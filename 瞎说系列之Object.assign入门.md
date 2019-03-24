@@ -231,7 +231,7 @@ function foo(options) {
 
 ### 浏览器兼容性
 
-![image-20190324113944044](../../Library/Application Support/typora-user-images/image-20190324113944044.png)
+![image-20190324113944044](https://github.com/MagicHacker/Blog/blob/master/image/browser.png)
 
 ### 最后
 
