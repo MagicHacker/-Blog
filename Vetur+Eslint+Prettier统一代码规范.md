@@ -328,7 +328,7 @@ npm install --save-dev eslint-plugin-vue
 
 * [eslint-plugin-babel](https://github.com/babel/eslint-plugin-babel)：和babel-eslint一起使用的一款插件。babel-eslint将eslint应用于babel方面做的很好，但是它不能更改内置的规则来支持实验特性。eslint-plugin-babel重新实现了这些有问题的规则，因此不会误报一些错误信息。
 * [eslint-plugin-import](https://github.com/benmosher/eslint-plugin-import)：该插件支持对ES6+的import/export语法的校验，并防止一些文件路径拼写错误或者导入名称错误的情况。
-* [eslint-plugin-prettier](https://github.com/prettier/eslint-plugin-prettier)：该插件辅助ESLint与Prettier一些协作，并将prettier的解析作为ESLint的一部分，在最后输出给出修改意见，这样当使用prettier格式化代码的时候，依然能够遵循ESLint的规则。如果你禁用掉了所有和代码格式化相关的Eslint规则，该插件可以更好得工作。因此你可以用eslint-config-prettier禁用掉所有的格式化相关的规则(如果其他有效的Eslint规则与prettier在代码如何格式化的问题上不一致的时候，报错是在所难免的了)
+* [eslint-plugin-prettier](https://github.com/prettier/eslint-plugin-prettier)：该插件辅助ESLint与Prettier一些协作，并将prettier的解析作为ESLint的一部分，在最后输出给出修改意见，这样当使用prettier格式化代码的时候，依然能够遵循ESLint的规则。如果你禁用掉了所有和代码格式化相关的Eslint规则，该插件可以更好得工作。因此你可以用eslint-config-prettier禁用掉所有的格式化相关的规则(如果其他有效的Eslint规则与prettier在代码如何格式化的问题上不一致的时候，报错是在所难免的了)。
 * [@typescript-eslint/eslint-plugin](https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin)：typescript辅助ESLint的插件。此插件为ESLint校验typescript使用，所以需要使用**<font color="blue">@typescript-eslint/parser</font>**作为ESLint的解析器。
 
 ###### Extends扩展配置
@@ -641,7 +641,7 @@ overrides: [
 
 它会移除原有代码的样式，并输出统一样式的代码。Prettier会重新计算每行代码的长度并重新打印它。Prettier 通过解析你的代码库，强制使用统一的风格的代码，因为它会移除掉原有代码样式（这并不会影响 AST 的代码样式）。它会采用自己的规则来重新输出解析后的 AST，该规则将考虑每行最大长度，当必要的时候，会进行换行。
 
-### 安装
+### 安装和使用
 
 ​	通过yarn：
 
@@ -665,5 +665,31 @@ npm install --global prettier
 echo {}> .prettierrc.json
 ```
 
-​	接着创建一个[.prettierignore](https://prettier.io/docs/en/ignore.html)文件让编辑器知道哪些文件不需要格式化。
+​	接着创建一个[.prettierignore](https://prettier.io/docs/en/ignore.html)文件让编辑器知道哪些文件不需要格式化。比如：
+
+```
+# Ignore artifacts:
+build
+coverage
+# Ignore all HTML files:
+*.html
+```
+
+​	最后使用Prettier格式化所有文件:
+
+```
+npx prettier --write .
+# or
+yarn prettier --write .
+```
+
+### 与其他Linters的集成
+
+​	一些Linters通常不止包含代码质量检验的规则，也包含一些格式化规则。当使用了Prettier时，一些Linters的格式化规则是不必要的，甚至还会与Prettier产生冲突。
+
+​	幸运的是通过第三方配置可以很容易的关闭与Prettier冲突且没需要的规则。
+
+	+ [eslint-config-prettier](https://github.com/prettier/eslint-config-prettier)
+	+ [tslint-config-prettier](https://github.com/alexjoverm/tslint-config-prettier)
+	+ [stylelint-config-prettier](https://github.com/prettier/stylelint-config-prettier)
 
