@@ -202,9 +202,9 @@ eslint不仅支持文件配置，还支持代码注释的配置方式，不推�
 
 **<font color="blue">"semi"和"quotes"</font>**是Eslint中规则的名称，第一个值是错误的级别，可以是下面的值之一：
 
-	* **<font color="blue">"off"或0</font>**--关闭规则
-	* **<font color="blue">"warn"或1</font>**---将规则视为一个警告（不会影响退出码），程序不会退出运行
-	* **<font color="blue">"error"或2</font>**----将规则视为一个错误（退出码为1），同时会退出程序的运行。
+* **<font color="blue">"off"或0</font>**--关闭规则
+* **<font color="blue">"warn"或1</font>**---将规则视为一个警告（不会影响退出码），程序不会退出运行
+* **<font color="blue">"error"或2</font>**----将规则视为一个错误（退出码为1），同时会退出程序的运行。
 
 同时也可以使用推荐配置：
 
@@ -276,9 +276,9 @@ eslint不仅支持文件配置，还支持代码注释的配置方式，不推�
 
 ​	以下解析器与ESLint兼容：
 
-	* [Esprima](https://www.npmjs.com/package/esprima)
-	* [Babel-ESLint](https://www.npmjs.com/package/babel-eslint) - 一个对[Babel](https://babeljs.io/)解析器的包装，使其能够与 ESLint 兼容。**<font color="red">注意：</font>**该包允许你使用一些实验特性的时候，依然能够用上ESLint语法检查，如果没有用到ESLint不支持的实验特性时不需要安装此包。
-	* [@typescript-eslint/parser](https://www.npmjs.com/package/@typescript-eslint/parser) - 将 TypeScript 转换成与 estree 兼容的形式，以便在ESLint中使用。
+* [Esprima](https://www.npmjs.com/package/esprima)
+* [Babel-ESLint](https://www.npmjs.com/package/babel-eslint) - 一个对[Babel](https://babeljs.io/)解析器的包装，使其能够与 ESLint 兼容。**<font color="red">注意：</font>**该包允许你使用一些实验特性的时候，依然能够用上ESLint语法检查，如果没有用到ESLint不支持的实验特性时不需要安装此包。
+* [@typescript-eslint/parser](https://www.npmjs.com/package/@typescript-eslint/parser) - 将 TypeScript 转换成与 estree 兼容的形式，以便在ESLint中使用。
 
 **<font color="red">注意：</font>**在使用自定义解析器时，为了让ESLint在处理非 ECMAScript 5 特性时正常工作，仍然需要配置属性parserOptions。
 
@@ -290,8 +290,9 @@ eslint不仅支持文件配置，还支持代码注释的配置方式，不推�
 
 ​	解析器选项可以在.eslintrc文件中使用parserOptions属性配置。可用的配置有：
 
-	* ecmaVersion:3，5（默认），你也可以使用6，7，8，9，10来指定想要使用的ECMAScript版本。同时也可以使用年份命名的版本号，2015（同 6），2016（同 7），或 2017（同 8）或 2018（同 9）或 2019 (同10)。
-	* sourceType:默认是"script"，也可以使用"module"(如果你的代码是ECMAScript 模块)。
+* ecmaVersion:3，5（默认），你也可以使用6，7，8，9，10来指定想要使用的ECMAScript版本。同时也可以使用年份命名的版本号，2015（同 6），2016（同 7），或 2017（同 8）或 2018（同 9）或 2019 (同10)。
+* sourceType:默认是"script"，也可以使用"module"(如果你的代码是ECMAScript 模块)。
+
  * ecmaFeatures：该配置对象指定你想使用的额外的语言特性:
    * globalReturn：允许在全局作用域下使用return语句。
    * impliedStrict：启用全局严格校验模式。
@@ -337,8 +338,8 @@ npm install --save-dev eslint-plugin-vue
 
 ​	extend是属性值可以是：
 
-	* 指定配置的字符串（配置文件的路径，可共享的配置的名称，**<font color="blue">`eslint:recommended`</font>**或**<font color="blue"> `eslint:all`</font>**）
-	* 字符串数组：每个配置都继承它前面的配置。
+* 指定配置的字符串（配置文件的路径，可共享的配置的名称，**<font color="blue">`eslint:recommended`</font>**或**<font color="blue"> `eslint:all`</font>**）
+* 字符串数组：每个配置都继承它前面的配置。
 
 ESLint递归地扩展配置，因此基本配置也可以具有extends属性。extends属性中的相对路径和可共享配置名从配置文件中出现的位置进行解析。
 
@@ -421,9 +422,9 @@ overrides: [
 
 ​	可以在项目根目录创建一个**<font color="blue">.eslintignore</font>**文件去告诉ESLint忽略特定的文件和目录。**<font color="blue">.eslintignore</font>**文件是一个纯文本文件，其中每一行都是一个glob模式的，表明哪些路径应该忽略检测。当ESLint运行时，在确定哪些文件要检测之前，它会在当前工作目录中查找一个**<font color="blue">.eslintignore</font>**文件，如果找到，当遍历目录时，将会应用这些设置。可用的特性如下：
 
-	* 以**<font color="blue">#</font>**开头的行会被当做注释。
-	* 路径是相当于**<font color="blue">.eslintignore</font>**的位置或当前目录。
-	* 忽略模式同**<font color="blue">.gitignore</font>**。
+* 以**<font color="blue">#</font>**开头的行会被当做注释。
+* 路径是相当于**<font color="blue">.eslintignore</font>**的位置或当前目录。
+* 忽略模式同**<font color="blue">.gitignore</font>**。
 
 除了**<font color="blue">.eslintignore</font>**文件中的模式，ESLint总是忽略**<font color="blue">/node_modules/*</font>**中的文件。
 
@@ -626,18 +627,18 @@ overrides: [
 
 ​	Prettier是一个固定的代码格式化程序，支持以下类型：
 
-	* JavaScript, including ES2017
-	* JSX
-	* Angular
-	* Vue
-	* Flow
-	* TypeScript
-	* CSS，Less，SCSS
-	* HTML
-	* JSON
-	* GraphQL
-	* Markdown，including GFM andMDX
-	* YAML
+* JavaScript, including ES2017
+* JSX
+* Angular
+* Vue
+* Flow
+* TypeScript
+* CSS，Less，SCSS
+* HTML
+* JSON
+* GraphQL
+* Markdown，including GFM andMDX
+* YAML
 
 它会移除原有代码的样式，并输出统一样式的代码。Prettier会重新计算每行代码的长度并重新打印它。Prettier 通过解析你的代码库，强制使用统一的风格的代码，因为它会移除掉原有代码样式（这并不会影响 AST 的代码样式）。它会采用自己的规则来重新输出解析后的 AST，该规则将考虑每行最大长度，当必要的时候，会进行换行。
 
