@@ -80,7 +80,7 @@
 
 ### Formatting（格式化）
 
-​	**Vetur**支持`html/css/scss/less/postcss/stylus/js/ts`格式化。
+​	**Vetur**支持`html/css/scss/less/postcss/stylus/js/ts`格式化，其内部默认使用Prettier进行格式化。
 
 ​	**Vetur**仅能格式化整个文档，不能格式化任意区域。
 
@@ -665,7 +665,7 @@ npm install --global prettier
 echo {}> .prettierrc.json
 ```
 
-​	接着创建一个[.prettierignore](https://prettier.io/docs/en/ignore.html)文件让编辑器知道哪些文件不需要格式化。比如：
+​	接着创建一个[.prettierignore](https://prettier.io/docs/en/ignore.html)文件让编辑器知道哪些文件不需要格式化。以#开头的行会被当做注释。比如：
 
 ```
 # Ignore artifacts:
@@ -689,7 +689,57 @@ yarn prettier --write .
 
 ​	幸运的是通过第三方配置可以很容易的关闭与Prettier冲突且没需要的规则。
 
-	+ [eslint-config-prettier](https://github.com/prettier/eslint-config-prettier)
-	+ [tslint-config-prettier](https://github.com/alexjoverm/tslint-config-prettier)
-	+ [stylelint-config-prettier](https://github.com/prettier/stylelint-config-prettier)
+	+ [eslint-config-prettier](https://github.com/prettier/eslint-config-prettier)：关闭一些不必须且ESLint可能与Prettier冲突的规则。
+	+ [tslint-config-prettier](https://github.com/alexjoverm/tslint-config-prettier)：关闭一些不必须且TSLint可能与Prettier冲突的规则。
+	+ [stylelint-config-prettier](https://github.com/prettier/stylelint-config-prettier)：关闭一些不必须且stylelint可能与Prettier冲突的规则。
+
+#### Notes：
+
+​	当在网上同时搜索Prettier和ESLint时，经常会搜到其他相关的内容。虽然在某些情况下会很有用，但是已经不推荐使用这些包了。
+
+	+ [eslint-plugin-prettier](https://github.com/prettier/eslint-plugin-prettier)：Prettier作为ESLint的规则去运行。
+	+ [tslint-plugin-prettier](https://github.com/ikatyang/tslint-plugin-prettier)：Prettier作为TSLint的规则去运行。
+	+ [stylelint-prettier](https://github.com/prettier/stylelint-prettier)：Prettier作为stylelint的规则去运行。
+
+这些插件在Prettier刚推出的时候特别有用。当时这些插件有缺点：
+
+	+ 在编辑器中会出现很多红色的波浪线，非常烦人。
+	+ 它们比直接运行Prettier慢。
+
+### Pre-commit Hook
+
+​	你可以通过pre-commit工具来使用Prettier。执行了git add的文件在提交之前，可以重新格式化这些被保存在暂存区的文件。
+
+```
+npx mrm lint-staged
+```
+
+​	执行之后会安装[husky](https://github.com/typicode/husky)和[lint-staged](https://github.com/okonet/lint-staged)，同时自动在你的package.json文件中添加配置。如下：
+
+```
+"husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix"
+  }
+```
+
+### 常用配置
+
+```
+module.exports = { 
+  "printWidth": 80, // 每行代码长度（默认80）
+  "tabWidth": 2, // 每个tab相当于多少个空格（默认2）
+  "useTabs": false, // 是否使用tab进行缩进（默认false）
+  "singleQuote": true, // 使用单引号（默认false）
+  "semi": true, // 声明结尾使用分号(默认true)
+  "trailingComma": "all", // 多行使用拖尾逗号（默认none）
+  "bracketSpacing": true, // 对象字面量的大括号间使用空格（默认true）
+  "jsxBracketSameLine": false, // 多行JSX中的>放置在最后一行的结尾，而不是另起一行（默认false）
+  "arrowParens": "avoid" // 只有一个参数的箭头函数的参数是否带圆括号（默认avoid）
+}; 
+```
 
