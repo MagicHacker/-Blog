@@ -1,4 +1,4 @@
-# Vetur+Eslint+Prettier统一代码规范
+# Vetur+Eslint+Prettier介绍
 
 ## Vetur的使用
 
@@ -158,7 +158,7 @@ $ npx eslint yourfile.js
 
 ​	在运行eslint --init之后会在控制台生成一个交互提示界面，可根据需求手动选择eslint的配置。
 
-![image-20200621235954351](/Users/zhangxuan/Library/Application Support/typora-user-images/image-20200621235954351.png)
+![image-20200621235954351](https://tva1.sinaimg.cn/large/007S8ZIlly1ggnetpvf6uj30cu0250su.jpg)
 
 ​	在选择完配置之后，会在项目中生成.eslintrc配置文件：
 
