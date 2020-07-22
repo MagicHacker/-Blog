@@ -690,22 +690,22 @@ yarn prettier --write .
 
 ​	幸运的是通过第三方配置可以很容易的关闭与Prettier冲突且没需要的规则。
 
-	+ [eslint-config-prettier](https://github.com/prettier/eslint-config-prettier)：关闭一些不必须且ESLint可能与Prettier冲突的规则。
-	+ [tslint-config-prettier](https://github.com/alexjoverm/tslint-config-prettier)：关闭一些不必须且TSLint可能与Prettier冲突的规则。
-	+ [stylelint-config-prettier](https://github.com/prettier/stylelint-config-prettier)：关闭一些不必须且stylelint可能与Prettier冲突的规则。
++ [eslint-config-prettier](https://github.com/prettier/eslint-config-prettier)：关闭一些不必须且ESLint可能与Prettier冲突的规则。
++ [tslint-config-prettier](https://github.com/alexjoverm/tslint-config-prettier)：关闭一些不必须且TSLint可能与Prettier冲突的规则。
++ [stylelint-config-prettier](https://github.com/prettier/stylelint-config-prettier)：关闭一些不必须且stylelint可能与Prettier冲突的规则。
 
 #### Notes：
 
 ​	当在网上同时搜索Prettier和ESLint时，经常会搜到其他相关的内容。虽然在某些情况下会很有用，但是已经不推荐使用这些包了。
 
-	+ [eslint-plugin-prettier](https://github.com/prettier/eslint-plugin-prettier)：Prettier作为ESLint的规则去运行。
-	+ [tslint-plugin-prettier](https://github.com/ikatyang/tslint-plugin-prettier)：Prettier作为TSLint的规则去运行。
-	+ [stylelint-prettier](https://github.com/prettier/stylelint-prettier)：Prettier作为stylelint的规则去运行。
++ [eslint-plugin-prettier](https://github.com/prettier/eslint-plugin-prettier)：Prettier作为ESLint的规则去运行。
++ [tslint-plugin-prettier](https://github.com/ikatyang/tslint-plugin-prettier)：Prettier作为TSLint的规则去运行。
++ [stylelint-prettier](https://github.com/prettier/stylelint-prettier)：Prettier作为stylelint的规则去运行。
 
 这些插件在Prettier刚推出的时候特别有用。当时这些插件有缺点：
 
-	+ 在编辑器中会出现很多红色的波浪线，非常烦人。
-	+ 它们比直接运行Prettier慢。
++ 在编辑器中会出现很多红色的波浪线，非常烦人。
++ 它们比直接运行Prettier慢。
 
 ### Pre-commit Hook
 
