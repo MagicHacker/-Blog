@@ -666,6 +666,18 @@ npm install --global prettier
 echo {}> .prettierrc.json
 ```
 
+​	**注意：**我目前碰到的情况是.prettierrc.json是不生效的，只有.prettierrc.js是生效的。
+
+#### 配置文件格式优先级
+
++ package.json
++ .prettierrc.json
++ .prettierrc.yaml
++ .prettierrc.yml
++ .prettierrc.js
++ prettier.config.js
++ .prettierrc.toml
+
 ​	接着创建一个[.prettierignore](https://prettier.io/docs/en/ignore.html)文件让编辑器知道哪些文件不需要格式化。以#开头的行会被当做注释。比如：
 
 ```
@@ -684,6 +696,29 @@ npx prettier --write .
 yarn prettier --write .
 ```
 
+### 配置项参数
+
+	+ printWidth：设置prettier单行输出的最大长度，默认为80。
+	+ tabWidth：设置每个水平缩进的空格数，默认为2。
+	+ useTabs：使用tab（制表位）进行缩进而非空格，默认为false。
+	+ semi：是否在语句末尾添加分号，默认为true。
+	+ singleQuote：是否使用单引号包裹字符串，默认为false。
+ + quoteProps：是否使用引号包裹对象的键名，默认为"as-needed"。
+   + "as-needed"：当且仅当对象中特定键名需要被引号包裹时，使用引号包裹特定键名。
+   + "consistent"：如果对象中至少存在一个键名必须被引号包裹时，使用引号包裹所有键名
+   + "preserve"：不做任何特殊处理。
+
++ trailingCommas：多行时使用尾后逗号，默认为"es5"。
+  + "none"：不使用。
+  + "es5"：添加es5中被支持的尾逗号。
+  + "all"：所有可能的地方都被添加尾逗号。
+
++ bracketSpacing：在对象字面量声明所使用的的花括号后（{）和前（}）输出空格，默认为true。
++ jsxBracketSameLinte：在多行JSX元素最后一行的末尾添加 > 而使 > 单独一行（不适用于自闭和元素），默认为false。
++ arrowParens：为单行箭头函数的参数添加圆括号，默认为"always"。
+  + "avoid " - 尽可能不添加圆括号，示例：x => x。
+  + "always " - 总是添加圆括号，示例： (x) => x。
+
 ### 与其他Linters的集成
 
 ​	一些Linters通常不止包含代码质量检验的规则，也包含一些格式化规则。当使用了Prettier时，一些Linters的格式化规则是不必要的，甚至还会与Prettier产生冲突。
@@ -698,14 +733,20 @@ yarn prettier --write .
 
 ​	当在网上同时搜索Prettier和ESLint时，经常会搜到其他相关的内容。虽然在某些情况下会很有用，但是已经不推荐使用这些包了。
 
-+ [eslint-plugin-prettier](https://github.com/prettier/eslint-plugin-prettier)：Prettier作为ESLint的规则去运行。
-+ [tslint-plugin-prettier](https://github.com/ikatyang/tslint-plugin-prettier)：Prettier作为TSLint的规则去运行。
-+ [stylelint-prettier](https://github.com/prettier/stylelint-prettier)：Prettier作为stylelint的规则去运行。
++ [eslint-plugin-prettier](https://github.com/prettier/eslint-plugin-prettier)：Prettier作为ESLint的规则去运行，将prettier集成到ESLint工作流中，不需要再单独使用prettier命令。
++ [tslint-plugin-prettier](https://github.com/ikatyang/tslint-plugin-prettier)：Prettier作为TSLint的规则去运行，将prettier集成到TSLint工作流中，不需要再单独使用prettier命令。
++ [stylelint-prettier](https://github.com/prettier/stylelint-prettier)：Prettier作为stylelint的规则去运行，将prettier集成到stylelint工作流中，不需要再单独使用prettier命令。
 
-这些插件在Prettier刚推出的时候特别有用。当时这些插件有缺点：
+这些插件在Prettier刚推出的时候特别有用。但是这些插件有缺点：
 
 + 在编辑器中会出现很多红色的波浪线，非常烦人。
 + 它们比直接运行Prettier慢。
+
+现在有一些新工具在运行prettier的时候立即运行eslint --fix去修复文件，但是这些工具比单独运行prettier要慢。
+
++ [prettier-eslint](https://github.com/prettier/prettier-eslint)：先通过prettier格式化代码，然后运行eslint --fix修复文件。
++ [prettier-tslint](https://github.com/azz/prettier-tslint)：先通过prettier格式化代码，然后运行tslint --fix修复文件。
++ [prettier-stylelint](https://github.com/hugomrdias/prettier-stylelint)：先通过prettier格式化代码，然后运行stylelint --fix修复文件。
 
 ### Pre-commit Hook
 
@@ -724,9 +765,20 @@ npx mrm lint-staged
     }
   },
   "lint-staged": {
-    "*.js": "eslint --cache --fix"
+    "src/**/*.{js,css,json,vue}":[
+      "eslint --fix",
+      "prettier --write",
+      "git add ." // lint-staged 10.0以上版本可以省略此行
+    ]
   }
 ```
+
+​	husky和lint-staged工作流程如下：
+
+	1. git add .将所有改动的文件提交到暂存区
+ 	2. git commit -m ""此操作会被husky拦截，之后调用lint-staged对文件进行检查。
+ 	3. lint-staged会先进行git stash操作，之后会将与规则相匹配的暂存区的文件进行检查，只有已经提交到暂存区的文件才会被检查。
+ 	4. 等到lint-staged执行完成后，只要有一个文件没有通过检查，husky会阻止本次git commit，然后手动修改对应的有问题的文件，重新执行git add和git commit操作，会重复2，3步骤进行检查。
 
 ### 常用配置
 
@@ -737,10 +789,10 @@ module.exports = {
   "useTabs": false, // 是否使用tab进行缩进（默认false）
   "singleQuote": true, // 使用单引号（默认false）
   "semi": true, // 声明结尾使用分号(默认true)
-  "trailingComma": "all", // 多行使用拖尾逗号（默认none）
+  "trailingComma": "none", // 多行使用拖尾逗号（默认none）
   "bracketSpacing": true, // 对象字面量的大括号间使用空格（默认true）
   "jsxBracketSameLine": false, // 多行JSX中的>放置在最后一行的结尾，而不是另起一行（默认false）
-  "arrowParens": "avoid" // 只有一个参数的箭头函数的参数是否带圆括号（默认avoid）
+  "arrowParens": "avoid" // 只有一个参数的箭头函数的参数是否带圆括号（默认为always）
 }; 
 ```
 
