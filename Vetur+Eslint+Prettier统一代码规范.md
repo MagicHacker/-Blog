@@ -796,3 +796,80 @@ module.exports = {
 }; 
 ```
 
+## 推荐配置
+
+### package.json
+
+```
+"husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,css,json,vue}":[
+      "eslint --fix",
+      "prettier --write"
+    ]
+  }
+```
+
+### .eslintrc.js
+
+```
+module.exports = {
+  root: true,
+  // 启用node环境
+  env: {
+    node: true
+  },
+  extends: ['attack', 'attack/vue', 'prettier'],
+  plugins: ['prettier'],
+  rules: {
+    'prettier/prettier': 'error'
+  },
+  parserOptions: {
+    // 指定使用babel-eslint作为eslint的解析器
+    parser: 'babel-eslint'
+  }
+}
+
+```
+
+### .prettierrc.js
+
+```
+module.exports = {
+  singleQuote: true,
+  printWidth: 80,
+  semi: false,
+  tabWidth: 2,
+  trailingComma: 'none',
+  overrides: [
+    {
+      files: [
+        '*.json',
+        '.eslintrc',
+        '.tslintrc',
+        '.prettierrc',
+        '.tern-project'
+      ],
+      options: {
+        parser: 'json',
+        tabWidth: 2
+      }
+    }
+  ]
+}
+
+```
+
+###  安装相应的包
+
+```
+#npm
+npm i eslint babel-eslint eslint-config-attack eslint-config-prettier eslint-plugin-prettier eslint-plugin-vue husky lint-staged prettier --save-dev
+# yarn 
+yarn add babel-eslint eslint-config-attack eslint-config-prettier eslint-plugin-prettier eslint-plugin-vue husky lint-staged prettier --dev
+```
+
