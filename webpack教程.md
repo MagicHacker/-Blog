@@ -1,14 +1,24 @@
 # 概念
 
-​	本质上，webpack是一个现代JavaScript应用程序的静态模块打包器。当webpack处理应用程序时，它会递归地构建一个依赖关系图，其中包含应用程序需要的每个模块，然后将所有这些模块打包成一个或多个bundle。
+​		本质上，webpack是一个现代JavaScript应用程序的静态模块打包器。当webpack处理应用程序时，它会递归地构建一个依赖关系图，其中包含应用程序需要的每个模块，然后将所有这些模块打包成一个或多个bundle。
+
+# context
+
+​		context是webpack编译时的基础目录，是一个绝对路径的字符串，用于从配置中解析入口entry和**loader**在配置了context字段之后，webpack在寻找相对路径的文件时会以context为根目录。context默认为执行启动webpack时所在的当前工作目录。如果想改变context的默认配置，则可以采用如下配置：
+
+```javascript
+module.exports = {
+    context: path.resolve(__dirname, 'src')
+}
+```
+
+​		**注意：**一旦设置了context，那么在配置entry的时候，就需要相对于context配置的路径去设置。
+
+这样的好处是webpack配置可以独立于工程目录。例如在分离开发环境和生产环境的配置文件的时候，一般把webpack.config.js放到build文件夹下，此时entry不用相对于build目录来配置，只需要根据context的设置来配置即可。
 
 # entry入口
 
-​	entry即入口，指示webpack应该使用哪个模块来作为构建起其内部依赖图的开始。进入entry后，webpack会找出有哪些模块和库是entry直接或间接依赖的。可以通过在webpack配置文件中配置entry属性，来指定一个入口（或多个入口）。默认值为./src。
-
-### context
-
-​	context是webpack编译时的基础目录，是一个绝对路径的字符串。
+​		entry即入口，指示webpack应该使用哪个模块来作为构建起其内部依赖图的开始。进入entry后，webpack会找出有哪些模块和库是entry直接或间接依赖的。可以通过在webpack配置文件中配置entry属性，来指定一个入口（或多个入口）。默认值为./src。
 
 ## 单个入口语法
 
@@ -42,7 +52,7 @@ module.exports = {
 
 ## 对象语法
 
-​	当你想要构建多页应用的时候，可以通过对象的语法告诉webpack一次性构建出多个bundle文件。
+当你想要构建多页应用的时候，可以通过对象的语法告诉webpack一次性构建出多个bundle文件。
 
 用法：`entry: {[entryChunkName: string]: string|Array<string>}`
 
@@ -143,7 +153,7 @@ module.exports = {
 
 ## 数组语法
 
-​	可以使用数组为一个入口指定多个文件。一般情况下，数组中引入的文件是没有相互依赖关系的，但是基于某种原因需要将它们打包在一起，最后webpack会将数组中最后一个模块的module.exports作为入口模块的module.exports导出。
+​		可以使用数组为一个入口指定多个文件。一般情况下，数组中引入的文件是没有相互依赖关系的，但是基于某种原因需要将它们打包在一起，最后webpack会将数组中最后一个模块的module.exports作为入口模块的module.exports导出。
 
 ```javascript
 module.exports = {
@@ -160,4 +170,42 @@ module.exports = {
 ![image-20201026235604690](https://tva1.sinaimg.cn/large/0081Kckwly1gk36d1v5saj30d004y3yy.jpg)
 
 ![image-20201026235618859](https://tva1.sinaimg.cn/large/0081Kckwly1gk36daw49yj307u01dmwz.jpg)
+
+# output出口
+
+​		output属性告诉webpack在哪里输出它所创建的bundles，以及如何命名这些文件，默认值为./dist。
+
+## 基本配置
+
+```javascript
+module.exports = {
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, "dist")
+  }
+}
+```
+
+filename：用于配置输出文件的文件名。
+
+path：用于配置文件的输出路径，是一个绝对路径。
+
+## 多个入口entry
+
+```javascript
+module.exports = {
+  output: {
+    filename: '[name].bundle.js',
+    path: path.resolve(__dirname, "dist")
+  }
+}
+```
+
+## 常用API
+
+### output.chunkFilename（待验证）
+
+​		chunkFilename是指未被放在entry中，但却又需要被打包出来的**chunk**文件的名称。一般来说，这个**chunk**文件指的就是要懒加载的模块。默认使用[id].js或从output.filename中推断出的值([name]会被预先替换为[id]或[id].)。
+
+​		webpack的异步模块默认是没有名字的，同时由于没有在异步模块加载的时候显示的指定chunkFilename，webpack就会把[name]替换为chunk文件的[id]，一个自增的id号。可以通过import(/\*webpackChunkName: "test123"\*/ 'index.js')来为设置webpack的chunkFilename中的[name]占位符。
 
