@@ -209,3 +209,60 @@ module.exports = {
 
 ​		webpack的异步模块默认是没有名字的，同时由于没有在异步模块加载的时候显示的指定chunkFilename，webpack就会把[name]替换为chunk文件的[id]，一个自增的id号。可以通过import(/\*webpackChunkName: "test123"\*/ 'index.js')来为设置webpack的chunkFilename中的[name]占位符。
 
+### output.filename
+
+​		filename用于设置输出的bundle的名称。bundle将被写入到output.path选项指定的目录下。
+
+#### 普通字符串
+
+​		filname的值是普通的字符串就会输出固定名称的文件，如果filename的值是路径字符串会输出带有路径的文件。
+
+```javascript
+module.exports = {
+  context: path.resolve(__dirname, 'src'),
+  entry: {
+    main: "./index.js"
+  },
+  output: {
+    filename: "bundle.js",
+    path: path.resolve(__dirname, "dist")
+  }
+}
+```
+
+![image-20201029231700913](https://tva1.sinaimg.cn/large/0081Kckwly1gk6m3d9a1mj307j01gjr6.jpg)
+
+或者是路径字符串：
+
+```javascript
+module.exports = {
+  context: path.resolve(__dirname, 'src'),
+  entry: {
+    main: "./index.js"
+  },
+  output: {
+    filename: "js/bundle.js",
+    path: path.resolve(__dirname, "dist")
+  }
+}
+```
+
+![image-20201029231831107](https://tva1.sinaimg.cn/large/0081Kckwly1gk6m4w3l02j307b01cgle.jpg)
+
+#### 占位符字符串
+
+​		在webpack配置中，开发者大多使用占位符的形式，因为其构建灵活，常用的占位符如下：
+
++ [name]：模块的名称，即entry的key值（main，index，home，app之类的）。
++ [id]：模块的标识符，即webpack打包过程中生成的内部的chunk id。
++ [hash]：模块标识符的hash。
++ [chunkhash]：chunk内容的hash。
+
+​		[hash] 和 [chunkhash] 的长度可以使用[hash:16] (默认为 20) 来指定，或者通过output.hashDigestLength在全局配置长度。
+
+​		[hash]是整个项目的hash值，其根据每次编译的内容计算得到，只要修改文件就会导致整个项目构建的hash值发生改变。在一个项目中会打包很多资源，但是[hash]会让所有资源都使用同一个hash。一旦我只修改某一个文件，打包后就会造成所有文件的hash值都会改变，会导致未曾修改的文件的hash值变化，进一步会导致未修改的文件在浏览器的缓存失效了。因此[hash]无法实现静态资源在浏览器上的长效缓存，[hash]可以用在开发环境，不适用于生产环境。
+
+​		[chunkhash]是根据不同的入口文件（entry）进行依赖文件解析，构建对应的chunk，生成相应的chunkhash。如果在某一入口文件创建的关系依赖图上存在文件内容发生了变化，那么相应的入口文件的chunkhash才会发生变化，否则chunkhash就不会变化，所以一般在项目中会把公共库和其他文件拆开，并把公共库代码拆分到一起进行打包，因为公共库的代码变动较少，这样可以实现公共库的长效缓存。
+
+​		[contenthash]使用chunkhash还存在一个问题，当一个JS文件引入了CSS文件（import 'xxx.css'），打包构建后它们的chunkhash值是相同的，因此如果更改了JS文件的内容，即使CSS文件内容没有更改，那么与其JS关联的CSS文件的chunkhash也会跟着改变，这样就会导致未改变的CSS文件的缓存失效了。针对这种情况，我们可以使用mini-css-extract-plugin（后面讲插件的时候会单独讲解该插件的内容）插件将CSS从JS文件中抽离出来并使用contenthash，来解决上述问题。
+
