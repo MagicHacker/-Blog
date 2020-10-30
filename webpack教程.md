@@ -203,13 +203,13 @@ module.exports = {
 
 ## 常用API
 
-### output.chunkFilename（待验证）
+### chunkFilename（待验证）
 
 ​		chunkFilename是指未被放在entry中，但却又需要被打包出来的**chunk**文件的名称。一般来说，这个**chunk**文件指的就是要懒加载的模块。默认使用[id].js或从output.filename中推断出的值([name]会被预先替换为[id]或[id].)。
 
 ​		webpack的异步模块默认是没有名字的，同时由于没有在异步模块加载的时候显示的指定chunkFilename，webpack就会把[name]替换为chunk文件的[id]，一个自增的id号。可以通过import(/\*webpackChunkName: "test123"\*/ 'index.js')来为设置webpack的chunkFilename中的[name]占位符。
 
-### output.filename
+### filename
 
 ​		filename用于设置输出的bundle的名称。bundle将被写入到output.path选项指定的目录下。
 
@@ -265,4 +265,31 @@ module.exports = {
 ​		[chunkhash]是根据不同的入口文件（entry）进行依赖文件解析，构建对应的chunk，生成相应的chunkhash。如果在某一入口文件创建的关系依赖图上存在文件内容发生了变化，那么相应的入口文件的chunkhash才会发生变化，否则chunkhash就不会变化，所以一般在项目中会把公共库和其他文件拆开，并把公共库代码拆分到一起进行打包，因为公共库的代码变动较少，这样可以实现公共库的长效缓存。
 
 ​		[contenthash]使用chunkhash还存在一个问题，当一个JS文件引入了CSS文件（import 'xxx.css'），打包构建后它们的chunkhash值是相同的，因此如果更改了JS文件的内容，即使CSS文件内容没有更改，那么与其JS关联的CSS文件的chunkhash也会跟着改变，这样就会导致未改变的CSS文件的缓存失效了。针对这种情况，我们可以使用mini-css-extract-plugin（后面讲插件的时候会单独讲解该插件的内容）插件将CSS从JS文件中抽离出来并使用contenthash，来解决上述问题。
+
+### path
+
+​		path用来指定webpack打包构建的最终输出的目录，是一个绝对路径。
+
+### publicPath（待补充）
+
+​		webpack提供一个非常有用的配置，该配置能帮你为项目中的所有资源指定一个基础路径，它被称为公共路径publicPath。这里所说的所有资源的基础路径是指项目中应用CSS，JS，图片等资源的时候的一个基础路径，这个基础路径要配合具体资源的指定路径使用，所以其实打包后的资源访问路径可以如下表示：
+
+静态资源最终访问路径 = output.publicPath+资源loader或插件等配置路径。
+
+publicPath一般用来处理将静态资源部署到CDN的情况下的资源访问路径。
+
+# mode
+
+​		mode表示webpack当前的环境以及对不同环境的配置。默认是production（生产环境）。
+
+```javascript
+module.exports = {
+  mode: 'production'
+};
+```
+
+​		不同的环境，webpack内部会调用不同的内置插件对文件进行处理。
+
++ development：开发环境。会将process.env.NODE_ENV设置为development，启用NamedChunksPlugin和NamedModulesPlugin。
++ production：生产环境。会将process.env.NODE_ENV设置为production，启用FlagDependencyUsagePlugin，FlagIncludedChunksPlugin，ModuleConcatenationPlugin，NoEmitOnErrorsPlugin，OccurrenceOrderPlugin，SideEffectsFlagPlugin，UglifyJsPlugin。在生产环境下，webpack会自动调用UglifyJsPlugin对代码进行混淆压缩，也会优化打包后的文件。
 
