@@ -344,3 +344,38 @@ webpack --module-bind 'css=style-loader!css-loader'
 	+ loader接收查询参数，用于对loader传递配置。
 	+ loader也能够使用options对象进行配置。
 
+## 常用的loader
+
+### babel-loader
+
+​		在日常的开发中，很多人会使用ES6，7，8或者更高版本的JS代码，然而浏览器对这些语法的支持并不是特别友好，因此为了让新语法能够在浏览器中顺利运行，需要使用Babel对JS语法进行转换，变成ES5等浏览器支持的语法。webpack通过babel-loader调用babel，从而在打包的时候做这种转换。
+
+#### 安装
+
+```json
+npm i @babel-core babel-loader @babel/preset-env --save-dev
+```
+
+@babel-core是babel编译库的核心包。@babel/preset-env是babel的编译规则，通过这个包告诉babel是以什么样的规范去编译JS代码。
+
+#### 用法
+
+```javascript
+module: {
+    rules: [
+        {
+            test: /.js$/,
+            exclude: /node_modules/,
+            use:{
+                loader: 'babel-loader',
+                options: {
+                    presets: ['@babel/preset-env']
+                }
+            }
+        }
+    ]
+}
+```
+
+
+
