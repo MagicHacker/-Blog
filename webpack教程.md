@@ -293,3 +293,54 @@ module.exports = {
 + development：开发环境。会将process.env.NODE_ENV设置为development，启用NamedChunksPlugin和NamedModulesPlugin。
 + production：生产环境。会将process.env.NODE_ENV设置为production，启用FlagDependencyUsagePlugin，FlagIncludedChunksPlugin，ModuleConcatenationPlugin，NoEmitOnErrorsPlugin，OccurrenceOrderPlugin，SideEffectsFlagPlugin，UglifyJsPlugin。在生产环境下，webpack会自动调用UglifyJsPlugin对代码进行混淆压缩，也会优化打包后的文件。
 
+# loader
+
+​		loader是webpack的模块加载器，webpack将一切资源（JS，CSS，图片等）都看成是模块，然而webpack自身只支持加载JS和JSON模块，为了让webpack能够去处理其他类型的文件，就需要引入相应的loader，在import或加载模块的时候**预处理**文件，loader处理的是文件层面的资源。
+
+## loader的使用
+
+​		在webpack中，有三种loader的使用方式：
+
++ 配置（推荐）：在webpack.config.js文件中配置相应的loader。
++ 内联（不推荐）：在每个import语句中显示的指定相应的loader。
++ CLI（不推荐）：在shell命令中指定相应的loader。
+
+### 配置的方式
+
+​		在webpack中，通过module.rules的方式配置多个loader。示例如下：
+
+```javascript
+module: {
+    rules: [
+        {
+            test: /\.css$/,
+            use: ['style-loader', 'css-loader']
+        }
+    ]
+}
+```
+
+### 内联的方式
+
+​		可以在import语句或者其他等效于import的方式中指定loader。使用**!**将loader分开，分开的每部分都会相对于当前目录进行解析。
+
+```javascript
+import Styles from 'style-loader!css-loader?modules!./normal.css';
+```
+
+### CLI的方式
+
+​		通过CLI的方式使用loader
+
+```javascript
+webpack --module-bind 'css=style-loader!css-loader'
+```
+
+## loader的特性
+
+	+ loader支持链式传递。loader会将前一个loader的处理结果传递给下一个loader进行处理。一组loader将按照定义的相反的顺序去执行，从空间上看就是从下到上执行，或者从右向左执行。
+	+ loader可以是同步的，也可以是异步的。
+	+ loader运行在Node.js中，并且能够执行任何可能的操作。
+	+ loader接收查询参数，用于对loader传递配置。
+	+ loader也能够使用options对象进行配置。
+
