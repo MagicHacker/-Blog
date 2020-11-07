@@ -456,5 +456,75 @@ useBuiltIns的参数支持三个值：
 
 2、@babel/polyfill会污染全局环境，因为新的API都是由@babel/polyfill引入到全局环境中的，一般在写工具类库的时候会比较在意这个问题。
 
+为了解决这个问题我们引入@babel/plugin-transform-runtime和@babel/runtime，@babel/runtime-corejs2，@babel/runtime-corejs3。
 
+@babel/runtime：由Babel提供的polyfill套件，由core-js和regenerator组成。提供了一些辅助函数，ES6转码时，babel会需要一些辅助函数，例如_extend。
+
+@babel/plugin-transform-runtime：transform-runtime可以自动化地将@babel/runtime中的polyfill模块注入到对应的文件中。
+
+```javascript
+module: {
+    rules: [
+        {
+            test: /.js$/,
+            exclude: /node_modules/,
+            use:{
+                loader: 'babel-loader',
+                options: {
+                    cacheDirectory: true,
+                    presets: [['@babel/preset-env', {
+                        useBuiltIns: 'usage'
+                    }]],
+                    "plugins": [
+                        [
+                            "@babel/plugin-transform-runtime",
+                            {
+                                "absoluteRuntime": false,
+                                "corejs": 2,
+                                "helpers": true,
+                                "regenerator": true,
+                                "useESModules": false
+                            }
+                        ]
+                    ]
+                }
+            }
+        }
+    ]
+}
+```
+
+在@babel/plugin-transform-runtime配置中需要配置corejs选项，它有三个参数：
+
++ false：需要安装@babel/runtime。
++ 2：需要安装@babel/runtime-corejs2
++ 3：需要安装@babel/runtime-corejs3
+
+配置好@babel/plugin-transform-runtime相应的内容之后，就可以将@babel/polyfill相关的内容全部删掉，因为
+
+@babel/plugin-transform-runtime对ES6代码已经做了处理了。
+
+#### 最后
+
+可以把在babel-loader配置项中关于babel的配置单独写到.babelrc配置文件中进行维护，`注意`cacheDirectory参数是babel-loader的配置项，不是babel的配置项。
+
+.babelrc：
+
+```json
+{
+    "presets": ["@babel/preset-env"],
+    "plugins": [
+        [
+            "@babel/plugin-transform-runtime",
+            {
+                "absoluteRuntime": false,
+                "corejs": 2,
+                "helpers": true,
+                "regenerator": true,
+                "useESModules": false
+            }
+        ]
+    ]
+}
+```
 
