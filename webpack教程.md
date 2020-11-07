@@ -348,7 +348,7 @@ webpack --module-bind 'css=style-loader!css-loader'
 
 ### babel-loader
 
-​		在日常的开发中，很多人会使用ES6，7，8或者更高版本的JS代码，然而浏览器对这些语法的支持并不是特别友好，因此为了让新语法能够在浏览器中顺利运行，需要使用Babel对JS语法进行转换，变成ES5等浏览器支持的语法。webpack通过babel-loader调用babel，从而在打包的时候做这种转换。
+​		在日常的开发中，很多人会使用ES6，7，8或者更高版本的JS代码，然而浏览器对这些语法的支持并不是特别友好，因此为了让新语法能够在浏览器中顺利运行，需要使用babel对JS语法进行转换，变成ES5等浏览器支持的语法，如果单纯地手动引入babel，既麻烦，又会导致文件体积过大，所以使用webpack通过babel-loader调用babel，从而在打包的时候做这种转换。
 
 #### 安装
 
@@ -356,7 +356,7 @@ webpack --module-bind 'css=style-loader!css-loader'
 npm i @babel-core babel-loader @babel/preset-env --save-dev
 ```
 
-@babel-core是babel编译库的核心包。@babel/preset-env是babel的编译规则，通过这个包告诉babel是以什么样的规范去编译JS代码。
+@babel-core是babel编译库的核心包。@babel/preset-env是babel的编译规则，通过这个包告诉babel是以什么样的转码规范去编译JS代码。
 
 #### 用法
 
@@ -376,4 +376,16 @@ module: {
     ]
 }
 ```
+
+options中的presets是用来配置babel的预设，即babel的编码规则。通过以上配置就可以实现babel对ES6代码的转译。
+
+未使用babel-loader的情况：
+
+![image-20201107183313401](https://tva1.sinaimg.cn/large/0081Kckwly1gkgsgvt539j308u02j745.jpg)
+
+使用babel-loader的情况：
+
+![image-20201107183452056](https://tva1.sinaimg.cn/large/0081Kckwly1gkgsij8wruj30ag02gq2u.jpg)
+
+与上面的对比，可以很明显的看到babel-loader已经将ES6的const和箭头函数转换成ES5的语法了。
 
