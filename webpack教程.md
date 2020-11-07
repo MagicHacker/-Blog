@@ -369,6 +369,7 @@ module: {
             use:{
                 loader: 'babel-loader',
                 options: {
+                    cacheDirectory: true,
                     presets: ['@babel/preset-env']
                 }
             }
@@ -388,4 +389,72 @@ options中的presets是用来配置babel的预设，即babel的编码规则。�
 ![image-20201107183452056](https://tva1.sinaimg.cn/large/0081Kckwly1gkgsij8wruj30ag02gq2u.jpg)
 
 与上面的对比，可以很明显的看到babel-loader已经将ES6的const和箭头函数转换成ES5的语法了。
+
+#### 其他配置项
+
+cacheDirectory：用于设置babel编译结果的缓存，下一次编译如果文件没有修改，babel会直接读取缓存，提升babel的编译速度，默认值为false。
+
+cacheIdentifier：默认是由 @babel/core 版本号，babel-loader 版本号，.babelrc文件内容（存在的情况下），环境变量 `BABEL_ENV` 的值（没有时降级到 `NODE_ENV`）组成的一个字符串。可以设置为一个自定义的值，在 identifier 改变后，来强制缓存失效。
+
+cacheCompression：默认值为 true。当设置此值时，会使用 Gzip 压缩每个 Babel transform 输出。
+
+#### 进阶
+
+​	babel默认只会对新语法进行转译，例如箭头函数，let，const，class等。但是不会转译新的API，比如promise，map，set等。
+
+为了让我们的代码能够更好的支持ES6，就需要使用@babel/polyfill。polyfill是一个针对ES6环境的shim，实际上@babel/polyfill只是简单的把core-js和regenerator runtime包装了一下。使用@babel/polyfill会把整个ES6环境引入到你的代码中。`在Babel >= 7.4.0之后@babel/polyfill已经被废弃了`。
+
+```
+npm install --save @babel/polyfill
+```
+
+第一种使用方式是在页面中直接：
+
+```js
+import '@babel/polyfill'
+```
+
+但是直接使用@babel/polyfill会有两个问题：
+
+1、@babel/polyfill会造成代码非常冗余，导致打包后的体积过大。
+
+引入前：
+
+![image-20201107230213631](https://tva1.sinaimg.cn/large/0081Kckwly1gkh08q5dp6j30hd029glw.jpg)
+
+引入后：
+
+![image-20201107230304470](https://tva1.sinaimg.cn/large/0081Kckwly1gkh09ljconj30gv03a0t6.jpg)
+
+为了解决这个问题，我们可以在配置@babel/preset-env时，添加useBuiltIns参数。
+
+```javascript
+module: {
+    rules: [
+        {
+            test: /.js$/,
+            exclude: /node_modules/,
+            use:{
+                loader: 'babel-loader',
+                options: {
+                    cacheDirectory: true,
+                    presets: [['@babel/preset-env', {
+                        useBuiltIns: 'usage'
+                    }]]
+                }
+            }
+        }
+    ]
+}
+```
+
+useBuiltIns的参数支持三个值：
+
++ entry: 只支持引入一次@babel/polyfill，如果多次引用会抛出错误。
++ usage：只会在用到ES6的API的文件里引用。
++ false：默认值，会将@babel/polyfill整体引入。
+
+2、@babel/polyfill会污染全局环境，因为新的API都是由@babel/polyfill引入到全局环境中的，一般在写工具类库的时候会比较在意这个问题。
+
+
 
