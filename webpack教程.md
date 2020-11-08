@@ -598,3 +598,26 @@ module: {
 
 `modules`：类型为Object。默认值为undefined。此参数用来配置CSS模块。
 
+### less-loader
+
+​		webpack通过less-loader将less编译成CSS。
+
+#### 安装
+
+```bash
+npm install less less-loader --save-dev
+```
+
+#### 用法
+
+```javascript
+module: {
+    rules: [
+        {
+            test: /\.less$/,
+            loader: 'less-loader'
+        }
+    ]
+}
+```
+
