@@ -528,3 +528,73 @@ module: {
 }
 ```
 
+### css-loader
+
+​		css-loader是webpack用来处理项目中的CSS的loader。它用imports和url(……)返回一个通过webpack require函数解析过的CSS。
+
+#### 安装
+
+```bash
+npm install --save-dev css-loader
+```
+
+#### 用法
+
+```javascript
+module: {
+    rules: [
+        {
+            test: /\.css$/,
+            use: ['style-loader','css-loader']
+        }
+    ]
+}
+```
+
+通常情况下，css-loader与style-loader一起配合使用。
+
+#### 配置项
+
+url：默认值为true。启用/禁用url()的解析，绝对路径url不会被解析。
+
+import：默认值为true。启用/禁用@import的解析，绝对路径的url在运行时会被移除。
+
+modules：默认值为false。启用/禁用CSS模块。
+
+minimize：默认值为false。启用/禁用压缩。
+
+### style-loader
+
+​		style-loader用来通过`<style>`标签将CSS插入到HTML文件中。通常，style-loader与css-loader一起使用。先使用css-loader处理项目中的CSS，然后再使用style-loader将处理过的CSS通过`<style>`标签插入到HTML中。
+
+#### 安装
+
+```bash
+npm install --save-dev style-loader
+```
+
+#### 用法
+
+```javascript
+module: {
+    rules: [
+        {
+            test: /\.css$/,
+            use: ['style-loader','css-loader']
+        }
+    ]
+}
+```
+
+#### 配置项
+
+`injectType`：类型为string，默认值为styleTag，用来设置把style插入到DOM中的方式。
+
+`attributes`：类型为Object，默认值为{}。用来添加自定义属性到插入的标签中。
+
+`insert`：类型为string/function，默认值为head。用于在指定的位置插入标签。默认情况下，style-loader会把`<style>/<link>`标签添加到`<head>`标签的尾部，这会使style-loader处理的CSS比原本在`<head>`中已经存在的CSS具有更高的优先级。
+
+`esModule`：类型为Boolean，默认值为true。一般情况下，style-loader使用ES modules的语法生成JS模块。
+
+`modules`：类型为Object。默认值为undefined。此参数用来配置CSS模块。
+
