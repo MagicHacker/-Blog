@@ -530,7 +530,9 @@ module: {
 
 ### css-loader
 
-​		css-loader是webpack用来处理项目中的CSS的loader。它用imports和url(……)返回一个通过webpack require函数解析过的CSS。
+​		css-loader是webpack用来处理项目中的CSS的loader，它会对`@import`和`url()`进行处理。一般用于处理在一个CSS文件中通过@import引入另一个CSS文件，或者在一个JS文件中通过import/require引入一个CSS文件，css-loader会将样式打包进bundle.js文件中。
+
+![image-20201109000028740](https://tva1.sinaimg.cn/large/0081Kckwly1gki7jp089yj30ok01zglr.jpg)
 
 #### 安装
 
