@@ -623,3 +623,32 @@ module: {
 }
 ```
 
+### file-loader
+
+​		file-loader将文件中的`import/require()`解析成url并且将文件输出到output指定的目录中，并返回文件的public url。默认情况下，生成文件的文件名是根据文件内容生成的哈希值加上原来文件的扩展名。
+
+#### 安装
+
+```bash
+npm install file-loader --save-dev
+```
+
+#### 用法
+
+```javascript
+module: {
+    rules: [
+        {
+            test: /\.(png|jpe?g|gif)$/,
+            use: [
+              {
+                loader: 'file-loader'
+              }
+            ]
+        }
+    ]
+}
+```
+
+#### 配置项
+
