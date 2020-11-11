@@ -663,3 +663,39 @@ module: {
 
 ​		outputPath只是告诉webpack将生成的结果输出到哪里，而publicPath则是被用于内嵌到CSS，HTML文件中的url的值。
 
+### url-loader
+
+​		url-loader用于将文件转换为base64编码 URIs。url-loader功能和file-loader类似，但在文件大小（单位byte）小于指定的限制时，返回一个base64编码的DataURL。
+
+#### 安装
+
+```bash
+npm install url-loader --save-dev
+```
+
+#### 用法
+
+```javascript
+module: {
+    rules: [
+        {
+            test: /\.(png|jpg|gif)$/,
+            use: [
+                {
+                    loader: 'url-loader',
+                    options: {
+                        limit: 8192
+                    }
+                }
+            ]
+        }
+    ]
+}
+```
+
+#### 配置项
+
++ limit：文件大小的限制，小于该值文件就会被打包成base64编码的DataURL。
++ mimetype：用于设置文件的MIME类型。如果未指定，则使用文件扩展名来查找对应的MIME类型。
++ fallback：用于设置当url-loader加载的文件大于限制时，所对应的loader。
+
