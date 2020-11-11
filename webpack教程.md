@@ -4,7 +4,7 @@
 
 # context
 
-​		context是webpack编译时的基础目录，是一个绝对路径的字符串，用于从配置中解析入口entry和**loader**在配置了context字段之后，webpack在寻找相对路径的文件时会以context为根目录。context默认为执行启动webpack时所在的当前工作目录。如果想改变context的默认配置，则可以采用如下配置：
+​		context是webpack编译时的基础目录，是一个绝对路径的字符串，用于从配置中解析入口entry和**loader**。在配置了context字段之后，webpack在寻找相对路径的文件时会以context为根目录。context默认为执行启动webpack时所在的当前工作目录。如果想改变context的默认配置，则可以采用如下配置：
 
 ```javascript
 module.exports = {
@@ -625,7 +625,7 @@ module: {
 
 ### file-loader
 
-​		file-loader将文件中的`import/require()`解析成url并且将文件输出到output指定的目录中，并返回文件的public url。默认情况下，生成文件的文件名是根据文件内容生成的哈希值加上原来文件的扩展名。
+​		file-loader将文件中的`import/require()`解析成url并且将文件输出到output指定的目录中，并返回文件的public url。默认情况下，生成文件的文件名是根据文件内容生成的哈希值加上原来文件的扩展名。file-loader不会对文件的内容做任何处理。
 
 #### 安装
 
@@ -651,4 +651,15 @@ module: {
 ```
 
 #### 配置项
+
++ name：默认值为[hash].[ext]，用来为文件自定义文件名。
++ context：默认值为webpack.config.js的context，用于配置自定义文件的context。
++ publicPath：用于为文件配置自定义的public发布目录。
++ outputPath：用于为文件配置自定义的output输出目录。
++ useRelativePath：默认值为false，用来为每个文件生成一个相对url的context。
++ emitFile：默认值为true。如果设置为false，则只会返回public url，但不会生成相应的文件。
+
+#### outputPath和publicPath的区别
+
+​		outputPath只是告诉webpack将生成的结果输出到哪里，而publicPath则是被用于内嵌到CSS，HTML文件中的url的值。
 
