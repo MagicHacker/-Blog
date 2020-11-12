@@ -338,11 +338,11 @@ webpack --module-bind 'css=style-loader!css-loader'
 
 ## loader的特性
 
-	+ loader支持链式传递。loader会将前一个loader的处理结果传递给下一个loader进行处理。一组loader将按照定义的相反的顺序去执行，从空间上看就是从下到上执行，或者从右向左执行。
-	+ loader可以是同步的，也可以是异步的。
-	+ loader运行在Node.js中，并且能够执行任何可能的操作。
-	+ loader接收查询参数，用于对loader传递配置。
-	+ loader也能够使用options对象进行配置。
++ loader支持链式传递。loader会将前一个loader的处理结果传递给下一个loader进行处理。一组loader将按照定义的相反的顺序去执行，从空间上看就是从下到上执行，或者从右向左执行。
++ loader可以是同步的，也可以是异步的。
++ loader运行在Node.js中，并且能够执行任何可能的操作。
++ loader接收查询参数，用于对loader传递配置。
++ loader也能够使用options对象进行配置。
 
 ## 常用的loader
 
@@ -695,7 +695,7 @@ module: {
 
 #### 配置项
 
-+ limit：文件大小的限制，小于该值文件就会被打包成base64编码的DataURL。当文件的大小大于等于limit设置的值时，默认调用file-loader并且所有查询参数都会传递给file-loader。
++ limit：文件大小的限制，小于该值文件就会被打包成base64编码的DataURL，如果文件大小大于等于该值，则默认使用file-loader来处理，并且全部查询参数会传递给它。
 + mimetype：用于设置文件的MIME类型。如果未指定，则使用文件扩展名来查找对应的MIME类型。
 + fallback：用于设置当url-loader加载的文件大于限制时，所对应的loader。
 
