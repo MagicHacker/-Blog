@@ -703,3 +703,74 @@ module: {
 
 ​		插件是用来扩展webpack的功能的，它们会在构建过程的整个生命周期中生效，执行相关的任务。
 
+## 常用的plugin
+
+### html-webpack-plugin
+
+​		html-webpack-plugin用于生成一个html文件，并将最终生成的静态文件自动插入其中。它默认会在`output.path`的目录下创建一个`index.html`文件，并在文件中插入`script`标签，标签的`src`为`output.filename`。
+
+#### 安装
+
+```bash
+npm i --save-dev html-webpack-plugin
+```
+
+#### 用法
+
+```javascript
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+
+module.exports = {
+  entry: 'index.js',
+  output: {
+    path: __dirname + '/dist',
+    filename: 'index_bundle.js'
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+        template: './index.html',
+        filename: 'index.html'
+    })
+  ]
+}
+```
+
+如果是多入口的项目，就要多配置几个html-webpack-plugin。如下：
+
+```javascript
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+
+module.exports = {
+  entry: {
+    index: 'index.js',
+    print: 'print.js'
+  },
+  output: {
+    path: __dirname + '/dist',
+    filename: 'index_bundle.js'
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+        template: './index.html',
+        filename: 'index.html'
+    }),
+    new HtmlWebpackPlugin({
+        template: './print.html',
+        filename: 'print.html'
+    })
+  ]
+}
+```
+
+#### 配置项
+
++ title：用于设置document.title，在index.html中使用`<%= htmlWebpackPlugin.options.title %>`自定义网页标题。
++ filename：用于设置html文件生成的名称。默认值是index.html，可以自定义文件名称，也可以写文件路径，生成的文件的根路径为`output.path`的目录，同时自动引入的JS文件也会改成对应的路径，以保证正确的引入。
++ template：要生成的html文件的模板。值为文件的路径，相对于webpack.config.js的路径，同时此路径受webpack的context的影响，路径为context的路径+template的路径。
++ inject：指定webpack打包的静态资源插入到html中的位置，为`true`或`body`时会把JS文件插入到body底部，为`head`时会将JS文件插入到`<head>`标签中。
++ meta：为生成的html文件注入`meta`信息，例如：`{viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no'}`。
++ minify：压缩html文件。值为`{collapseWhitespace:true,removeComments:true,removeRedundantAttributes:true,removeScriptTypeAttributes:true,removeStyleLinkTypeAttributes:true,useShortDoctype:true}`
++ hash：设置为true会在生成的html文件中的静态资源文件末尾添加hash值。
+
+![image-20201114000358861](https://tva1.sinaimg.cn/large/0081Kckwly1gknzqv29aej30gj01e749.jpg)
+
