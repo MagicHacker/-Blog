@@ -699,3 +699,7 @@ module: {
 + mimetype：用于设置文件的MIME类型。如果未指定，则使用文件扩展名来查找对应的MIME类型。
 + fallback：用于设置当url-loader加载的文件大于限制时，所对应的loader。
 
+# plugins
+
+​		插件是用来扩展webpack的功能的，它们会在构建过程的整个生命周期中生效，执行相关的任务。
+
