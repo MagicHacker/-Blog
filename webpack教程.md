@@ -777,3 +777,30 @@ module.exports = {
 + cache：默认值true，用于指定文件要不要缓存。
 + chunks：一般用于在打包多入口项目时，指定每个html文件只引入各自相对应的JS文件，防止html文件多引入不需要的文件。
 
+### clean-webpack-plugin
+
+​		该插件用于在下一次打包时清除之前打包的文件，清除的是`outpu.path`设置的文件夹。
+
+#### 安装
+
+```bash
+npm i clean-webpack-plugin --save-dev
+```
+
+#### 用法
+
+```javascript
+const CleanWebpackPlugin = require('clean-webpack-plugin')
+
+module.exports = {
+  entry: 'index.js',
+  output: {
+    path: __dirname + '/dist',
+    filename: 'index_bundle.js'
+  },
+  plugins: [
+    new CleanWebpackPlugin()
+  ]
+}
+```
+
