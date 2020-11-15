@@ -804,3 +804,44 @@ module.exports = {
 }
 ```
 
+### mini-css-extract-plugin
+
+​		该插件会将CSS提取到单独的文件中，减少webpack的打包体积。它会为每个包含CSS的JS文件创建一个CSS文件，并且支持CSS和sourceMaps的按需加载。
+
+#### 安装
+
+```bash
+npm install --save-dev mini-css-extract-plugin
+```
+
+#### 用法
+
+```javascript
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+module.exports = {
+  plugins: [new MiniCssExtractPlugin()],
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+      }
+    ]
+  }
+}
+```
+
+#### 配置项
+
++ filename：用于设置每个输出的CSS的文件名，类似于`output.filename`可以使用各种hash。
++ chunkFilename：用于设置非入口的chunk的文件名称，类似于`output.chunkFilename`。
++ attributes：用于设置`<link>`标签上的属性。
+
+#### loader配置项
+
+​		mini-css-extract-plugin的loader有自己的配置项。如下：
+
++ publicPath：默认值为webpack的`output.publicPath`的值。用于为提取的CSS文件指定一个自定义的公共路径，多为CDN路径。
++ esModule：默认值为true。用于设置是否使用ES modules语法。
++ modules：用于配置CSS modules模块。
+
