@@ -845,3 +845,95 @@ module.exports = {
 + esModule：默认值为true。用于设置是否使用ES modules语法。
 + modules：用于配置CSS modules模块。
 
+# webpack-dev-server
+
+​		在构建代码并部署到生产环境之前，需要一个本地环境来运行我们开发的代码，访问webpack打包好的静态文件，我们可以使用它来调用前端代码。webpack-dev-server是webpack官方提供的一个工具，基于当前的webpack配置来快启动一个静态服务，每次修改代码保存后可以自动打包，打包输出的文件只存在于内存当中，支持自动刷新页面。
+
+## 安装
+
+```bash
+npm i webpack-dev-server --save-dev
+```
+
+## 启动
+
+```bash
+# 使用npm scripts
+"scripts": {
+  "dev": "webpack-dev-server --config webpack.config.js"
+}
+npm run dev
+# 使用CLI方式
+node_modules/.bin/webpack-dev-server
+```
+
+## 配置
+
+```javascript
+module.exports = {
+  entry: {
+    index: 'index.js',
+    print: 'print.js'
+  },
+  output: {
+    path: __dirname + '/dist',
+    filename: 'index_bundle.js'
+  },
+  devServer: {
+	contentBase: path.join(__dirname, 'dist'),
+    port: 8080
+  }
+}
+```
+
+## 配置项
+
++ contentBase：提供静态文件的目录地址，建议使用绝对路径。默认情况下，它将使用当前的工作目录来提供内容。
++ compress：为静态文件开启gzip压缩。
++ hot：用于开启webpack的Hot Module Replacement（HMR）功能。要完全启用HMR，需要配置webpack.HotModuleReplacementPlugin，但是如果在npm scripts中启用webpack-dev-server，同时添加了--hot参数，则webpack.HotModuleReplacementPlugin将会被自动添加。
++ inline：用于设置`HMR`的模式。默认值为true。设置为true则使用inline模式。设置为false则使用iframe模式。iframe模式是在网页中嵌入一个iframe，并将我们自己的代码注入到这个iframe中。推荐使用inline模式。
++ open：webpack-dev-server启动后自动打开浏览器。默认值为true。
++ port：webpack-dev-server监听的端口号。
++ public：用于指定静态服务的域名，默认为`http://localhost:8080/`，当你使用Nginx来做反向代理的时候，应该是该配置来指定Nginx配置使用的服务域名。
++ publicPath：用于指定构建好的静态文件在浏览器中用什么路径去访问。默认值为`/`。比如，对于一个构建好的文件bundle.js，完整的访问路径为`http://localhost:8080/bundle.js`，但是如果设置了`publicPath: 'asstes/'`，那么完整的访问路径为`http://localhost:8080/assets/bundle.js`。可以使用整个 URL 来作为 `publicPath` 的值，如 `publicPath: 'http://localhost:8080/assets/'`。如果你使用了 HMR，那么要设置 `publicPath` 就必须使用完整的 URL。建议将 `devServer.publicPath` 和 `output.publicPath` 的值保持一致。
++ proxy：用于设置代理。一般用于解决跨域问题。
+
+```javascript
+module.exports = {
+  entry: {
+    index: 'index.js',
+    print: 'print.js'
+  },
+  output: {
+    path: __dirname + '/dist',
+    filename: 'index_bundle.js'
+  },
+  devServer: {
+	proxy: {
+        '/api': {
+            // 匹配到路径中的api时，代理到3000端口
+            // 即http://localhost:8080/api/123代理到http://localhost:3000/api/123
+            target: 'http://localhost: 3000',
+            // 重写路径
+            // 即http://localhost:8080/api/123代理到http://localhost:3000/123
+            pathRewrite: {
+                '^/api': ''
+            }
+        }
+    }
+  }
+}
+```
+
++ before：用于在webpack-dev-server中定义额外的中间件，在webpack-dev-server内部所有中间件执行之前调用。可以用于拦截部分请求返回特定的内容，或者实现简单的数据Mock服务。
+
+  ```javascript
+  before(app){
+    app.get('/some/path', function(req, res) {//当访问/some/path 路径时，返回自定义的json数据
+      res.json({ custom: 'response' })
+    })
+  }
+  ```
+
++ after：用于在webpack-dev-server中定义额外的中间件，在webpack-dev-server内部所有中间件执行之后调用。用到较少，一般用于打印日志或者做一些额外的处理。
+
