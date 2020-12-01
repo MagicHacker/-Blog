@@ -845,6 +845,44 @@ module.exports = {
 + esModule：默认值为true。用于设置是否使用ES modules语法。
 + modules：用于配置CSS modules模块。
 
+### copy-webpack-plugin
+
+​		用于将单个文件或者整个目录复制到构建目录。
+
+#### 安装
+
+```bash
+npm i copy-webpack-plugin --save-dev
+```
+
+#### 用法
+
+新版的copy-webpack-plugin插件需要使用patterns字段。
+
+```javascript
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+module.exports = {
+  plugins: [
+      new CopyWebpackPlugin([
+          patterns: [
+            { from: "source", to: "dest" },
+            { from: "other", to: "public" },
+          ]
+      ])
+  ]
+}
+```
+
+#### 配置项
+
+	+ from：需要复制的文件的资源。可以是路径或者glob模式匹配的文件路径。
+	+ to：复制的文件资源要生成的路径。
+	+ context：用来配置路径。webpack在寻找相对路径的文件时会以context为根目录。
+	+ filter：用来过滤所复制的资源。
+	+ toType：用来设置复制的是文件还是目录。
+	+ transform：可在文件写入webpack之前修改内容。
+	+ cacheTransform：配置缓存。
+
 # webpack-dev-server
 
 ​		在构建代码并部署到生产环境之前，需要一个本地环境来运行我们开发的代码，访问webpack打包好的静态文件，我们可以使用它来调用前端代码。webpack-dev-server是webpack官方提供的一个工具，基于当前的webpack配置来快启动一个静态服务，每次修改代码保存后可以自动打包，打包输出的文件只存在于内存当中，支持自动刷新页面。
