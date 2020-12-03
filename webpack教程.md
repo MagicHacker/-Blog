@@ -1002,3 +1002,73 @@ module.exports = {
 
 + after：用于在webpack-dev-server中定义额外的中间件，在webpack-dev-server内部所有中间件执行之后调用。用到较少，一般用于打印日志或者做一些额外的处理。
 
+# 模块解析
+
+​		resolver是一个寻找模块绝对路径的库。一个模块可以作为另一个模块的依赖模块，被后者引用。比如：
+
+```javascript
+import foo from '../foo'
+require('bar')
+```
+
+resolver帮助webpack从每个import/require语句中，找到需要引入到bundle中的模块代码。webpack使用enhanced-resolve来解析文件路径。
+
+## 解析规则
+
+​		使用enhanced-resolve，webpack能解析三种文件路径：
+
++ 绝对路径。由于已经获得文件的绝对路径，因此不需要再解析。
++ 相对路径。在import/require中给定的相对路径，webpack会拼接上下文路径，来生成模块的绝对路径。
++ 模块路径。
+
+## resolve选项
+
+​		resolve选项能够设置模块如何被解析，webpack会提供合理的默认配置。
+
+### alias
+
+​		配置模块路径的别名，在使用import/require时，使用模块路径的别名，来使得引入模块更加简单，同时可以使webpack更加快速精准的检索到模块，不用再递归解析依赖，提升构建速度。alias的优先级高于其他模块的解析方式。例如：
+
+```javascript
+const path = require('path')
+module.exports = {
+    resolve: {
+        alias: {
+            '@src': path.resolve(__dirname, 'src/')
+        }
+    }
+}
+```
+
+```javascript
+import foo from '@src/foo/index'
+```
+
+### enforceExtension
+
+​		用于在import/require时是否让开发者强制加上文件的扩展名。默认为false。如果为true，将不允许import/require无扩展名的文件。
+
+### extensions
+
+​		一个字符串数组，数组的元素是文件的扩展名。webpack会尝试按照数组元素的顺序解析扩展名，使用此项会覆盖默认配置，这意味着webpack将不再尝试使用默认扩展来解析模块。如果有多个同名文件，但是扩展名不同，webpack会解析列在数组首位的扩展名文件，并跳过其余后缀。
+
+```javascript
+module.exports = {
+  resolve: {
+    extensions: ['.css', '.less', '.js', '.json'],
+  },
+};
+```
+
+引入模块时可以不带扩展名：
+
+```javascript
+import foo from './foo/index'
+```
+
+### modules（待验证）
+
+​		告诉webpack解析模块时应该搜索的目录。
+
+# splitChunks
+
