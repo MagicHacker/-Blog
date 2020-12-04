@@ -1070,5 +1070,70 @@ import foo from './foo/index'
 
 ​		告诉webpack解析模块时应该搜索的目录。
 
-# splitChunks
+# Optimization
+
+​		webpack的优化项。
+
+## minimize
+
+​		默认值为true。告知webpack使用TerserPlugin或其他在optimization.minimizer定义的插件压缩bundle。
+
+```javascript
+module.exports = {
+  optimization: {
+    minimize: false
+  }
+};
+```
+
+## minimizer
+
+​		开发者配置一个或者多个TerserPlugin实例，覆盖默认的压缩工具。
+
+```javascript
+const TerserPlugin = require('terser-webpack-plugin');
+
+module.exports = {
+  optimization: {
+    minimizer: [
+      new TerserPlugin({
+        cache: true,
+        parallel: true,
+        sourceMap: true, // 如果在生产环境中使用 source-map，必须设置为 true
+        terserOptions: {
+          // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
+        }
+      }),
+    ],
+  }
+};
+```
+
+## splitChunks
+
+​		webpack4版本之后使用optimization.splitChunks代替commonsChunkPlugin来对模块进行分割打包。
+
+
+
+
+
+
+
+# devtool
+
+​		控制webpack如何生成source-map。
+
+
+
+# DllPlugin
+
+
+
+
+
+
+
+
+
+# vue.config.js
 
