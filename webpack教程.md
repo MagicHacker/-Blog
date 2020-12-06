@@ -1047,8 +1047,6 @@ externals : {
 
 这种配置方式的意思是，lodash这个库在AMD和CommonJS模块方案中通过lodash访问，在浏览器中通过全局变量_访问。
 
-
-
 ## 不同环境设置externals的方式
 
 1、如果在Node环境中运行，需要在externals中添加前缀CommonJS或者CommonJS2。
@@ -1066,14 +1064,6 @@ externals: {
     jquery: 'jQuery'
 }
 ```
-
-
-
-
-
-
-
-
 
 # 模块解析
 
