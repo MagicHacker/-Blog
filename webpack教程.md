@@ -1176,9 +1176,89 @@ module.exports = {
 
 ​		webpack4版本之后使用optimization.splitChunks代替commonsChunkPlugin来对模块进行分割打包。
 
+默认情况下，它只会影响到那些按需加载的chunks。webpack在以下场景会自动分割chunks：
 
++ 新的chunk被多个chunk共享，或者它来自于node_modules文件夹。
++ 新的chunk体积大于20kb（在进行min+gz）之前的体积。
++ 在按需加载chunk时，其最大并发请求的数量小于等于30。
++ 初始页面加载时并行请求的最大数量小于等于30。
 
+### 基本使用
 
+```javascript
+module.exports = {
+    optimization: {
+        splitChunks: {
+            chunks: 'async',
+            minSize: 30000,
+            maxSize: 0,
+            minChunks: 1,
+            maxAsyncRequests: 6,
+            maxInitialRequests: 4,
+            automaticNameDelimiter: '~',
+            cacheGroups: {
+                vendors: {
+                    test: /[\\/]node_modules[\\/]/,
+                    priority: -10,
+                },
+                default: {
+                    minChunks: 2,
+                    priority: -20,
+                    reuseExistingChunk: true,
+                }
+            }
+        }
+    }
+}
+```
+
+### 配置项
+
+#### chunks
+
+​		其值为`all`，`initial`，`async`，默认值为async。
+
++ initial：同步加载的模块，即直接通过import/require导入的模块会被split。比如：import foo from \`foo\`，或const a = require(\`a\`)
+
++ async：异步加载的模块，即动态按需加载的模块会被split。比如：
+
+  ```javascript
+  import(/* webpackChunkName: "a" */ './a.js').then(a => {
+    console.log(a)
+  })
+  ```
+
++ all：包含上述两种情况。
+
+#### minsize
+
+​		生成的chunk的最小体积，单位为字节，默认是20000。	
+
+#### maxSize
+
+​		表示被分割的文件在压缩前的最大体积，默认为0，表示不限制最大体积。
+
+#### minChunks
+
+​		表示模块被引用的次数，默认为1。超过minChunks次数的代码才会被抽离。
+
+#### maxAsyncRequests
+
+​		表示按需加载的最大并行请求数，默认值为30。
+
+#### maxInitialRequests
+
+​		表示初始化的时候最多可以有多少个并行的请求数。
+
+#### automaticNameDelimiter
+
+​		指定生成的模块名称的连接符。
+
+#### name
+
+​		指定抽离的模块的名称。默认值为false。
+
+#### cacheGroups
 
 
 
@@ -1211,5 +1291,7 @@ module.exports = {
 
 
 
-# vue.config.js
+# chain-webpack
+
+
 
