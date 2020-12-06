@@ -1002,6 +1002,79 @@ module.exports = {
 
 + after：用于在webpack-dev-server中定义额外的中间件，在webpack-dev-server内部所有中间件执行之后调用。用到较少，一般用于打印日志或者做一些额外的处理。
 
+# externals
+
+​		externals意为webpack的外部扩展。externals选项提供了从webpack的输出的bundle文件中排除某些依赖的方法，防止将某些import的包打包到bundle中，而是在运行时再去从外部获取这些扩展依赖，减少打包的体积。使用externals配置后，webpack可以不处理这些依赖库，但是依旧可以在代码中通过CMD，AMD，window/global全局的方式访问。
+
+比如，从CDN加载jQuery，而不是将它打包进最终的bundle文件中。配置如下：
+
+```javascript
+module.exports = {
+  externals: {
+    jquery: 'jQuery'
+  }
+};
+```
+
+```html
+<script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+```
+
+```javascript
+import $ from 'jquery'
+```
+
+<font style="color: red">注意</font>：externals配置对象中，属性名为模块名，属性值为变量名。这里jquery代表的是真实的jquery模块名，jQuery代表的是全局变量名，可随意定义，比如定义成$。
+
+## externals支持的模块上下文
+
+​		externals支持以下模块上下文（module context）：
+
++ root：可以通过一个全局变量访问library，例如通过script标签。
++ CommonJS：可以将library作为一个CommonJS模块访问。
++ CommonJS2：和上面CommonJS类似，但导出的是module.exports.default。
++ amd：类似于CommonJS，但使用的是AMD模块方案。
+
+```javascript
+externals : {
+  lodash : {
+    commonjs: "lodash",
+    amd: "lodash",
+    root: "_"
+  }
+}
+```
+
+这种配置方式的意思是，lodash这个库在AMD和CommonJS模块方案中通过lodash访问，在浏览器中通过全局变量_访问。
+
+
+
+## 不同环境设置externals的方式
+
+1、如果在Node环境中运行，需要在externals中添加前缀CommonJS或者CommonJS2。
+
+```javascript
+externals: {
+    jquery: 'commonjs jQuery'
+}
+```
+
+2、如果在浏览器中运行，就不用添加什么前缀，默认就是global。
+
+```javascript
+externals: {
+    jquery: 'jQuery'
+}
+```
+
+
+
+
+
+
+
+
+
 # 模块解析
 
 ​		resolver是一个寻找模块绝对路径的库。一个模块可以作为另一个模块的依赖模块，被后者引用。比如：
@@ -1121,7 +1194,9 @@ module.exports = {
 
 # devtool
 
-​		控制webpack如何生成source-map。
+​		控制webpack如何生成source-map。可以使用SourceMapDevToolPlugin对source-map进行更细粒度的控制。
+
+
 
 
 
