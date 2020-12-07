@@ -1232,15 +1232,15 @@ module.exports = {
 
 #### minsize
 
-​		生成的chunk的最小体积，单位为字节，默认是20000。	
+​		被抽离的模块在压缩前的体积的最小值，单位为字节，默认是20000。只有体积超过20000字节才会被抽离。
 
 #### maxSize
 
-​		表示被分割的文件在压缩前的最大体积，默认为0，表示不限制最大体积。
+​		被抽离的模块打包生成的文件大小不能超过maxSize值，如果超过了，要再对其进行分割抽取并打包成新的文件。单位为字节，默认为0，表示不限制大小。
 
 #### minChunks
 
-​		表示模块被引用的次数，默认为1。超过minChunks次数的代码才会被抽离。
+​		表示模块抽离之前被引用的次数，默认为1。超过minChunks次数的代码才会被抽离。
 
 #### maxAsyncRequests
 
@@ -1259,6 +1259,13 @@ module.exports = {
 ​		指定抽离的模块的名称。默认值为false。
 
 #### cacheGroups
+
+​		用于定义chunks所属的缓存组。配置抽离模块的方案。里面的每一项都代表一个抽离模块的方案。cacheGroups可以继承/覆盖splitChunks.*中的任何选项，同时它自己独有test，priority，reuseExistingChunk，enforce等选项。cacheGroups有两个默认的组，一个是vendors，打包所有来自node_modules的模块。另一个是default，打包两个以上的chunk所共享的模块。
+
++ test：用来匹配要抽离的模块的资源路径或者名称，符合条件的模块就会被分配到该组。值是一个函数或者正则表达式。省略它的话会选择所有模块。
++ priority：所采用的cacheGroups的方案的优先级，数字越大优先级越高，默认值为0，一般自定义设置为负数。
++ reuseExistingChunk：表示是否复用已有的chunk。值为false/true。设置为true时，如果当前要抽取的模块，已经存在于打包生成的js文件中，则会复用该模块，而不会打包成新的chunk。
++ enforce：是否忽略外层splitChunks中配置的选项。值为false/true。设置为true时，会忽略minSize，minChunks，maxSize等配置项。
 
 
 
