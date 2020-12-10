@@ -1174,7 +1174,7 @@ module.exports = {
 
 ## splitChunks
 
-​		webpack4版本之后使用optimization.splitChunks代替commonsChunkPlugin来对模块进行分割打包。
+​		webpack4版本之后使用optimization.splitChunks代替commonsChunkPlugin来对模块进行分割打包，将代码分离到不同的bundle中，然后可以按需加载或并行加载这些文件，合理的控制资源的加载，减少打包的体积和速度。
 
 默认情况下，它只会影响到那些按需加载的chunks。webpack在以下场景会自动分割chunks：
 
@@ -1218,7 +1218,7 @@ module.exports = {
 
 ​		其值为`all`，`initial`，`async`，默认值为async。
 
-+ initial：同步加载的模块，即直接通过import/require导入的模块会被split。比如：import foo from \`foo\`，或const a = require(\`a\`)
++ initial：原始的拆分模块。原则就是有共用的情况下发生拆分。在这个模式下，动态引入的代码，无论如何都会走拆分逻辑（只有拆分成单独的文件才能动态引入）。对于同步引入的模块，如果有多处在共用，则抽离出来。
 
 + async：异步加载的模块，即动态按需加载的模块会被split。比如：
 
@@ -1230,7 +1230,7 @@ module.exports = {
 
 + all：包含上述两种情况。
 
-#### minsize
+#### minSize（待验证）
 
 ​		被抽离的模块在压缩前的体积的最小值，单位为字节，默认是20000。只有体积超过20000字节才会被抽离。
 
@@ -1244,11 +1244,11 @@ module.exports = {
 
 #### maxAsyncRequests
 
-​		表示按需加载的最大并行请求数，默认值为30。
+​		表示按需加载的最大并行请求数，默认值为6。如果拆分后导致bundle需要同时异步加载的chunk数量大于等于6个，则不会进行拆分，因为增加了请求数，得不偿失。
 
 #### maxInitialRequests
 
-​		表示初始化的时候最多可以有多少个并行的请求数。
+​		表示初始化的时候最多可以有多少个并行的请求数，默认值为4。拆分后的入口文件的chunk请求数大于等于4，则不会进行拆分，因为这样增加了请求数。
 
 #### automaticNameDelimiter
 
@@ -1256,7 +1256,7 @@ module.exports = {
 
 #### name
 
-​		指定抽离的模块的名称。默认值为false。
+​		指定抽离的模块的名称。默认值为true，表示自动生成文件名。
 
 #### cacheGroups
 
@@ -1288,11 +1288,30 @@ module.exports = {
 
 ​		在生产环境中将devtool设置为hidden-source-map，这样会生成详细的sourcemap，但不会把sourcemap暴露出去。
 
-# DllPlugin
+# DllPlugin和DllRefrencePlugin
 
+​		DllPlugin和DllRefrencePlugin用来拆分模块，同时大幅度提升构建速度。DllPlugin将不常变动的模块单独打包成一个bundle，同时生成一个manifest.json文件，DllRefrencePlugin通过manifest.json文件把依赖的模块的名称映射到模块id上，在需要的时候通过内置的\__webpack\__require\__函数来require相应的模块。
 
+	## 安装
 
+```bash
+npm i DllPlugin DllReferencePlugin --save-dev
+```
 
+## DllPlugin配置项
+
++ context：manifest.json文件生成的基础路径，默认为webpack.context的值。
++ format：格式化manifest.json，默认值为false。如果设置为true，将格式化manifest.json文件。
++ name：暴露出来的动态链接库全局变量名名称，需要与output.library保持一致。
++ path：manifest.json文件生成的绝对路径。
++ entryOnly（不常使用）：默认值为true，如果为true，则仅暴露入口。*建议 DllPlugin 只在* `entryOnly: true` 时使用，否则 DLL 中的 tree shaking 将无法工作，因为所有 exports 均可使用。
++ type：dll打包出来的bundle的类型。
+
+## DllRefrencePlugin配置项
+
++ context：引入manifest.json文件的基础路径，默认为webpack.context的值。
++ extensions：用于解析dll bundle中模块的扩展名。
++ manifest：用于引入dll生成的manifest.json文件。
 
 
 
