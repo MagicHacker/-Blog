@@ -1292,11 +1292,9 @@ module.exports = {
 
 ​		DllPlugin和DllRefrencePlugin用来拆分模块，同时大幅度提升构建速度。DllPlugin将不常变动的模块单独打包成一个bundle，同时生成一个manifest.json文件，DllRefrencePlugin通过manifest.json文件把依赖的模块的名称映射到模块id上，在需要的时候通过内置的\__webpack\__require\__函数来require相应的模块。
 
-	## 安装
+## 为什么使用DllPlugin和DllRefrencePlugin
 
-```bash
-npm i DllPlugin DllReferencePlugin --save-dev
-```
+​		通常来说，我们的代码可以简单的区分为业务代码和第三方库。如果不做处理，每次构建时都需要把所有的代码重新构建一次，耗费大量的时间。然后大部分情况下，很多第三方库的代码并不会发生变更（除非是版本升级），这时就可以用到dll：把复用性较高的第三方模块打包到动态链接库中，在不升级这些库的情况下，动态库不需要重新打包，每次构建只重新打包业务代码。
 
 ## DllPlugin配置项
 
@@ -1313,7 +1311,58 @@ npm i DllPlugin DllReferencePlugin --save-dev
 + extensions：用于解析dll bundle中模块的扩展名。
 + manifest：用于引入dll生成的manifest.json文件。
 
+## 用法
 
+​		使用Dll时，构建过程分为两个：dll的构建和webpack主构建。因此需要使用两个配置文件：webpack.config.js和webpack.dll.config.js。先通过webpack.dll.config.js构建出dll bundle，然后再使用webpack主构建进行打包。
+
+### webpack.dll.config.js
+
+```javascript
+const path = require('path')
+module.exports = {
+    entry: {
+        jquery: ['jquery']
+    },
+    output: {
+        filename: '[name].dll.js',
+        path: path.resolve(__dirname, './dist/dll'),
+        // 存放相关的dll文件的全局变量名
+        library: '[name]_dll'
+    },
+    plugins: [
+        new webpack.DllPlugin({
+            // 动态链接库的全局变量名称，需要和 output.library 中保持一致
+      		// 该字段的值也就是输出的 manifest.json 文件 中 name 字段的值
+            name: '[name]_dll',
+            path: path.resolve(__dirname, 'dist', '[name].manifest.json')
+        })
+    ]
+}
+```
+
+### webpack.config.js
+
+```javascript
+const path = require('path')
+module.exports = {
+    plugins: [
+        new webpack.DllRefrencePlugin({
+            manifest: require('./dist/jquery.manifest.json')
+        })
+    ]
+}
+```
+
+### 在入口html文件中引入
+
+​		由于生成的dll暴露出的是全局函数，因此需要在入口的html中引入。
+
+```html
+<body>
+    <!--引如dll文件-->
+    <script src="../../dist/dll/jquery.dll.js" ></script>
+</body>
+```
 
 
 
