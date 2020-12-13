@@ -1366,7 +1366,104 @@ module.exports = {
 
 # webpack-chain
 
+​		通过一个链式的API来修改2~4版本的webpack的配置。webpack-chain通过提供链式或顺流式的API创建和修改webpack配置，不用再像以前一样写死一个webpack配置对象。API的key部分可以由用户指定的名称引用。目前vue-cli内部的webpack配置就是通过webpack-chain来维护的。
 
+## 安装
 
+```bash
+## npm
+npm install --save-dev webpack-chain
+## yarn
+yarn add --dev webpack-chain
+```
 
+## 用法
+
+```javascript
+const path = require('path')
+// 导入webpack-chain模块，该模块导出了一个用于创建webpack配置API的单一构造函数
+const Config = require('webpack-chain')
+// 对单一构造函数创建一个新的配置实例
+const config = new Config()
+// 使用链式API改变配置
+config
+	// 修改entry配置
+	.entry('app')
+	.add('src/index.js')
+	// 返回上层的实例对象
+	.end()
+	// 修改output配置
+	.output
+	.path('dist')
+	.filename('[name].bundle.js')
+
+// 设置别名
+config.resolve.alias
+	.set('@src', path.resolve(__dirname, 'src'))
+
+// 使用loader
+config.module
+	.rule('lint')
+	.include
+	.add('src')
+	.end()
+	// 创建具名规则
+	.use('eslint')
+	.loader('eslint-loader')
+	.options({
+    	rules: {
+            semi: 'off'
+        }
+	})
+
+// 修改loader选项
+config.module
+	.rule('compile')
+	.use('babel')
+	.tap(options => {
+    plugins: ['@babel/plugin-proposal-class-properties']
+})
+
+// 使用plugin
+config
+	.plugin('clean')
+	.use(CleanPlugin, [['dist'], {root: '/dir'}])
+
+// 使用when做条件配置
+config
+	.when(process.env.NODE_ENV === 'production',
+      config => config.plugin('minify').use(BabiliWebpackPlugin))
+// 合并配置
+config.merge({devtool: 'source-map'})
+
+// 导出配置对象
+module.exports = config.toConfig()
+```
+
+使用toString()方法查看webpack-chain生成的对应的webpack配置
+
+```javascript
+config
+    .module
+    .rule('compile')
+    .test(/\.js$/)
+    .use('babel')
+    .loader('babel-loader')
+config.toString();
+/**
+{module:
+	{rules:
+		[
+		/* config.module.rule('compile') */
+            {
+                test: /\.js$/,
+                use: [
+                /* config.module.rule('compile').use('babel') */
+                    {loader: 'babel-loader'}
+                ]
+            }
+        ]
+}}
+*/
+```
 
