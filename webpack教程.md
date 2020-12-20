@@ -268,7 +268,7 @@ module.exports = {
 
 ### path
 
-​		path用来指定webpack打包构建的最终输出的目录，是一个绝对路径。
+​		path用来指定webpack打包构建的最终输出的目录，必须是一个绝对路径。
 
 ### publicPath（待补充）
 
@@ -530,7 +530,9 @@ module: {
 
 ### css-loader
 
-​		css-loader是webpack用来处理项目中的CSS的loader，它会对`@import`和`url()`进行处理。一般用于处理在一个CSS文件中通过@import引入另一个CSS文件，或者在一个JS文件中通过import/require引入一个CSS文件，css-loader会将样式打包进bundle.js文件中。
+​		css-loader是webpack用来处理项目中的CSS的loader，它会对`@import`和`url()`（CSS中的图片引入，同时还需要url-loader/file-loader处理图片）进行处理。一般用于处理在一个CSS文件中通过@import引入另一个CSS文件，或者在一个JS文件中通过import/require引入一个CSS文件，css-loader会将样式打包进bundle.js文件中，
+
+但是不会将CSS插入到HTML中。
 
 ![image-20201109000028740](https://tva1.sinaimg.cn/large/0081Kckwly1gki7jp089yj30ok01zglr.jpg)
 
@@ -1065,7 +1067,7 @@ externals: {
 }
 ```
 
-# 模块解析
+# module解析
 
 ​		resolver是一个寻找模块绝对路径的库。一个模块可以作为另一个模块的依赖模块，被后者引用。比如：
 
