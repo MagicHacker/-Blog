@@ -608,7 +608,7 @@ body {
 }
 ```
 
-当css-loader处理index.less文件时，执行到@import语句时，importLoaders设置了1，所以a.less和b.less会先交给postcss-loader处理，不会交给less-loader处理，如果设置为2，则a.less和b.less文件会交给postcss-loader和less-loader处理。
+当css-loader处理index.less文件时，执行到@import语句时，importLoaders设置了1，所以a.less和b.less会先交给postcss-loader处理，不会交给less-loader处理，如果设置为2，则a.less和b.less文件会交给postcss-loader和less-loader处理。如果不设置importLoaders或者将其设置为0，则a.less和b.less不会被postcss-loader和less-loader处理。所以importLoaders设置的目的就是让@import进来的文件也能够经过相关loader去处理。
 
 ### style-loader
 
