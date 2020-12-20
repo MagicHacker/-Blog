@@ -530,9 +530,7 @@ module: {
 
 ### css-loader
 
-​		css-loader是webpack用来处理项目中的CSS的loader，它会对`@import`和`url()`（CSS中的图片引入，同时还需要url-loader/file-loader处理图片）进行处理。一般用于处理在一个CSS文件中通过@import引入另一个CSS文件，或者在一个JS文件中通过import/require引入一个CSS文件，css-loader会将样式打包进bundle.js文件中，
-
-但是不会将CSS插入到HTML中。
+​		css-loader是webpack用来处理项目中的CSS的loader，它会对`@import`和`url()`（CSS中的图片引入，同时还需要url-loader/file-loader处理图片）进行处理。一般用于处理在一个CSS文件中通过@import引入另一个CSS文件，或者在一个JS文件中通过import/require引入一个CSS文件，css-loader会将样式打包进bundle.js文件中，但是不会将CSS插入到HTML中。
 
 ![image-20201109000028740](https://tva1.sinaimg.cn/large/0081Kckwly1gki7jp089yj30ok01zglr.jpg)
 
@@ -559,13 +557,58 @@ module: {
 
 #### 配置项
 
-url：默认值为true。启用/禁用url()的解析，绝对路径url不会被解析。
++ url：默认值为true。启用/禁用url/image-set的解析，控制url（）函数的解析，绝对路径url不会被解析。
 
-import：默认值为true。启用/禁用@import的解析，绝对路径的url在运行时会被移除。
++ import：默认值为true。启用/禁用@import的解析，@import中的绝对路径的url会被移到运行时去处理。
 
-modules：默认值为false。启用/禁用CSS模块。
++ modules：默认值为false。启用/禁用CSS模块规范，设置为false会提升性能，因为避免了CSS modules特性的解析。
++ importLoaders：用于设置在【css-loader处理@import的资源文件之前】使用多少个loader。比如：
 
-minimize：默认值为false。启用/禁用压缩。
+```javascript
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.less$/,
+        use: [
+          {
+            loader: 'style-loader'
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1
+            }
+          },
+          'postcss-loader',
+          'less-loader'
+        ]
+      }
+    ]
+  }
+}
+```
+
+```css
+// a.less
+body {
+    font-size: 14px;
+}
+
+// b.less
+body {
+    background-color: #f00;
+}
+// index.less
+@import "./a.less";
+@import "./b.less";
+
+body {
+    color: #0f0;
+}
+```
+
+当css-loader处理index.less文件时，执行到@import语句时，importLoaders设置了1，所以a.less和b.less会先交给postcss-loader处理，不会交给less-loader处理，如果设置为2，则a.less和b.less文件会交给postcss-loader和less-loader处理。
 
 ### style-loader
 
