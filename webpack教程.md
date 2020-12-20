@@ -635,15 +635,15 @@ module: {
 
 #### 配置项
 
-`injectType`：类型为string，默认值为styleTag，用来设置把style插入到DOM中的方式。
++ `injectType`：类型为string，默认值为styleTag，用来设置把style插入到DOM中的方式。
 
-`attributes`：类型为Object，默认值为{}。用来添加自定义属性到插入的标签中。
++ `attributes`：类型为Object，默认值为{}。用来添加自定义属性到插入的标签中。
 
-`insert`：类型为string/function，默认值为head。用于在指定的位置插入标签。默认情况下，style-loader会把`<style>/<link>`标签添加到`<head>`标签的尾部，这会使style-loader处理的CSS比原本在`<head>`中已经存在的CSS具有更高的优先级。
++ `insert`：类型为string/function，默认值为head。用于在指定的位置插入标签。默认情况下，style-loader会把`<style>或者<link>`标签添加到`<head>`标签的尾部，这会使style-loader处理的CSS比原本在`<head>`中已经存在的CSS具有更高的优先级。
 
-`esModule`：类型为Boolean，默认值为true。一般情况下，style-loader使用ES modules的语法生成JS模块。
++ `esModule`：类型为Boolean，默认值为true。一般情况下，style-loader使用ES modules的语法生成JS模块。
 
-`modules`：类型为Object。默认值为undefined。此参数用来配置CSS模块。
++ `modules`：类型为Object。默认值为undefined。此参数用来配置CSS模块。
 
 ### less-loader
 
