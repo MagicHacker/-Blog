@@ -948,13 +948,13 @@ module.exports = {
 
 #### 配置项
 
-	+ from：需要复制的文件的资源。可以是路径或者glob模式匹配的文件路径。
-	+ to：复制的文件资源要生成的路径。
-	+ context：用来配置路径。webpack在寻找相对路径的文件时会以context为根目录。
-	+ filter：用来过滤所复制的资源。
-	+ toType：用来设置复制的是文件还是目录。
-	+ transform：可在文件写入webpack之前修改内容。
-	+ cacheTransform：配置缓存。
++ from：需要复制的文件的资源。可以是路径或者glob模式匹配的文件路径。
++ to：复制的文件资源要生成的路径。
++ context：用来配置路径。webpack在寻找相对路径的文件时会以context为根目录。
++ filter：用来过滤所复制的资源。
++ toType：用来设置复制的是文件还是目录。
++ transform：可在文件写入webpack之前修改内容。
++ cacheTransform：配置缓存。
 
 # webpack-dev-server
 
