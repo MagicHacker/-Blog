@@ -4,7 +4,7 @@
 
 # context
 
-​		context是webpack编译时的基础目录，是一个绝对路径的字符串，用于从配置中解析入口entry和**loader**。在配置了context字段之后，webpack在寻找相对路径的文件时会以context为根目录。context默认为执行启动webpack时所在的当前工作目录。如果想改变context的默认配置，则可以采用如下配置：
+​		context是webpack编译时的基础目录，是一个绝对路径的字符串，用于从配置中解析入口entry和loader。在配置了context字段之后，webpack在寻找相对路径的文件时会以context为根目录。context默认为执行启动webpack时所在的当前工作目录。如果想改变context的默认配置，则可以采用如下配置：
 
 ```javascript
 module.exports = {
@@ -203,7 +203,7 @@ module.exports = {
 
 ## 常用API
 
-### chunkFilename（待验证）
+### chunkFilename
 
 ​		chunkFilename是指未被放在entry中，但却又需要被打包出来的**chunk**文件的名称。一般来说，这个**chunk**文件指的就是要懒加载的模块。默认使用[id].js或从output.filename中推断出的值([name]会被预先替换为[id]或[id].)。
 
@@ -270,7 +270,7 @@ module.exports = {
 
 ​		path用来指定webpack打包构建的最终输出的目录，必须是一个绝对路径。
 
-### publicPath（待补充）
+### publicPath
 
 ​		webpack提供一个非常有用的配置，该配置能帮你为项目中的所有资源指定一个基础路径，它被称为公共路径publicPath。这里所说的所有资源的基础路径是指项目中应用CSS，JS，图片等资源的时候的一个基础路径，这个基础路径要配合具体资源的指定路径使用，所以其实打包后的资源访问路径可以如下表示：
 
@@ -711,7 +711,7 @@ module: {
 
 #### outputPath和publicPath的区别
 
-​		outputPath只是告诉webpack将生成的结果输出到哪里，而publicPath则是被用于内嵌到CSS，HTML文件中的url的值。
+​		outputPath只是告诉webpack将生成的结果输出到哪里，而publicPath则是被用于内嵌到CSS，HTML文件中的url的值，即资源的引用路径。
 
 ### url-loader
 
