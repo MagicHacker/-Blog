@@ -706,7 +706,7 @@ module: {
 + name：默认值为[contenthash].[ext]，用来为文件自定义文件名，值可以是字符串或者函数。
 + context：默认值为webpack.config.js的context，用于配置自定义文件的context。
 + publicPath：用于为文件配置自定义的public发布目录，值是字符串或者函数，默认值是webpack.outputpath+outputpath。
-+ outputPath：用于为文件配置自定义的output输出目录，值是字符串或者函数。
++ outputPath：用于为文件配置自定义的output输出目录，值是字符串或者函数。其设置的路径是相对于webpack的输出目录。
 + emitFile：默认值为true。如果设置为false，则只会返回public url，但不会生成相应的文件。
 
 #### outputPath和publicPath的区别
@@ -715,7 +715,7 @@ module: {
 
 ### url-loader
 
-​		url-loader用于将文件转换为base64编码 URIs。url-loader功能和file-loader类似，但在文件大小（单位byte）小于指定的限制时，返回一个base64编码的DataURL。
+​		url-loader用于将文件转换为base64编码 URIs。url-loader功能和file-loader类似，不同点是url-loader可以通过配置一个limit值来决定图片是要像file-loader一样返回一个公共的url路径，或者直接把图片进行base64编码，写入到对应的路径中去。在文件大小（单位byte）小于指定的限制时，返回一个base64编码的DataURI。文件转换成DataURI之后可以直接访问，减少了HTTP的请求数，提高了页面性能。缺点是小于limit设置的文件会被达成base64的DataURI添加到文件中，使得文件体积增大，降低页面加载性能。
 
 #### 安装
 
@@ -734,7 +734,15 @@ module: {
                 {
                     loader: 'url-loader',
                     options: {
-                        limit: 8192
+                        limit: 8192,
+                        fallback: {
+                            loader: 'file-loader',
+                            options: {
+                                name: '[name].[ext]',
+                                outputPath: 'images',
+                                emitFile: true
+                            }
+                        }
                     }
                 }
             ]
@@ -745,7 +753,7 @@ module: {
 
 #### 配置项
 
-+ limit：文件大小的限制，小于该值文件就会被打包成base64编码的DataURL，如果文件大小大于等于该值，则默认使用file-loader来处理，并且全部查询参数会传递给它。
++ limit：文件大小的限制，单位为字节byte，小于该值文件就会被打包成base64编码的DataURL，如果文件大小大于等于该值，则默认使用file-loader来处理，并且全部查询参数会传递给它。
 + mimetype：用于设置文件的MIME类型。如果未指定，则使用文件扩展名来查找对应的MIME类型。
 + fallback：用于设置当url-loader加载的文件大于限制时，所对应的loader。
 
