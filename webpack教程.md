@@ -670,7 +670,9 @@ module: {
 
 ### file-loader
 
-​		file-loader将文件中的`import/require()`解析成url并且将文件输出到output指定的目录中，并返回文件的public url。默认情况下，生成文件的文件名是根据文件内容生成的哈希值加上原来文件的扩展名。file-loader不会对文件的内容做任何处理。
+​		file-loader将文件中的`import/require()`（也会处理CSS中的background url()）解析成url并且将文件输出到output指定的目录中，并返回文件的public url，经file-loader处理过的资源在其他文件中会自动替换成public url。默认情况下，生成文件的文件名是根据文件内容生成的哈希值加上原来文件的扩展名。file-loader不会对文件的内容做任何处理。通常使用file-loader处理图片和字体等静态资源。
+
+![image-20201224221250415](https://tva1.sinaimg.cn/large/0081Kckwly1glzaxvokn2j30y6082taf.jpg)
 
 #### 安装
 
@@ -687,7 +689,11 @@ module: {
             test: /\.(png|jpe?g|gif)$/,
             use: [
               {
-                loader: 'file-loader'
+                loader: 'file-loader',
+                options: {
+                    name: '[name].[ext]',
+                    outputpath: 'images'
+                }
               }
             ]
         }
@@ -697,11 +703,10 @@ module: {
 
 #### 配置项
 
-+ name：默认值为[hash].[ext]，用来为文件自定义文件名。
++ name：默认值为[contenthash].[ext]，用来为文件自定义文件名，值可以是字符串或者函数。
 + context：默认值为webpack.config.js的context，用于配置自定义文件的context。
-+ publicPath：用于为文件配置自定义的public发布目录。
-+ outputPath：用于为文件配置自定义的output输出目录。
-+ useRelativePath：默认值为false，用来为每个文件生成一个相对url的context。
++ publicPath：用于为文件配置自定义的public发布目录，值是字符串或者函数，默认值是webpack.outputpath+outputpath。
++ outputPath：用于为文件配置自定义的output输出目录，值是字符串或者函数。
 + emitFile：默认值为true。如果设置为false，则只会返回public url，但不会生成相应的文件。
 
 #### outputPath和publicPath的区别
