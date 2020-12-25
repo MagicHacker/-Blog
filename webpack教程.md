@@ -22,7 +22,7 @@ module.exports = {
 
 ## 单个入口语法
 
-​	用法：`entry: string|Array\<string\>`
+​	用法：`entry: string|Array<string>`
 
 webpack.config.js
 
@@ -79,11 +79,11 @@ module.exports = {
 
 ![image-20201026231511179](https://tva1.sinaimg.cn/large/0081Kckwly1gk356ix1obj308701ujr8.jpg)
 
-**注意：**构建多页面应用而使用对象语法，最终是要构建出多个bundle文件的，所以在output中不能指定某一个文件，否则无法构建成功而报错。
+**注意：**构建多页面应用而使用对象语法，最终是要构建出多个bundle文件的，所以在output中不能指定输出某一个文件，否则无法构建成功，因而报错。
 
 ### key为路径字符串
 
-​	entry中的key值可以是路径字符串，此时webpack会自动生成路径目录，并将路径作为[name]。
+​	entry中的key值可以是路径字符串，此时webpack会自动生成路径目录，并将路径作为[name]。不要滥用，因为entry入口的路径会影响mini-css-extract-plugin插件输出的CSS文件的路径。
 
 ```javascript
 module.exports = {
@@ -116,7 +116,7 @@ module.exports = {
 module.exports = {
   entry: {
     main: "./src/index.js",
-    'vendor': "lodash"
+    vendor: "lodash"
   },
   output: {
     filename: "[name].bundle.js",
@@ -153,7 +153,7 @@ module.exports = {
 
 ## 数组语法
 
-​		可以使用数组为一个入口指定多个文件。一般情况下，数组中引入的文件是没有相互依赖关系的，但是基于某种原因需要将它们打包在一起，最后webpack会将数组中最后一个模块的module.exports作为入口模块的module.exports导出。
+​		可以使用数组为一个入口指定多个文件。一般情况下，数组中引入的文件是没有相互依赖关系的，但是基于某种原因需要将它们打包在一起，最后webpack会将数组中最后一个模块的module.exports作为入口整个模块的module.exports导出。
 
 ```javascript
 module.exports = {
