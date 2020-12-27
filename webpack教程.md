@@ -1049,12 +1049,14 @@ module.exports = {
 ```
 
 ```html
-<script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 ```
 
 ```javascript
 import $ from 'jquery'
 ```
+
+同时可以去掉项目中安装的jquery的npm包，或者不用再npm install jquery -S了。
 
 <font style="color: red">注意</font>：externals配置对象中，属性名为模块名，属性值为变量名。这里jquery代表的是真实的jquery模块名，jQuery代表的是全局变量名，可随意定义，比如定义成$。
 
