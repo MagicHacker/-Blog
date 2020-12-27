@@ -823,17 +823,34 @@ module.exports = {
 #### 配置项
 
 + title：用于设置document.title，在index.html中使用`<%= htmlWebpackPlugin.options.title %>`自定义网页标题。
+
 + filename：用于设置html文件生成的名称。默认值是index.html，可以自定义文件名称，也可以写文件路径，生成的文件的根路径为`output.path`的目录，同时自动引入的JS文件也会改成对应的路径，以保证正确的引入。
+
 + template：要生成的html文件的模板。值为文件的路径，相对于webpack.config.js的路径，同时此路径受webpack的context的影响，路径为context的路径+template的路径。
+
 + inject：指定webpack打包的静态资源插入到html中的位置，为`true`或`body`时会把JS文件插入到body底部，为`head`时会将JS文件插入到`<head>`标签中。
+
 + meta：为生成的html文件注入`meta`信息，例如：`{viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no'}`。
-+ minify：压缩html文件。一般情况下是在生成环境下才会启用压缩。值为`{collapseWhitespace:true,removeComments:true,removeRedundantAttributes:true,removeScriptTypeAttributes:true,removeStyleLinkTypeAttributes:true,useShortDoctype:true}`
+
++ minify：压缩html文件。一般情况下是在生成环境下才会启用压缩。值为
+
+  ```javascript
+  {
+      collapseWhitespace:true,
+      removeComments:true,
+      removeRedundantAttributes:true,
+      removeScriptTypeAttributes:true,
+      removeStyleLinkTypeAttributes:true,
+      useShortDoctype:true
+  }
+  ```
+
 + hash：设置为true会在生成的html文件中的静态资源文件末尾添加hash值。
 
 ![image-20201114000358861](https://tva1.sinaimg.cn/large/0081Kckwly1gknzqv29aej30gj01e749.jpg)
 
 + cache：默认值true，用于指定文件要不要缓存。
-+ chunks：一般用于在打包多入口项目时，指定每个html文件只引入各自相对应的JS文件，防止html文件多引入不需要的文件。
++ chunks：一般用于在打包多入口项目时，指定每个html文件只引入各自相对应的JS文件，防止html文件多引入不需要的文件。值为数组，数组的元素为entry入口配置项的**key**值，而非entry入口配置的文件名。
 
 ### clean-webpack-plugin
 
