@@ -1211,7 +1211,7 @@ resolve: {
 
 ## minimize
 
-​		默认值为true。告知webpack使用TerserPlugin或其他在optimization.minimizer定义的插件压缩bundle。
+​		默认值为true。告知webpack使用TerserPlugin或其他在optimization.minimizer定义的插件压缩bundle。即使mode为development模式也会被压缩。
 
 ```javascript
 module.exports = {
@@ -1223,7 +1223,7 @@ module.exports = {
 
 ## minimizer
 
-​		开发者配置一个或者多个TerserPlugin实例，覆盖默认的压缩工具。
+​		开发者配置一个或者多个TerserPlugin实例，覆盖默认的压缩工具。一般使用webpack的默认配置。
 
 ```javascript
 const TerserPlugin = require('terser-webpack-plugin');
@@ -1251,7 +1251,7 @@ module.exports = {
 默认情况下，它只会影响到那些按需加载的chunks。webpack在以下场景会自动分割chunks：
 
 + 新的chunk被多个chunk共享，或者它来自于node_modules文件夹。
-+ 新的chunk体积大于20kb（在进行min+gz）之前的体积。
++ 新的chunk体积大于20kb（在进行min+gz之前的）体积。
 + 在按需加载chunk时，其最大并发请求的数量小于等于30。
 + 初始页面加载时并行请求的最大数量小于等于30。
 
@@ -1302,9 +1302,9 @@ module.exports = {
 
 + all：包含上述两种情况。
 
-#### minSize（待验证）
+#### minSize
 
-​		被抽离的模块在压缩前的体积的最小值，单位为字节，默认是20000。只有体积超过20000字节才会被抽离。
+​		被抽离的模块在压缩前的体积的最小值，单位为字节，默认是20000。只有体积超过20000字节的模块才会被抽离。
 
 #### maxSize
 
@@ -1316,11 +1316,11 @@ module.exports = {
 
 #### maxAsyncRequests
 
-​		表示按需加载的最大并行请求数，默认值为6。如果拆分后导致bundle需要同时异步加载的chunk数量大于等于6个，则不会进行拆分，因为增加了请求数，得不偿失。
+​		表示按需加载的最大并行请求数，默认值为6。如果拆分后导致bundle需要同时异步加载的chunk数量大于等于6个，则不会进行拆分，因为增加了请求数，得不偿失。一般使用默认值即可。
 
 #### maxInitialRequests
 
-​		表示初始化的时候最多可以有多少个并行的请求数，默认值为4。拆分后的入口文件的chunk请求数大于等于4，则不会进行拆分，因为这样增加了请求数。
+​		表示初始化的时候最多可以有多少个并行的请求数，默认值为4。拆分后的入口文件的chunk请求数大于等于4，则不会进行拆分，同样因为增加了请求数，得不偿失。一般使用默认值即可。
 
 #### automaticNameDelimiter
 
@@ -1337,9 +1337,7 @@ module.exports = {
 + test：用来匹配要抽离的模块的资源路径或者名称，符合条件的模块就会被分配到该组。值是一个函数或者正则表达式。省略它的话会选择所有模块。
 + priority：所采用的cacheGroups的方案的优先级，数字越大优先级越高，默认值为0，一般自定义设置为负数。
 + reuseExistingChunk：表示是否复用已有的chunk。值为false/true。设置为true时，如果当前要抽取的模块，已经存在于打包生成的js文件中，则会复用该模块，而不会打包成新的chunk。
-+ enforce：是否忽略外层splitChunks中配置的选项。值为false/true。设置为true时，会忽略minSize，minChunks，maxSize等配置项。
-
-
++ enforce：是否忽略外层splitChunks中配置的选项。值为false/true。设置为true时，会忽略minSize，minChunks，maxSize等配置项，使用cacheGroups自定义的相关配置项。
 
 # devtool
 
