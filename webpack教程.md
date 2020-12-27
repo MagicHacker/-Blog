@@ -944,7 +944,7 @@ module.exports = {
 
 # webpack-dev-server
 
-​		在构建代码并部署到生产环境之前，需要一个本地环境来运行我们开发的代码，访问webpack打包好的静态文件，我们可以使用它来调用前端代码。webpack-dev-server是webpack官方提供的一个工具，基于当前的webpack配置来快启动一个静态服务，每次修改代码保存后可以自动打包，打包输出的文件只存在于内存当中，支持自动刷新页面。
+​		在构建代码并部署到生产环境之前，需要一个本地环境来运行我们开发的代码，访问webpack打包好的静态文件，我们可以使用它来调用前端代码。webpack-dev-server是webpack官方提供的一个工具，基于当前的webpack配置来快速启动一个静态服务，每次修改代码保存后可以自动打包，打包输出的文件只存在于内存当中，支持自动刷新页面。
 
 ## 安装
 
@@ -986,10 +986,10 @@ module.exports = {
 ## 配置项
 
 + contentBase：提供静态文件的目录地址，建议使用绝对路径。默认情况下，它将使用当前的工作目录来提供内容。
-+ compress：为静态文件开启gzip压缩。
-+ hot：用于开启webpack的Hot Module Replacement（HMR）功能。要完全启用HMR，需要配置webpack.HotModuleReplacementPlugin，但是如果在npm scripts中启用webpack-dev-server，同时添加了--hot参数，则webpack.HotModuleReplacementPlugin将会被自动添加。
++ compress：设置为true为静态文件开启gzip压缩。通过命令行使用需要添加 --compress参数。
++ hot：用于开启webpack的Hot Module Replacement（HMR）功能。要完全启用HMR，需要配置webpack.HotModuleReplacementPlugin，但是如果在npm scripts中启用webpack-dev-server，同时添加了--hot参数，则webpack.HotModuleReplacementPlugin将会被自动添加。在开启HMR功能时，webpack不允许对输出的entry入口的JS文件使用[contenthash]。
 + inline：用于设置`HMR`的模式。默认值为true。设置为true则使用inline模式。设置为false则使用iframe模式。iframe模式是在网页中嵌入一个iframe，并将我们自己的代码注入到这个iframe中。推荐使用inline模式。
-+ open：webpack-dev-server启动后自动打开浏览器。默认值为true。
++ open：webpack-dev-server启动后自动打开浏览器。默认值为false。
 + port：webpack-dev-server监听的端口号。
 + public：用于指定静态服务的域名，默认为`http://localhost:8080/`，当你使用Nginx来做反向代理的时候，应该是该配置来指定Nginx配置使用的服务域名。
 + publicPath：用于指定构建好的静态文件在浏览器中用什么路径去访问。默认值为`/`。比如，对于一个构建好的文件bundle.js，完整的访问路径为`http://localhost:8080/bundle.js`，但是如果设置了`publicPath: 'asstes/'`，那么完整的访问路径为`http://localhost:8080/assets/bundle.js`。可以使用整个 URL 来作为 `publicPath` 的值，如 `publicPath: 'http://localhost:8080/assets/'`。如果你使用了 HMR，那么要设置 `publicPath` 就必须使用完整的 URL。建议将 `devServer.publicPath` 和 `output.publicPath` 的值保持一致。
