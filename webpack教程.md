@@ -1133,7 +1133,7 @@ resolver帮助webpack从每个import/require语句中，找到需要引入到bun
 
 + 绝对路径。由于已经获得文件的绝对路径，因此不需要再解析。
 + 相对路径。在import/require中给定的相对路径，webpack会拼接上下文路径，来生成模块的绝对路径。
-+ 模块路径。
++ 模块路径。直接引入模块名，首先查找当前文件目录，若找不到，会继续往父级目录一个一个地查找，直到项目根目录下的node_modules目录，若再找不到，则会抛出错误。
 
 ## resolve选项
 
@@ -1158,6 +1158,21 @@ module.exports = {
 import foo from '@src/foo/index'
 ```
 
+如果需要使用精确匹配可以使用$：
+
+```javascript
+const path = require('path')
+module.exports = {
+    resolve: {
+        alias: {
+            '@src$': path.resolve(__dirname, 'src/')
+        }
+    }
+}
+```
+
+
+
 ### enforceExtension
 
 ​		用于在import/require时是否让开发者强制加上文件的扩展名。默认为false。如果为true，将不允许import/require无扩展名的文件。
@@ -1180,9 +1195,15 @@ module.exports = {
 import foo from './foo/index'
 ```
 
-### modules（待验证）
+### modules
 
-​		告诉webpack解析模块时应该搜索的目录。
+​		告诉webpack解析模块时应该搜索的目录。可以是绝对路径或相对路径。`resolve.modules`的默认值是`node_modules`。一般不会去调整这个配置。import/require使用绝对路径时，将只在给定目录中搜索。
+
+```javascript
+resolve: {
+  modules: ['node_modules']
+}
+```
 
 # Optimization
 
