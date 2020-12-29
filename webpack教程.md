@@ -1343,8 +1343,8 @@ module.exports = {
 
 ​		控制webpack如何生成source-map。可以使用SourceMapDevToolPlugin对source-map进行更细粒度的控制。devtool的取值可以由source-map，eval，inline，cheap，module，hidden这6个关键字任意组合而成。这6个关键字每一项都代表了一种特性。
 
-+ eval：用eval()语句包裹模块代码，使得打包后的bundle文件中的每个模块都使用eval去执行。会在文件末尾追加//@ sourceURL。
-+ source-map：打包后会生成独立的.map文件，同时会在bundle文件末尾追加sourceURI指定map文件路径。
++ eval：用eval()语句包裹模块代码，使得打包后的bundle文件中的每个模块都使用eval去执行，会在每个模块的末尾添加//# sourceURL来关联模块处理前后的对应关系，不会生成相应的独立的.map文件。
++ source-map：打包后会生成独立的.map文件，同时会在bundle文件末尾追加**sourceMappingURL**指定map文件路径，抽离出来的独立的CSS文件，也会生成相应的.map文件。
 + inline：不会产生独立的.map文件，而是把sourcemap的内容以DataURI的方式追加到bundle文件末尾。
 + hidden：不在bundle文件结尾处指出source map的信息，但是仍然会生成sourcemap，这样浏览器不会自动加载source map，避免生产环境发布sourcemap信息。
 + cheap：生成的sourcemap中不包含列信息，也不包含loader的sourcemap信息。即生成的sourcemap映射的是loader处理后的源代码。
@@ -1352,7 +1352,7 @@ module.exports = {
 
 ## 开发环境
 
-​		在开发环境中我们将devtool设置为cheap-module-eval-source-map，cheap关键字会生成带有行信息的比较详细的sourcemap，module会包含babel等库生成的sourcemap信息，同时生成的bundle文件体积小，eval关键字使得打包构建的速度很快，source-map保证了会单独生成.map文件。
+​		在开发环境中我们将devtool设置为eval-cheap-module-source-map，cheap关键字会生成带有行信息的比较详细的sourcemap，module会包含babel等库生成的sourcemap信息，同时生成的bundle文件体积小，eval关键字使得打包构建的速度很快，带有eval关键字，不会生成相应的独立的.map文件。
 
 ## 生产环境
 
