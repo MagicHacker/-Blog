@@ -1436,7 +1436,7 @@ module.exports = {
 
 # webpack-chain
 
-​		通过一个链式的API来修改2~4版本的webpack的配置。webpack-chain通过提供链式或顺流式的API创建和修改webpack配置，不用再像以前一样写死一个webpack配置对象。API的key部分可以由用户指定的名称引用。目前vue-cli内部的webpack配置就是通过webpack-chain来维护的。
+​		通过一个链式的API来修改2~4版本的webpack的配置。webpack-chain通过提供链式或顺流式的API创建和修改webpack配置，不用再像以前一样维护和修改一个写死的webpack配置对象。API的key部分可以由用户指定的名称引用。目前vue-cli内部的webpack配置就是通过webpack-chain来维护的。
 
 ## 安装
 
@@ -1495,9 +1495,24 @@ config.module
 })
 
 // 使用plugin
+// 注意use部分，此时不能通过new的方式生成插件实例
 config
 	.plugin('clean')
 	.use(CleanPlugin, [['dist'], {root: '/dir'}])
+
+// 修改plugin参数
+config
+	.plugin(name)
+	.tap(args => newArgs)
+
+config
+	.plugin('env')
+	.tap(args => [...args, 'ENV'])
+
+// 修改插件初始化
+config
+	.plugin(name)
+	.init((plugin, args) => new Plugin(...args))
 
 // 使用when做条件配置
 config
