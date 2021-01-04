@@ -390,7 +390,7 @@ options中的presets是用来配置babel的预设，即babel的编码规则。�
 
 与上面的对比，可以很明显的看到babel-loader已经将ES6的const和箭头函数转换成ES5的语法了。
 
-#### 其他配置项
+#### 配置项
 
 + cacheDirectory：用于设置babel编译结果的缓存，下一次编译如果文件没有修改，babel会直接读取缓存，提升babel的编译速度，默认值为false。设置为true或者空值babel-loader将使用默认的目录（node_modules/.cache/babel-loader）来缓存编译结果，如果在任何根目录下都没有找到 `node_modules` 目录，将会降级回退到操作系统默认的临时文件目录。或者自己手动指定一个缓存的目录。设置为false则不会缓存编译结果。
 
@@ -981,7 +981,7 @@ npm run dev
 node_modules/.bin/webpack-dev-server
 ```
 
-## 配置
+## 用法
 
 ```javascript
 module.exports = {
@@ -1425,11 +1425,11 @@ module.exports = {
 
 ### 在入口html文件中引入
 
-​		由于生成的dll暴露出的是全局函数，因此需要在入口的html中引入。
+​		由于生成的dll暴露出的是全局函数，因此需要在入口的html中手动引入。
 
 ```html
 <body>
-    <!--引如dll文件-->
+    <!--引入dll文件-->
     <script src="../../dist/dll/jquery.dll.js" ></script>
 </body>
 ```
