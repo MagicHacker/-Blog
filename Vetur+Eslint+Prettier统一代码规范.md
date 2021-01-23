@@ -1,6 +1,4 @@
-# Vetur+Eslint+Prettier介绍
-
-## Vetur的使用
+# Vetur+ESLint+Prettier介绍
 
 ### Vetur介绍
 
@@ -33,11 +31,11 @@
 + `<style>:css,scss,less`
 + `<script>:js,ts`
 
-可以通过`vetur.validation.[template/style/script]`选择性的关闭错误检查。
+可以通过`vetur.validation.[template/style/script]`选择性的关闭默认的错误检查。
 
 #### Linting
 
-​	要使用该功能需要在vscode中安装Eslint插件（**<font color="red">注意：不是引入eslint的node包，显著的表现就是有问题代码下出现波浪号</font>**），插件安装完成后此时Vetur对`<template>`不支持规则配置。
+​	要使用该功能需要在vscode中安装Eslint插件（**<font color="red">注意：不是引入eslint的node包，显著的表现就是有问题代码下出现波浪号</font>**），插件安装完成后此时Vetur对`<template>`支持规则配置。
 
 ​	安装Eslint插件后，添加**`vue`**到vscode的**`eslint.validate`**的配置中：
 
@@ -55,13 +53,12 @@
 
 ##### Linting for `<template>`
 
-​	对`<template>`的校验，Vetur只在**eslint-plugin-vue**的一些版本起作用。Linting是基于**eslint-plugin-vue**的[基本规则集](https://vuejs.github.io/eslint-plugin-vue/rules/#priority-a-essential-error-prevention)进行配置。
+​	对`<template>`的校验，Vetur只在**eslint-plugin-vue**的某些版本起作用。Linting是基于**eslint-plugin-vue**的[基本规则集](https://vuejs.github.io/eslint-plugin-vue/rules/#priority-a-essential-error-prevention)进行配置。
 
-​	此时Linting是不可配置的，并且是基于固定版本的**eslint-plugin-vue**，如果想自定义配置`<template>`的linting
+​	此时Linting是不可配置的，并且是基于固定版本的**eslint-plugin-vue**，如果想自定义配置`<template>`的linting需要：
 
-需要：
++ 通过**vetur.validation.template:false**关闭**Vetur**的模板Linting。
 
-+ 通过**vetur.valition.template:false**关闭**Vetur**的模板Linting。
 + 确保vscode安装了**Eslint**插件。此时错误检查就来自**Eslint**插件，不是来自**Vetur**。
 + 在项目执行中`yarn add -D eslint eslint-plugin-vue`。
 + 在项目根目录中配置**.eslintrc**。比如：
@@ -134,7 +131,7 @@
 
 ​	你可以使用npm或者yarn安装ESLint：
 
-```
+```bash
 npm install eslint --save-dev
 # or
 yarn add eslint --dev
@@ -142,21 +139,21 @@ yarn add eslint --dev
 
 ​	然后创建一个配置文件：
 
-```
+```bash
 $ npx eslint --init
 ```
 
 ​	之后在任何文件或者目录下运行：
 
-```
+```bash
 $ npx eslint yourfile.js
 ```
 
-​	同时你也可以全局安装ESLint（使用**<font color="red">npm install eslint -g</font>**），同时与eslint相关的插件也必须是全局安装的。然而不推荐这种方式，在项目中所有插件或者其他配置都必须再次安装在本地项目中。
+​	同时你也可以全局安装ESLint（使用**<font color="red">npm install eslint -g</font>**），同时与eslint相关的插件也必须是全局安装的。然而非常不推荐这种方式。目前项目中的所有插件或者其他配置都必须安装在本地项目中。
 
 ##### **<font color="red">Notes</font>**
 
-​	在运行eslint --init之后会在控制台生成一个交互提示界面，可根据需求手动选择eslint的配置。
+​	在运行eslint --init之后会在控制台生成一个交互提示界面，可根据需求手动选择eslint的配置。此种方式太过繁琐，并不太推荐。
 
 ![image-20200621235954351](https://tva1.sinaimg.cn/large/007S8ZIlly1ggnetpvf6uj30cu0250su.jpg)
 
@@ -174,7 +171,7 @@ $ npx eslint yourfile.js
 
   **<font color="red">PS:</font>**翻阅ESLint[源码](https://github.com/eslint/eslint/blob/v6.0.1/lib/cli-engine/config-array-factory.js#L52)可以看到，其配置文件的优先级如下：
   
-  ```
+  ```javascript
   const configFilenames = [
     ".eslintrc.js",
     ".eslintrc.yaml",
@@ -191,7 +188,7 @@ eslint不仅支持文件配置，还支持代码注释的配置方式，不推�
 
 ​	在.eslintrc文件中可以看到许多这样的规则:
 
-```
+```javascript
 {
     "rules": {
     "semi": ["error", "always"],
@@ -200,15 +197,15 @@ eslint不仅支持文件配置，还支持代码注释的配置方式，不推�
 }
 ```
 
-**<font color="blue">"semi"和"quotes"</font>**是Eslint中规则的名称，第一个值是错误的级别，可以是下面的值之一：
++ **semi"和"quotes**是Eslint中规则的名称，第一个值是错误的级别，可以是下面的值之一：
 
-* **<font color="blue">"off"或0</font>**--关闭规则
-* **<font color="blue">"warn"或1</font>**---将规则视为一个警告（不会影响退出码），程序不会退出运行
-* **<font color="blue">"error"或2</font>**----将规则视为一个错误（退出码为1），同时会退出程序的运行。
+* **off或0**：关闭规则。
+* **warn或1**：将规则视为一个警告，程序不会退出运行。
+* **error或2**：将规则视为一个错误（退出码为1），同时会退出程序的运行。
 
 同时也可以使用推荐配置：
 
-```
+```javascript
 "extends": "eslint:recommended"
 ```
 
@@ -216,17 +213,17 @@ eslint不仅支持文件配置，还支持代码注释的配置方式，不推�
 
 ##### 配置详解
 
-###### Environments环境配置
+###### Env环境配置
 
-​	指定脚本的运行环境。每种环境都有一组特定的预定义的全局变量。默认情况下所有环境变量都是false，且这些环境并不冲突，所以可以同时定义多个，自由选择环境搭配。将环境变量设置为true，开启环境变量，以保证代码检测时不会把这些环境预定义的全局变量识别成未定义的变量而报错。可用的环境包括：
+​	指定脚本的运行环境。每种环境都有一组特定的预定义的全局变量。默认情况下，所有环境的全局变量的配置都是false，且这些环境并不冲突，所以可以同时定义多个，自由选择环境搭配。将环境变量的配置设置为true，开启环境变量，以保证代码检测时不会把这些环境中预定义的全局变量识别成未定义的变量而报错。可用的环境包括：
 
-```
+```javascript
 "env": {
     "browser": true, // 浏览器环境中的全局变量
     "node": true, // Node.js全局变量和Node.js作用域。
     "commonjs": true, //CommonJS全局变量和CommonJS作用域（使用Browserify/webpack的浏览器代码）
     "shared-node-browser": true, // Node.js 和 Browser 通用全局变量
-    "es6": true,// 启用除modules以外的所有ES6特性（该选项会自动设置 ecmaVersion 解析器选项为 6）
+    "es6": true,// 启用ES6特性（该选项会自动设置 ecmaVersion 解析器选项为 6）
     "worker": true, // Web Workers 全局变量
     "amd": true, // 将require() 和 define() 定义为像 amd 一样的全局变量
     "mocha": true, // 添加所有的 Mocha 测试全局变量
@@ -240,9 +237,9 @@ eslint不仅支持文件配置，还支持代码注释的配置方式，不推�
 
 ###### Globals全局配置
 
-​	当访问代码内未定义的全局变量时，**<font color="blue">no-undef</font>**规则将发出警告。如果你想在代码内使用**<font color="red">自定义</font>**的全局变量，就需要在globals配置中指定。由于可以配置环境的预定义全局变量，所以此配置一般用不上，配置方式如下：
+​	当访问代码内未定义的全局变量时，**no-undef**规则将发出警告。如果你想在代码内使用**<font color="red">自定义</font>**的全局变量，就需要在globals配置中指定。由于可以配置环境的预定义全局变量，所以此配置一般用不上，配置方式如下：
 
-```
+```javascript
 {
     "globals": {
         "var1": "writable", // 允许重写变量
@@ -251,9 +248,9 @@ eslint不仅支持文件配置，还支持代码注释的配置方式，不推�
 }
 ```
 
-由于历史原因，**<font color="blue">false</font>**和**<font color="blue">readable</font>**等价于**<font color="blue">readonly</font>**。类似地，**<font color="blue">true</font>**和**<font color="blue">writeable</font>**等价于**<font color="blue">writeable</font>**，但是不建议使用旧值。
+由于历史原因，**false**和**readable**等价于**readonly**。类似地，**true**和**writeable**等价于**writeable**，但是不建议使用旧值。
 
-###### Parser解析器配置
+###### Parser解析器
 
 ​	ESLint默认使用Espree作为解析器，你可以在配置文件中指定不同的解析器，只要该解析器符合下列要求：
 
@@ -265,7 +262,7 @@ eslint不仅支持文件配置，还支持代码注释的配置方式，不推�
 
 ​	为了使用解析器，你需要在你的.eslintrc文件中指定parser选项。例如：
 
-```
+```javascript
 {
     "parser": "esprima",
     "rules": {
@@ -277,12 +274,12 @@ eslint不仅支持文件配置，还支持代码注释的配置方式，不推�
 ​	以下解析器与ESLint兼容：
 
 * [Esprima](https://www.npmjs.com/package/esprima)
-* [Babel-ESLint](https://www.npmjs.com/package/babel-eslint) - 一个对[Babel](https://babeljs.io/)解析器的包装，使其能够与 ESLint 兼容。**<font color="red">注意：</font>**该包允许你使用一些实验特性的时候，依然能够用上ESLint语法检查，如果没有用到ESLint不支持的实验特性时不需要安装此包。
-* [@typescript-eslint/parser](https://www.npmjs.com/package/@typescript-eslint/parser) - 将 TypeScript 转换成与 estree 兼容的形式，以便在ESLint中使用。
+* [Babel-ESLint](https://www.npmjs.com/package/babel-eslint) ：一个对[Babel](https://babeljs.io/)解析器的包装，使其能够与 ESLint 兼容。**<font color="red">注意：</font>**该包允许你使用一些实验特性的时候，依然能够用上ESLint语法检查，如果没有用到ESLint不支持的实验特性时不需要安装此包。
+* [@typescript-eslint/parser](https://www.npmjs.com/package/@typescript-eslint/parser) ：将 TypeScript 转换成与 estree 兼容的形式，以便在ESLint中使用。
 
 **<font color="red">注意：</font>**在使用自定义解析器时，为了让ESLint在处理非 ECMAScript 5 特性时正常工作，仍然需要配置属性parserOptions。
 
-###### ParseOptions解析器选项配置
+###### ParseOptions解析器选项
 
 ​	ESLint允许你指定你想要支持的JS语言选项。默认情况下，ESLint支持ECMAScript 5 语法。你可以覆盖该设置，以启用对ECMAScript 其它版本的支持。
 
@@ -300,12 +297,12 @@ eslint不仅支持文件配置，还支持代码注释的配置方式，不推�
 
 配置示例:
 
-```
+```javascript
 "parserOptions": {
     "ecmaVersion": 6,
     "sourceType": "module",
     "ecmaFeatures": {
-        "experimentalObjectRestSpread": true,//启用对对象的扩展
+        "experimentalObjectRestSpread": true,//启用对象的扩展
         "jsx": true, //启用jsx语法
         "globalReturn":true, //允许return在全局使用
         "impliedStrict":true //启用严格校验模式
@@ -318,19 +315,19 @@ eslint不仅支持文件配置，还支持代码注释的配置方式，不推�
 
 ​	虽然官方提供了上百种的规则供选择，但还是不够的，因为官方的规则只能检查标准的JavaScript语法，如果你写的是JSX或者Vue单文件组件，ESLint的规则就无法处理了。这时就通过安装ESLint的插件，指定一些特殊的规则进行检查，在.eslintrc配置文件配置插件时，可以使用plugins来存放插件名字的列表，插件的名字可以省略**<font color="blue">eslint-plugin-</font>**前缀。
 
-```
+```bash
 npm install --save-dev eslint-plugin-vue
 {
   "plugins": [
-    "vue",   // eslint-plugin-vue
+    "vue"  // eslint-plugin-vue
   ]
 }
 ```
 
-* [eslint-plugin-babel](https://github.com/babel/eslint-plugin-babel)：和babel-eslint一起使用的一款插件。babel-eslint将eslint应用于babel方面做的很好，但是它不能更改内置的规则来支持实验特性。eslint-plugin-babel重新实现了这些有问题的规则，因此不会误报一些错误信息。
+* [eslint-plugin-babel](https://github.com/babel/eslint-plugin-babel)：和babel-eslint一起使用的一款插件。虽然babel-eslint可以将eslint应用于babel，但是它不能更改内置的规则来支持实验特性。eslint-plugin-babel重新实现了这些有问题的规则，因此不会误报一些错误信息。
 * [eslint-plugin-import](https://github.com/benmosher/eslint-plugin-import)：该插件支持对ES6+的import/export语法的校验，并防止一些文件路径拼写错误或者导入名称错误的情况。
-* [eslint-plugin-prettier](https://github.com/prettier/eslint-plugin-prettier)：该插件辅助ESLint与Prettier一些协作，并将prettier的解析作为ESLint的一部分，在最后输出给出修改意见，这样当使用prettier格式化代码的时候，依然能够遵循ESLint的规则。如果你禁用掉了所有和代码格式化相关的Eslint规则，该插件可以更好得工作。因此你可以用eslint-config-prettier禁用掉所有的格式化相关的规则(如果其他有效的Eslint规则与prettier在代码如何格式化的问题上不一致的时候，报错是在所难免的了)。
-* [@typescript-eslint/eslint-plugin](https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin)：typescript辅助ESLint的插件。此插件为ESLint校验typescript使用，所以需要使用**<font color="blue">@typescript-eslint/parser</font>**作为ESLint的解析器。
+* [eslint-plugin-prettier](https://github.com/prettier/eslint-plugin-prettier)：该插件辅助ESLint与Prettier一些协作，并将prettier的解析作为ESLint的一部分，在最后输出时给出修改意见，这样当使用prettier格式化代码的时候，依然能够遵循ESLint的规则。如果你禁用掉了所有和代码格式化相关的Eslint规则，该插件可以更好得工作。因此你可以用eslint-config-prettier禁用掉所有的格式化相关的规则(如果其他有效的Eslint规则与prettier在代码如何格式化的问题上不一致的时候，报错是在所难免的了)。
+* [@typescript-eslint/eslint-plugin](https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin)：typescript辅助ESLint的插件。此插件为ESLint校验typescript使用，所以需要使用**@typescript-eslint/parser**作为ESLint的解析器。
 
 ###### Extends扩展配置
 
@@ -366,11 +363,11 @@ ESLint递归地扩展配置，因此基本配置也可以具有extends属性。e
   * [eslint-config-airbnb-base](https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb-base)：此工具包功能与上一个包一样，区别是不包含react的规则，所以不需要安装与react有关的插件。
   * [eslint-config-prettier](https://github.com/prettier/eslint-config-prettier)：此工具包将会禁用掉所有非必须或者与prettier冲突的规则，把它放在extends选项的最后。以便它能够覆盖其他配置。
 
-* eslint-plugin-:开头的是插件包。在extends中以plugin:开头。使用的是ESLint的plugins配置中的某些规则，有点相当于plugins配置中某个eslint-plugin插件的子集。
+* eslint-plugin-:开头的是插件包。在extends中以plugin:开头。使用的是ESLint的plugins配置中的某些规则，有点相当于plugins配置中某个eslint-plugin插件的子集。**在plugins选项中配置的eslint-plugin-xx插件是该插件下的所有规则包，而extends选项中配置plugin:xxx则是引入该插件下的某一个规则包**。
 
   * [eslint-plugin-vue](https://github.com/vuejs/eslint-plugin-vue)：此包是Vue的官方ESLint插件，它使你能够使用ESLint检查vue文件的`<template>`和`<script>`。目前支持的规则配置如下：
 
-    ```
+    ```javascript
     {
       "extends": "plugin:vue/base"
     }
@@ -387,7 +384,7 @@ ESLint递归地扩展配置，因此基本配置也可以具有extends属性。e
 
 ###### Rules规则配置
 
-**<font color="blue">rules</font>**属性可以做下面的任何事情以扩展(或覆盖)**<font color="red">默认的</font>**规则：
+**rules**属性可以做下面的任何事情以扩展(或覆盖)**<font color="red">默认的</font>**规则：
 
 * 启用额外的规则。
 * 改变继承的规则级别而不改变它的选项：
@@ -420,13 +417,13 @@ overrides: [
 
 ##### Ignore Files
 
-​	可以在项目根目录创建一个**<font color="blue">.eslintignore</font>**文件去告诉ESLint忽略特定的文件和目录。**<font color="blue">.eslintignore</font>**文件是一个纯文本文件，其中每一行都是一个glob模式的，表明哪些路径应该忽略检测。当ESLint运行时，在确定哪些文件要检测之前，它会在当前工作目录中查找一个**<font color="blue">.eslintignore</font>**文件，如果找到，当遍历目录时，将会应用这些设置。可用的特性如下：
+​	可以在项目根目录创建一个**.eslintignore**文件去告诉ESLint忽略特定的文件和目录。**.eslintignore**文件是一个纯文本文件，其中每一行都是一个glob模式的，表明哪些路径应该忽略检测。当ESLint运行时，在确定哪些文件要检测之前，它会在当前工作目录中查找一个**.eslintignore**文件，如果找到，当遍历目录时，将会应用这些设置。可用的特性如下：
 
-* 以**<font color="blue">#</font>**开头的行会被当做注释。
-* 路径是相当于**<font color="blue">.eslintignore</font>**的位置或当前目录。
-* 忽略模式同**<font color="blue">.gitignore</font>**。
+* 以**#**开头的行会被当做注释。
+* 路径是相当于**.eslintignore**的位置或当前目录。
+* 忽略模式同**.gitignore**。
 
-除了**<font color="blue">.eslintignore</font>**文件中的模式，ESLint总是忽略**<font color="blue">/node_modules/*</font>**中的文件。
+除了**.eslintignore**文件中的模式，ESLint总是忽略**/node_modules/***中的文件。
 
 ##### ESLint常见规则
 
@@ -609,7 +606,7 @@ overrides: [
 
 ​	如果需要在运行webpack时运行ESLint，需要在webpack中配置eslint-loader。
 
-```
+```javascript
 {
     test: /\.js$/,
     loader: 'eslint-loader',
@@ -640,13 +637,13 @@ overrides: [
 * Markdown，including GFM andMDX
 * YAML
 
-它会移除原有代码的样式，并输出统一样式的代码。Prettier会重新计算每行代码的长度并重新打印它。Prettier 通过解析你的代码库，强制使用统一的风格的代码，因为它会移除掉原有代码样式（这并不会影响 AST 的代码样式）。它会采用自己的规则来重新输出解析后的 AST，该规则将考虑每行最大长度，当必要的时候，会进行换行。
+​    它会移除原有代码的样式，并输出统一样式的代码。Prettier会重新计算每行代码的长度并重新打印它。Prettier 通过解析你的代码库，强制使用统一的风格的代码，因为它会移除掉原有代码样式（这并不会影响 AST 的代码样式）。它会采用自己的规则来重新输出解析后的 AST，该规则将考虑每行最大长度，当必要的时候，会进行换行。
 
 ### 安装和使用
 
 ​	通过yarn：
 
-```
+```bash
 yarn add prettier --dev --exact
 # or globally
 yarn global add prettier
@@ -654,7 +651,7 @@ yarn global add prettier
 
 ​	通过npm：
 
-```
+```bash
 npm install --save-dev --save-exact prettier
 # or globally
 npm install --global prettier
@@ -662,7 +659,7 @@ npm install --global prettier
 
 ​	然后创建一个空的配置文件来让编辑器和其他工具知道你正在使用Prettier：
 
-```
+```bash
 echo {}> .prettierrc.json
 ```
 
@@ -680,7 +677,7 @@ echo {}> .prettierrc.json
 
 ​	接着创建一个[.prettierignore](https://prettier.io/docs/en/ignore.html)文件让编辑器知道哪些文件不需要格式化。以#开头的行会被当做注释。比如：
 
-```
+```javascript
 # Ignore artifacts:
 build
 coverage
@@ -690,7 +687,7 @@ coverage
 
 ​	最后使用Prettier格式化所有文件:
 
-```
+```bash
 npx prettier --write .
 # or
 yarn prettier --write .
@@ -698,11 +695,12 @@ yarn prettier --write .
 
 ### 配置项参数
 
-	+ printWidth：设置prettier单行输出的最大长度，默认为80。
-	+ tabWidth：设置每个水平缩进的空格数，默认为2。
-	+ useTabs：使用tab（制表位）进行缩进而非空格，默认为false。
-	+ semi：是否在语句末尾添加分号，默认为true。
-	+ singleQuote：是否使用单引号包裹字符串，默认为false。
++ printWidth：设置prettier单行输出的最大长度，默认为80。
++ tabWidth：设置每个水平缩进的空格数，默认为2。
++ useTabs：使用tab（制表位）进行缩进而非空格，默认为false。
++ semi：是否在语句末尾添加分号，默认为true。
++ singleQuote：是否使用单引号包裹字符串，默认为false。
+
  + quoteProps：是否使用引号包裹对象的键名，默认为"as-needed"。
    + "as-needed"：当且仅当对象中特定键名需要被引号包裹时，使用引号包裹特定键名。
    + "consistent"：如果对象中至少存在一个键名必须被引号包裹时，使用引号包裹所有键名
@@ -713,7 +711,7 @@ yarn prettier --write .
   + "es5"：添加es5中被支持的尾逗号。
   + "all"：所有可能的地方都被添加尾逗号。
 
-+ bracketSpacing：在对象字面量声明所使用的的花括号后（{）和前（}）输出空格，默认为true。
++ bracketSpacing：在对象字面量声明所使用的的花括号后{和前}输出空格，默认为true。
 + jsxBracketSameLinte：在多行JSX元素最后一行的末尾添加 > 而使 > 单独一行（不适用于自闭和元素），默认为false。
 + arrowParens：为单行箭头函数的参数添加圆括号，默认为"always"。
   + "avoid " - 尽可能不添加圆括号，示例：x => x。
@@ -725,9 +723,9 @@ yarn prettier --write .
 
 ​	幸运的是通过第三方配置可以很容易的关闭与Prettier冲突且没需要的规则。
 
-+ [eslint-config-prettier](https://github.com/prettier/eslint-config-prettier)：关闭一些不必须且ESLint可能与Prettier冲突的规则。
-+ [tslint-config-prettier](https://github.com/alexjoverm/tslint-config-prettier)：关闭一些不必须且TSLint可能与Prettier冲突的规则。
-+ [stylelint-config-prettier](https://github.com/prettier/stylelint-config-prettier)：关闭一些不必须且stylelint可能与Prettier冲突的规则。
++ [eslint-config-prettier](https://github.com/prettier/eslint-config-prettier)：关闭一些不必须，且ESLint可能与Prettier冲突的规则。
++ [tslint-config-prettier](https://github.com/alexjoverm/tslint-config-prettier)：关闭一些不必须，且TSLint可能与Prettier冲突的规则。
++ [stylelint-config-prettier](https://github.com/prettier/stylelint-config-prettier)：关闭一些不必须，且stylelint可能与Prettier冲突的规则。
 
 #### Notes：
 
@@ -750,15 +748,15 @@ yarn prettier --write .
 
 ### Pre-commit Hook
 
-​	你可以通过pre-commit工具来使用Prettier。执行了git add的文件在提交之前，可以重新格式化这些被保存在暂存区的文件。
+​	你可以通过pre-commit工具来使用Prettier。执行了git add的文件在提交之前，可以重新格式化这些已经被保存在暂存区的文件。
 
-```
+```bash
 npx mrm lint-staged
 ```
 
 ​	执行之后会安装[husky](https://github.com/typicode/husky)和[lint-staged](https://github.com/okonet/lint-staged)，同时自动在你的package.json文件中添加配置。如下：
 
-```
+```json
 "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
@@ -775,14 +773,16 @@ npx mrm lint-staged
 
 ​	husky和lint-staged工作流程如下：
 
-	1. git add .将所有改动的文件提交到暂存区
+```bash
+1. git add .将所有改动的文件提交到暂存区
+```
  	2. git commit -m ""此操作会被husky拦截，之后调用lint-staged对文件进行检查。
  	3. lint-staged会先进行git stash操作，之后会将与规则相匹配的暂存区的文件进行检查，只有已经提交到暂存区的文件才会被检查。
  	4. 等到lint-staged执行完成后，只要有一个文件没有通过检查，husky会阻止本次git commit，然后手动修改对应的有问题的文件，重新执行git add和git commit操作，会重复2，3步骤进行检查。
 
-### 常用配置
+### prettier常用配置
 
-```
+```javascript
 module.exports = { 
   "printWidth": 80, // 每行代码长度（默认80）
   "tabWidth": 2, // 每个tab相当于多少个空格（默认2）
@@ -796,11 +796,11 @@ module.exports = {
 }; 
 ```
 
-## 推荐配置
+## 项目推荐配置
 
 ### package.json
 
-```
+```json
 "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
@@ -816,21 +816,29 @@ module.exports = {
 
 ### .eslintrc.js
 
-```
+```javascript
 module.exports = {
   root: true,
+  parser: 'babel-eslint',
+  parserOptions: {
+    ecmaVersion: 2020,
+    sourceType: 'module',
+    ecmaFeatures: {
+      experimentalObjectRestSpread: true,
+      globalReturn: false,
+      impliedStrict: true
+    }
+  },
   // 启用node环境
   env: {
-    node: true
+    node: true,
+    browser: true,
+    es6: true
   },
   extends: ['attack', 'attack/vue', 'prettier'],
-  plugins: ['prettier'],
+  plugins: ['prettier', 'vue'],
   rules: {
     'prettier/prettier': 'error'
-  },
-  parserOptions: {
-    // 指定使用babel-eslint作为eslint的解析器
-    parser: 'babel-eslint'
   }
 }
 
@@ -838,7 +846,7 @@ module.exports = {
 
 ### .prettierrc.js
 
-```
+```javascript
 module.exports = {
   singleQuote: true,
   printWidth: 80,
@@ -866,10 +874,10 @@ module.exports = {
 
 ###  安装相应的包
 
-```
+```bash
 #npm
 npm i eslint babel-eslint eslint-config-attack eslint-config-prettier eslint-plugin-prettier eslint-plugin-vue husky lint-staged prettier --save-dev
 # yarn 
-yarn add babel-eslint eslint-config-attack eslint-config-prettier eslint-plugin-prettier eslint-plugin-vue husky lint-staged prettier --dev
+yarn add eslint babel-eslint eslint-config-attack eslint-config-prettier eslint-plugin-prettier eslint-plugin-vue husky lint-staged prettier --dev
 ```
 
