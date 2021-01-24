@@ -872,12 +872,3 @@ module.exports = {
 
 ```
 
-###  安装相应的包
-
-```bash
-#npm
-npm i eslint babel-eslint eslint-config-attack eslint-config-prettier eslint-plugin-prettier eslint-plugin-vue husky lint-staged prettier --save-dev
-# yarn 
-yarn add eslint babel-eslint eslint-config-attack eslint-config-prettier eslint-plugin-prettier eslint-plugin-vue husky lint-staged prettier --dev
-```
-
