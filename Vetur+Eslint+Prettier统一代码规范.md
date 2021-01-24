@@ -775,10 +775,10 @@ npx mrm lint-staged
 
 ```bash
 1. git add .将所有改动的文件提交到暂存区
+2. git commit -m ""此操作会被husky拦截，之后调用lint-staged对文件进行检查。
+3. lint-staged会先进行git stash操作，之后会将与规则相匹配的暂存区的文件进行检查，只有已经提交到暂存区的文件才会被检查。
+4. 等到lint-staged执行完成后，只要有一个文件没有通过检查，husky会阻止本次git commit，然后手动修改对应的有问题的文件，重新执行git add和git commit操作，会重复2，3步骤进行检查。
 ```
- 	2. git commit -m ""此操作会被husky拦截，之后调用lint-staged对文件进行检查。
- 	3. lint-staged会先进行git stash操作，之后会将与规则相匹配的暂存区的文件进行检查，只有已经提交到暂存区的文件才会被检查。
- 	4. 等到lint-staged执行完成后，只要有一个文件没有通过检查，husky会阻止本次git commit，然后手动修改对应的有问题的文件，重新执行git add和git commit操作，会重复2，3步骤进行检查。
 
 ### prettier常用配置
 
@@ -853,6 +853,8 @@ module.exports = {
   semi: false,
   tabWidth: 2,
   trailingComma: 'none',
+  bracketSpacing: true,
+  arrowParens: "avoid"
   overrides: [
     {
       files: [
