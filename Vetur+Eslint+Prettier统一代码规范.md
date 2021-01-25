@@ -151,7 +151,7 @@ $ npx eslint yourfile.js
 
 ​	同时你也可以全局安装ESLint（使用**<font color="red">npm install eslint -g</font>**），同时与eslint相关的插件也必须是全局安装的。然而非常不推荐这种方式。目前项目中的所有插件或者其他配置都必须安装在本地项目中。
 
-##### **<font color="red">Notes</font>**
+##### **Notes**
 
 ​	在运行eslint --init之后会在控制台生成一个交互提示界面，可根据需求手动选择eslint的配置。此种方式太过繁琐，并不太推荐。
 
