@@ -667,6 +667,179 @@ function App() {
 
 \<Concats /> 和 \<Chat />之类的React元素本质上就是对象，所以你可以把它们当做props，像其他数据一样传递。在React中，你可以将任何东西作为props进行传递。
 
+# Refs
+
+​		Refs提供了一种方式，允许我们访问DOM节点或在render方法中创建的React元素。在典型的React数据流中，props是父组件与子组件交互的唯一方式。要修改一个子组件，需要使用新的props来重新渲染它。但是某些情况下，需要在典型数据流之外强制修改子组件。被修改的子组件可能是一个React组件的实例，也可能是一个DOM元素。
+
+## 何时使用Refs
+
+ + 管理焦点，文本选择或媒体播放。
+ + 触发强制动画。
+ + 集成第三方DOM库。
+
+避免使用refs来做任何可以通过声明式实现来完成的事情。
+
+## 创建Refs
+
+​		Refs是使用React.createRef()创建的，并通过ref属性添加到React元素。在构造组件时，通常将Refs分配给实例属性，以便在整个组件中引用它们。
+
+```jsx
+class MyComponent extends React.Component {
+    constructor(props) {
+        super(props)
+        this.ref = React.createRef()
+    }
+    render() {
+        return <div ref={this.ref}></div>
+    }
+}
+```
+
+## 访问Refs
+
+​		当ref被传递给render中的元素时，对该节点的引用可以在ref的current属性中被访问。
+
+```jsx
+const node = this.ref.current
+```
+
+ref的值根据节点的类型有所不同：
+
++ 当ref属性用于HTML元素时，构造函数中使用React.createRef()创建的ref接收底层DOM元素作为其current属性。
++ 当ref属性用于自定义class组件时，ref对象接收组件的挂载实例作为其current属性。
++ 不能在函数组件上使用ref属性，因为他们没有实例。
+
+```jsx
+class CustomTextInput extends React.Component {
+    constructor(props) {
+        super(props)
+        // 创建ref来存储textInput的DOM
+        this.textInput = React.createRef()
+        this.focusTextInput = this.focusTextInput.bind(this)
+    }
+    focusTextInput() {
+        // 通过current属性使用原生API使text输入框获得焦点
+        this.textInput.current.focus()
+    }
+    render() {
+        return (
+        	// 把<input> ref关联到构造器里创建的textInput上
+            <div>
+            	<input type="text" ref={this.textInput}/>
+                <input type="button" value="click" onClick={this.focusTextInput}/>
+            </div>
+        )
+    }
+}
+```
+
+React会在组件挂载时给current属性传入DOM元素，并在组件卸载时传入null值。ref会在componentDidMount和componentDidUpdate钩子触发前更新。
+
+### class组件添加ref
+
+​		想封装上面的CustomTextInput，来模拟它挂载之后立即被点击的操作。可以使用ref属性来获取自定义的input组件并手动调用它的focusTextInput方法。
+
+```jsx
+class AutoFocusTextInput extends React.Component {
+    constructor(props) {
+        super(props)
+        this.textInput = React.creatRef()
+    }
+    componentDidMount() {
+        this.textInput.current.focusTextInput()
+    }
+    render() {
+        return (
+        	<CustomTextInput ref={this.textInput}/>
+        )
+    }
+}
+```
+
+**注意：**仅在CustomTextInput声明为class时才有效。
+
+### Refs与函数组件
+
+​		默认情况下，不能在函数组件上使用ref属性，因为他们没有实例。如果要在函数组件中使用ref，可以使用forwardRef（与useImperativeHandle结合使用），或者将该组件转为class组件。
+
+但是可以在函数组件内部使用ref属性，只要它指向一个DOM元素或者class组件。
+
+```jsx
+function CustomTextInput(props) {
+    const textInput = useRef(null)
+    function handleClick() {
+        textInput.current.focus()
+    }
+    return (
+    	<div>
+        	<input type="text" ref={textInput}/>
+            <input type="button" value="click" onClick={handleClick}/>
+        </div>
+    )
+}
+```
+
+## 回调Refs
+
+​		React也支持另一种设置refs的方式，称为回调refs。它能帮助你更精细地控制何时refs被设置和解除。不同于传递createRef()创建的ref属性，你会传递一个函数。这个函数中接收React组件实例或者DOM元素作为参数，以使它们能在其他地方被存储和访问。
+
+```jsx
+class Custom extends React.Component {
+    constructor(props) {
+        super(props)
+        this.textInput = null
+        this.setTextInputRef = ele => {
+            this.textInput = ele
+        }
+        this.focusTextInput = () => {
+            if (this.textInput) {
+                this.textInput.focus()
+           	}
+        }
+    }
+    componentDidMount() {
+        this.focusTextInput()
+    }
+    render() {
+        // 使用ref的回调函数将DOM节点的引用存储到React实例上
+       	return (
+        	<div>
+            	<input type="text" ref={this.setTextInputRef}/>
+            </div>
+        )
+    }
+}
+```
+
+React将在组件挂载时，调用ref回调函数并传入DOM元素，当卸载时调用它并传入null。在componentDidMount或componentDidUpdate触发前，React保证refs一定是最新的。
+
+你可以在组件间传递回调形式的refs，就像你可以传递通过React.createRef()创建的对象refs一样。
+
+```jsx
+function Custom(props) {
+    return (
+    	<div>
+        	<input ref={props.inputRef}/>
+        </div>
+    )
+}
+class Parent extends React.Component {
+    render() {
+        return (
+        	<Custom inputRef={ele => this.inputElement = ele}></Custom>
+        )
+    }
+}
+```
+
+### 回调Refs的说明
+
+​		如果ref回调函数是以内联函数的方式定义的，在更新过程中它会被执行两次，第一次传入参数null，然后第二次传入参数DOM元素。这是因为在每次渲染时都会创建一个新的函数实例，所以React清空旧的ref并设置新的。通过将ref的回调函数定义成class的绑定函数的方式可以避免。
+
+
+
+
+
 
 
 
