@@ -836,6 +836,104 @@ class Parent extends React.Component {
 
 ​		如果ref回调函数是以内联函数的方式定义的，在更新过程中它会被执行两次，第一次传入参数null，然后第二次传入参数DOM元素。这是因为在每次渲染时都会创建一个新的函数实例，所以React清空旧的ref并设置新的。通过将ref的回调函数定义成class的绑定函数的方式可以避免。
 
+# React.lazy
+
+​		React.lazy函数能让你像渲染常规组件一样处理动态引入的组件。
+
+使用前：
+
+```jsx
+import OtherComponent from './OtherComponent';
+```
+
+使用后：
+
+```jsx
+const OtherComponent = React.lazy(() => import('./OtherComponent'))
+```
+
+此代码将会在组件首次渲染时，自动导入包含OtherComponent组件的包。
+
+React.lazy接受一个函数，这个函数需要动态调用import()。它必须返回一个promise，该promise需要resolve一个default export的React组件。然后应在**Suspense**组件中渲染lazy组件，使得我们在等待加载lazy组件时做优雅降级。
+
+```jsx
+import React, { Suspense } from 'react'
+const OtherComponent = React.lazy(() => import('./OtherComponent'))
+function MyComponent() {
+    return (
+    	<div>
+        	<Suspnese fallback={<div>Loading……</div>}>
+            	<OtherComponent />
+            </Suspnese>
+        </div>
+    )
+}
+```
+
+fallback属性接受任何在组件加载过程中你想展示的React元素。可以将Suspense组件置于懒加载组件之上的任何位置。可以用一个Suspense组件包裹多个懒加载组件。
+
+```jsx
+import React, { Suspense } from 'react';
+const OtherComponent = React.lazy(() => import('./OtherComponent'));
+const AnotherComponent = React.lazy(() => import('./AnotherComponent'));
+function MyComponent() {
+  return (
+    <div>
+      <Suspense fallback={<div>Loading...</div>}>
+        <section>
+          <OtherComponent />
+          <AnotherComponent />
+        </section>
+      </Suspense>
+    </div>
+  );
+}
+```
+
+## 异常捕获边界
+
+​		如果模块加载失败（如网络问题），它会触发一个错误。可以通过异常捕获边界来处理这些情况。
+
+```jsx
+import React, { Suspense } from 'react';
+import MyErrorBoundary from './MyErrorBoundary';
+const OtherComponent = React.lazy(() => import('./OtherComponent'));
+const AnotherComponent = React.lazy(() => import('./AnotherComponent'));
+const MyComponent = () => (
+  <div>
+    <MyErrorBoundary>
+      <Suspense fallback={<div>Loading...</div>}>
+        <section>
+          <OtherComponent />
+          <AnotherComponent />
+        </section>
+      </Suspense>
+    </MyErrorBoundary>
+  </div>
+);
+```
+
+## 基于路由的代码分割
+
+```jsx
+import React, { Suspense, lazy } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+const Home = lazy(() => import('./routes/Home'));
+const About = lazy(() => import('./routes/About'));
+const App = () => (
+  <Router>
+    <Suspense fallback={<div>Loading...</div>}>
+      <Switch>
+        <Route exact path="/" component={Home}/>
+        <Route path="/about" component={About}/>
+      </Switch>
+    </Suspense>
+  </Router>
+);
+```
+
+
+
 
 
 
