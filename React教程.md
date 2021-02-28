@@ -1,4 +1,4 @@
-# React简介
+# 	React简介
 
 ## 声明式
 
@@ -932,9 +932,574 @@ const App = () => (
 );
 ```
 
+# 错误边界
 
+​		组件内的JavaScript错误会导致React的内部状态被破坏，并且在下一次渲染时产生无法追踪的错误。部分UI的JavaScript错误不应该导致整个应用的崩溃。为此React16引入了错误边界。错误边界是一种React组件，这种组件可以捕获并打印发生在其子组件树任何位置的JavaScript错误，并且会渲染出备用UI，而不是渲染崩溃了的子组件树。错误边界在渲染期间，生命周期方法和整个组件树的构造函数中捕获错误。
 
+**注意：**
 
+错误边界无法捕获以下场景中产生的错误：
+
++ 事件处理
++ 异步代码
++ 服务端渲染
++ 自身抛出的错误
+
+如果一个class组件中定义了**static getDerivedStateFromError()**或**componentDidCatch()**这两个生命周期方法中的任意一个时，那个它就变成一个错误边界。当抛出错误时，使用**static getDerivedStateFromError()**渲染备用UI。
+
+```jsx
+class ErrorBoundary extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            hasError: false
+        }
+    }
+    static getDerivedStateFromError(error) {
+        return { hasError: true };
+    }
+    componentDidCatch(error, errorInfo) {
+        // 你同样可以将错误日志上报给服务器
+        logErrorToMyService(error, errorInfo);
+    }
+    render() {
+        if (this.state.hasError) {
+          // 你可以自定义降级后的 UI 并渲染
+          return <h1>Something went wrong.</h1>;
+        }
+
+        return this.props.children; 
+    }
+}
+```
+
+```jsx
+<ErrorBoundary>
+  <MyWidget />
+</ErrorBoundary>
+```
+
+错误边界的工作方式类似于JavaScript的catch，不同的地方在于错误边界只针对React组件。只有class组件才可以成为错误边界组件。只需要声明一次错误边界组件，就可以在整个应用中使用它。但是错误边界仅可以捕获其子组件的错误，它无法捕获其自身的错误。如果一个错误边界无法渲染错误信息，则错误会冒泡至最近的上层错误边界，类似于JavaScript中的catch工作机制。
+
+# Refs转发
+
+​		Ref转发是一项将ref自动地通过组件传递到其一子组件的技巧。
+
+## 转发refs到DOM组件
+
+```jsx
+function FancyButton(props) {
+    return (
+    	<button className="FancyButton">
+          {props.children}
+        </button>
+    )
+}
+```
+
+Ref转发是一个可选特性，其允许某些组件接收ref，并将其向下传递给子组件。
+
+```jsx
+const FancyButton = React.forwardRef((props, ref) => (
+	<button ref={ref}>xx</button>
+))
+// 可以直接获取DOM button的ref
+const ref = React.createRef()
+<FancyButton ref={ref}></FancyButton>
+```
+
+使用FancyButton的组件可以获取底层DOM节点button的ref。
+
++ 调用React.createRef创建了一个React ref并将其赋值给ref变量。
++ 通过指定ref为JSX属性，将其向下传递给<FancyButton ref={ref}>。
++ React 传递 `ref` 给 `forwardRef` 内函数 `(props, ref) => ...`，作为其第二个参数。
++ 我们向下转发该 `ref` 参数到 `<button ref={ref}>`，将其指定为 JSX 属性。
++ 当 ref 挂载完成，`ref.current` 将指向 `<button>` DOM 节点。
+
+# Fragments
+
+​		React一个常见的模式是一个组件返回多个元素。Fragments允许将子列表分组，而无需向DOM添加额外节点。
+
+```jsx
+render() {
+    return (
+    	<React.Fragment>
+        	<ChildA />
+            <ChildB />
+            <ChildC />
+        </React.Fragment>
+    )
+}
+```
+
+# React Hook
+
+## Hook简介
+
+​		Hook是React16.8的新增特性。它可以让你在不编写class的情况下使用state以及其他React特性。
+
+```jsx
+import React, { useState } from 'react'
+function Example() {
+    // 声明一个新的count的state变量
+    const [count, setCount] = useState(0)
+    return (
+    	<div>
+        	<span>{count}</span>
+            <button onClick={() => setCount(count + 1)}></button>
+        </div>
+    )
+}
+```
+
+Hook使你在无需修改组件结构的情况下复用状态逻辑。
+
+## Hook概览
+
+​		Hook是一些可以让你在函数组件里“钩入”React state以及生命周期等特性的函数。Hook不能在class组件里使用。
+
+## State Hook
+
+```jsx
+import React, { useState } from 'react'
+function Example() {
+    // 声明一个叫 “count” 的 state 变量。
+    const [count, setCount] = useState(0)
+    return (
+        <div>
+          <p>You clicked {count} times</p>
+          <button onClick={() => setCount(count + 1)}>
+            Click me
+          </button>
+        </div>
+    )
+}
+```
+
+**useState**就是一个Hook。通过在函数组件里调用它来给组件添加一些内部state。React会在重复渲染时保留这个state。useState会返回一对值：当前状态和一个让你更新状态的函数。它类似class组件的this.setState，但是它不会把新的state和旧的state进行合并。
+
+**useState**唯一的参数就是初始state。这个初始state参数只有在第一次渲染时会被用到。
+
+## Effect Hook
+
+​		在React组件中执行过数据获取，订阅或者手动修改过DOM，这些操作统称为副作用。**useEffect**就是一个Effect Hook，给函数组件增加了操作副作用的能力。它跟class组件中的componentDidMount，componentDidUpdate和componentWillUnmount具有相同的用途，只是被合并成了一个API。
+
+```jsx
+import React, { useState, useEffect } from 'react'
+function Example() {
+    const [count, setCount] = useState(0)
+    // 相当于componentDidMount和componentDidUpdate
+    useEffect(() => {
+        document.title = ''
+    })
+    return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+    </div>
+  )
+}
+```
+
+当你调用useEffect时，就是告诉React在完成对DOM的更改后运行“副作用”函数。由于“副作用”函数是在组件内声明的，所以可以访问到组件的props和state。默认情况下，React会在每次渲染后调用“副作用”函数，包括第一次渲染的时候。
+
+"副作用"函数还可以通过返回一个函数来指定如何清除副作用。
+
+```jsx
+import React, { useState, useEffect } from 'react'
+function Fstatus(props) {
+    const [isOnline, setIsOnline] = useState(null)
+    function handleStatusChange(status) {
+        setIsOnlint(status.isOnline)
+    }
+    useEffect(() => {
+        ChatAPI.subscribeToFriendStatus(props.friend.id, handleStatusChange);
+        return () => {
+          ChatAPI.unsubscribeFromFriendStatus(props.friend.id, handleStatusChange);
+        };
+    })
+    if (isOnline === null) {
+        return 'Loading...';
+    }
+    return isOnline ? 'Online' : 'Offline';
+}
+```
+
+跟useState一样，可以在组件中多次使用useEffect：
+
+```jsx
+function FriendStatusWithCounter(props) {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    document.title = `You clicked ${count} times`;
+  });
+
+  const [isOnline, setIsOnline] = useState(null);
+  useEffect(() => {
+    ChatAPI.subscribeToFriendStatus(props.friend.id, handleStatusChange);
+    return () => {
+      ChatAPI.unsubscribeFromFriendStatus(props.friend.id, handleStatusChange);
+    };
+  });
+
+  function handleStatusChange(status) {
+    setIsOnline(status.isOnline);
+  }
+}
+```
+
+通过使用Hook，可以把组件内相关的副作用组织在一起，而不是把它们拆分到不同的生命周期钩子函数里。
+
+## Hook使用规则
+
+​		Hook就是JavaScript函数，有两个额外的规则：
+
++ 只能在函数最外层调用Hook，不要在循环，条件判断或者子函数中调用。
++ 只能在React的函数组件中调用Hook，不要在其他JavaScript函数中调用。
+
+## 自定义Hook
+
+```jsx
+import React, { useState, useEffect } from 'react'
+function useFriendStatus(id) {
+    const [isOnLine, setIsOnLine] = useState(null)
+    function handleStatusChange(status) {
+        setIsOnLine(status.isOnLine)
+    }
+    useEffect(() => {
+        ChatAPI.subscribeToFriendStatus(id, handleStatusChange);
+        return () => {
+          ChatAPI.unsubscribeFromFriendStatus(id, handleStatusChange);
+        }
+     })
+     return isOnline;
+}
+```
+
+```jsx
+function FriendStatus(props) {
+    const isOnLine = useFriendStatus(props.friend.id)
+    if (isOnline === null) {
+        return 'Loading...';
+    }
+    return isOnline ? 'Online' : 'Offline';
+}
+```
+
+每个组件间的state是完全独立的。Hook是一种复用状态逻辑的方式，它不复用state本身。事实上Hook的每次调用都有一个完全独立的state，因此可以在单个组件中多次调用同一个自定义Hook。自定义Hook更像是一种约定而不是功能，如果函数的名字以“use”开头并调用其他Hook，我们就说这是一个自定义Hook。
+
+## 其他Hook
+
+​		除此之外，还有一些使用频率较低但是很有用的Hook。比如“useContext”让你不使用组件嵌套就可以订阅React的context。
+
+# State Hook
+
+```jsx
+import React, { useState } from 'react';
+
+function Example() {
+  // 声明一个叫 "count" 的 state 变量
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+    </div>
+  );
+}
+```
+
+等价的class示例：
+
+```jsx
+class Example extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            count: 0
+        }
+    }
+    render() {
+        return (
+        	<div>
+            	<span>{this.state.count}</span>
+                <button onClick={() => this.setState({ count: this.state.count + 1 })}></button>
+            </div>
+        )
+    }
+}
+```
+
+## 声明State变量
+
+​		在函数组件中，没有this，所以不能读取this.state。但是可以直接在组件中调用useState Hook：
+
+```jsx
+import React, { useState } from 'react'
+function Example() {
+    // 声明一个叫 “count” 的 state 变量
+  	const [count, setCount] = useState(0);
+}
+```
+
+**调用useState方法时做了什么？**它定义一个“state变量”。
+
+**useState需要哪些参数？**useState方法里面唯一的参数就是初始state。不同于class的是，可以按照需要使用的数字或字符串对其进行赋值，而不一定是对象。
+
+**useState方法的返回值是什么？**返回值为：当前state以及更新state的函数。需要成对获取它们。
+
+## 读取State
+
+​		当想在class组件中显示当前的count时，读取this.state.count：
+
+```jsx
+<p>You clicked {this.state.count} times</p>
+```
+
+​		在函数组件中可以直接用count：
+
+```jsx
+<p>You clicked {count} times</p>
+```
+
+## 更新State
+
+​		在class组件中，需要调用this.setState()来更新count值：
+
+```jsx
+  <button onClick={() => this.setState({ count: this.state.count + 1 })}>
+    Click me
+  </button>
+```
+
+​		在函数组件中，因为使用Hook，所以有了setCount和count变量，所以不需要this:
+
+```jsx
+<button onClick={() => setCount(count + 1)}>
+    Click me
+</button>
+```
+
+# Effect Hook
+
+​		Effect Hook可以让你在函数组件中执行副作用操作。
+
+```jsx
+import React, { useState, useEffect } from 'react'
+function Example() {
+    const [count, setCount] = useState(0)
+    useEffect(() => {
+        document.title = count
+    })
+    return (
+    	<div>
+          <p>You clicked {count} times</p>
+          <button onClick={() => setCount(count + 1)}>
+            Click me
+          </button>
+        </div>
+    )
+}
+```
+
+数据获取，设置订阅以及手动更改React组件中的DOM都属于副作用。可以把useEffect Hook看做是componentDidMount，componentDidUpdate和componentWillUnmount这三个生命周期函数的组合。
+
+在React组件中有两种常见的副作用操作：需要清除的和不需要清除的。
+
+## 无需清除的effect
+
+​		有时候，只想在React更新DOM之后运行一些额外的代码。比如发送网络请求，手动变更DOM，记录日志等。
+
+使用Class组件的示例：
+
+```jsx
+class Example extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            count: 0
+        }
+    }
+    componentDidMount() {
+        document.title = this.state.count
+    }
+    componentDidUpdate() {
+        document.title = this.state.count
+    }
+    render() {
+        return (
+          <div>
+            <p>You clicked {this.state.count} times</p>
+            <button onClick={() => this.setState({ count: this.state.count + 1 })}>
+              Click me
+            </button>
+          </div>
+        );
+    }
+}
+```
+
+使用Hook的示例
+
+```jsx
+import React, { useState, useEffect } from 'react'
+function Example() {
+    const [count, setCount] = useState(0)
+    useEffect(() => {
+        document.title = count
+    })
+    return (
+        <div>
+            <p>You clicked {count} times</p>
+            <button onClick={() => setCount(count + 1)}>
+                Click me
+            </button>
+        </div>
+    )
+}
+```
+
+**useEffect做了什么？**通过使用这个Hook，告诉React组件需要在渲染后执行某些操作。React会保存你传递的函数（被称为effect），并且在执行DOM更新之后调用它。
+
+**为何在组件内部调用useEffect？**将useEffect放在组件内部让我们可以在effect中直接访问count state变量。
+
+**useEffect会在每次渲染后都执行吗？**默认情况下，它在第一次渲染之后和每次更新之后都会执行。
+
+每次重新渲染，都会生成新的effect，替换掉之前的。与componentDidMount和componentDidUpdate不同，使用useEffect调度的effect不会阻塞浏览器更新屏幕，这让应用看起来响应更快。大多数情况下，effect不需要同步地执行。
+
+## 需要清除的effect
+
+​		有一些副作用是需要清除的。例如订阅外部数据源。
+
+使用Class组件的示例：
+
+```jsx
+class FriendStatus extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { isOnline: null };
+    this.handleStatusChange = this.handleStatusChange.bind(this);
+  }
+
+  componentDidMount() {
+    ChatAPI.subscribeToFriendStatus(
+      this.props.friend.id,
+      this.handleStatusChange
+    );
+  }
+  componentWillUnmount() {
+    ChatAPI.unsubscribeFromFriendStatus(
+      this.props.friend.id,
+      this.handleStatusChange
+    );
+  }
+  handleStatusChange(status) {
+    this.setState({
+      isOnline: status.isOnline
+    });
+  }
+
+  render() {
+    if (this.state.isOnline === null) {
+      return 'Loading...';
+    }
+    return this.state.isOnline ? 'Online' : 'Offline';
+  }
+}
+```
+
+使用Hook的示例：
+
+```jsx
+import React, { useState, useEffect } from 'react';
+
+function FriendStatus(props) {
+  const [isOnline, setIsOnline] = useState(null);
+
+  useEffect(() => {
+    function handleStatusChange(status) {
+      setIsOnline(status.isOnline);
+    }
+    ChatAPI.subscribeToFriendStatus(props.friend.id, handleStatusChange);
+    // Specify how to clean up after this effect:
+    return function cleanup() {
+      ChatAPI.unsubscribeFromFriendStatus(props.friend.id, handleStatusChange);
+    };
+  });
+
+  if (isOnline === null) {
+    return 'Loading...';
+  }
+  return isOnline ? 'Online' : 'Offline';
+}
+```
+
+**为何要在effect中返回一个函数？**这是effect可选的清除机制。每个effect都可以返回一个清除函数。
+
+**React何时清除effect？**React会在组件卸载的时候执行清除操作。
+
+# Hook规则
+
++ 只在最顶层使用Hook。
+
+不要在循环，条件判断或嵌套函数中调用Hook，确保总是在你的React函数的最顶层调用它们。
+
++ 只在React函数中调用Hook。
+  + 在React的函数组件中调用Hook。
+  + 在自定义Hook中调用其他Hook。
+
+# 自定义Hook
+
+​		通过自定义Hook，可以将组件逻辑提取到可重用的函数中。
+
+## 提取自定义Hook
+
+​		自定义Hook是一个函数，其名称以“use”开头，函数内部可以调用其他Hook。
+
+```jsx
+import { useState, useEffect } from 'react'
+function useStatus(id) {
+    const [isOnLine, setIsOnLine] = useState(null)
+    useEffect(() => {
+        function handleStatusChange(status) {
+            setIsOnline(status.isOnline)
+        }
+        ChatAPI.subscribeToFriendStatus(friendID, handleStatusChange);
+        return () => {
+          ChatAPI.unsubscribeFromFriendStatus(friendID, handleStatusChange);
+        }
+    })
+    return isOnLine
+}
+```
+
+## 使用自定义Hook
+
+```jsx
+function FriendStatus(props) {
+    const isOnLine = useFriendStatus(props.id)
+    if (isOnline === null) {
+        return 'Loading...';
+    }
+    return isOnline ? 'Online' : 'Offline';
+}
+```
+
+```jsx
+function FriendListItem(props) {
+  const isOnline = useFriendStatus(props.id)
+  return (
+    <li style={{ color: isOnline ? 'green' : 'black' }}>
+      {props.friend.name}
+    </li>
+  )
+}
+```
 
 
 
