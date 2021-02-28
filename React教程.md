@@ -1501,6 +1501,104 @@ function FriendListItem(props) {
 }
 ```
 
+# React高阶组件
+
+​		高阶组件HOC是React中用于复用组件逻辑的一种高级技巧。高阶组件是参数为组件，返回值为新组件的函数。
+
+```jsx
+const EnhancedComponent = higherOrderComponent(wrappedComponent)
+```
+
+组件是将props转换为UI，而高阶组件是将组件转换为另一个组件。
+
+```jsx
+function withSub(WrappedComponent, selectData) {
+    return class extends React.Component {
+        constructor(props)
+        super(props)
+        this.handleChange = this.handleChange.bind(this)
+        this.state = {
+            data: selectData(DataSource, props)
+        }
+        componentDidMount() {
+          // ...负责订阅相关的操作...
+          DataSource.addChangeListener(this.handleChange);
+        }
+
+        componentWillUnmount() {
+          DataSource.removeChangeListener(this.handleChange);
+        }
+        handleChange() {
+          this.setState({
+            data: selectData(DataSource, this.props)
+          });
+        }
+    	render() {
+            return <WrappedComponent data={this.state.data} {...this.props}/>
+        }
+    }
+}
+```
+
+HOC不会修改传入的组件，也不会使用继承来复制其行为。相反，HOC通过将组件包装在容器组件来组成新组件。HOC是纯函数，没有副作用。
+
+被包装组件接收来自容器组件的所有prop，同时也接受你一个新的用于render的data prop。
+
+## 不改变原始组件，使用组合
+
+不要试图在HOC中修改组件原型。HOC不应该修改传入的组件，而应该使用组合的方式，通过将组件包装在容器组件中实现功能：
+
+```jsx
+function logProps(WrappedComponent) {
+    return class extends React.Component {
+        componentDidUpdate(prevProps) {
+            console.log('Current props: ', this.props);
+      		console.log('Previous props: ', prevProps);
+        }
+        render() {
+            return <WrappedComponent {...this.props} />;
+        }
+    }
+}
+```
+
+## 约定：将不相关的props传递给被包裹组件
+
+​		HOC为组件添加特性，自身不应该大幅改变约定。HOC返回的组件与原组件应该保持类似的接口。HOC应该透传与自身无关的props，大多数HOC都应该包含一个类似于下面的render方法：
+
+```jsx
+render() {
+    // 过滤掉非此HOC额外的props，且不进行透传
+    const { extraProp, ...passProps } = this.props
+    // 将props注入到被包装的组件中
+    // 通常为state的值或者实例方法
+    const injectedProp = someStateOrMethod
+    return (
+    	<WrappedComponent injectedProp={injectedProp} {...passThroughProps}/>
+    )
+}
+```
+
+## 约定：最大化可组合性
+
+## 约定：包装显示名称以便轻松调试
+
+## 注意事项
+
+### 不要在render中使用HOC
+
+### 务必复制静态方法
+
+### Refs不会被传递
+
+​		虽然高阶组件的约定式将所有props传递给被包装组件，但对于ref并不适用。因为ref实际上并不是一个prop，就像**key**一样，它由React专门处理。如果将ref添加到HOC的返回组件中，则ref引用指向容器组件，而不是被包装组件。
+
+
+
+
+
+
+
 
 
 
