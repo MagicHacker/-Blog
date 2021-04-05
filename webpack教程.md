@@ -79,7 +79,7 @@ module.exports = {
 
 ![image-20201026231511179](https://tva1.sinaimg.cn/large/0081Kckwly1gk356ix1obj308701ujr8.jpg)
 
-**注意：**构建多页面应用而使用对象语法，最终是要构建出多个bundle文件的，所以在output中不能指定输出某一个文件，否则无法构建成功，因而报错。
+**注意：**构建多页面应用时会使用对象语法，最终是要构建出多个bundle文件的，所以在output中不能指定输出某一个文件，否则无法构建成功，因而报错。
 
 ### key为路径字符串
 
@@ -131,9 +131,9 @@ module.exports = {
 
 ![image-20201026234111456](https://tva1.sinaimg.cn/large/0081Kckwly1gk35xkndidj307m01va9x.jpg)
 
+打包后的vendor.bundle.js对应的内容为：
+
 ![image-20201026234133043](https://tva1.sinaimg.cn/large/0081Kckwly1gk35xxugcnj30mx094jt6.jpg)
-
-
 
 ### 分离应用程序和第三方库入口
 
@@ -153,7 +153,7 @@ module.exports = {
 
 ## 数组语法
 
-​		可以使用数组为一个入口指定多个文件。一般情况下，数组中引入的文件是没有相互依赖关系的，但是基于某种原因需要将它们打包在一起，最后webpack会将数组中最后一个模块的module.exports作为入口整个模块的module.exports导出。
+​		可以使用数组为一个入口指定多个文件。一般情况下，数组中引入的文件是没有相互依赖关系的，但是基于某种原因需要将它们打包在一起，最后webpack会将数组中最后一个模块的module.exports作为整个入口模块的module.exports导出。
 
 ```javascript
 module.exports = {
@@ -207,7 +207,7 @@ module.exports = {
 
 ​		chunkFilename是指未被放在entry中，但却又需要被打包出来的**chunk**文件的名称。一般来说，这个**chunk**文件指的就是要懒加载的模块。默认使用[id].js或从output.filename中推断出的值([name]会被预先替换为[id]或[id].)。
 
-​		webpack的异步模块（即通过import()导入的模块）默认是没有名字的，同时由于没有在异步模块加载的时候显示的指定chunkFilename，webpack就会把[name]替换为chunk文件的[id]，一个自增的id号。可以通过import(/\*webpackChunkName: "test123"\*/ 'index.js')来为设置webpack的chunkFilename中的[name]占位符。
+​		webpack的异步模块（即通过import()导入的模块）默认是没有名字的，同时由于没有在异步模块加载的时候显示的指定chunkFilename，webpack就会把[name]替换为chunk文件的[id]，一个自增的id号。可以通过import(/\*webpackChunkName: "test123"\*/ 'index.js')来设置webpack的chunkFilename中的[name]占位符。
 
 ### filename
 
@@ -232,7 +232,7 @@ module.exports = {
 
 ![image-20201029231700913](https://tva1.sinaimg.cn/large/0081Kckwly1gk6m3d9a1mj307j01gjr6.jpg)
 
-或者是路径字符串：
+如果是路径字符串：
 
 ```javascript
 module.exports = {
@@ -260,11 +260,11 @@ module.exports = {
 
 ​		[hash] 和 [chunkhash] 的长度可以使用[hash:16] (默认为 20) 来指定，或者通过output.hashDigestLength在全局配置长度。
 
-​		[hash]：是整个项目的hash值，其根据每次编译的内容计算得到，只要修改文件就会导致整个项目构建的hash值发生改变。在一个项目中会打包很多资源，但是[hash]会让所有资源都使用同一个hash。一旦我只修改某一个文件，打包后就会造成所有文件的hash值都会改变，会导致未曾修改的文件的hash值变化，进一步会导致未修改的文件在浏览器的缓存失效了，所以[hash]受所有代码的影响，只要内容有变化，[hash]值就会变。因而[hash]无法实现静态资源在浏览器上的长效缓存，[hash]可以用在开发环境，不适用于生产环境。
+​		[hash]：是整个项目的hash值，其根据每次编译的内容计算得到，只要修改文件就会导致整个项目构建的hash值发生改变。在一个项目中会打包很多资源，但是[hash]会让所有资源都使用同一个hash。一旦只修改某一个文件，打包后就会造成所有文件的hash值都会改变，会导致未曾修改的文件的hash值变化，进一步会导致未修改的文件在浏览器的缓存失效了，所以[hash]受所有代码的影响。只要内容有变化，[hash]值就会变。因此[hash]无法实现静态资源在浏览器上的长效缓存，[hash]可以用在开发环境，不适用于生产环境。
 
-​		[chunkhash]：是根据不同的入口文件（entry）进行依赖文件解析，构建对应的chunk，生成相应的chunkhash。如果在某一入口文件创建的关系依赖图上存在文件内容发生了变化，那么相应的入口文件的chunkhash才会发生变化，否则chunkhash就不会变化，所以[chunkhash]受它自身chunk的文件内容的影响，只要该chunk中的内容有变化，[chunkhash]就会变。因此一般在项目中会把公共库和其他文件拆开，并把公共库代码拆分到一起进行打包，因为公共库的代码变动较少，这样可以实现公共库的长效缓存。
+​		[chunkhash]：是根据不同的入口文件（entry）进行依赖文件解析，构建对应的chunk，生成相应的chunkhash。如果在某一入口文件创建的关系依赖图上存在文件内容发生了变化，那么相应的入口文件的chunkhash就会发生变化，否则chunkhash就不会变化，所以[chunkhash]受它自身chunk的文件内容的影响，只要该chunk中的内容有变化，[chunkhash]就会变。因此一般在项目中会把公共库和其他文件拆开，并把公共库代码拆分到一起进行打包，因为公共库的代码变动较少，这样可以实现公共库的长效缓存。
 
-​		[contenthash]：使用chunkhash还存在一个问题，当一个JS文件引入了CSS文件（import 'xxx.css'），打包构建后它们的chunkhash值是相同的，因此如果更改了JS文件的内容，即使CSS文件内容没有更改，那么与这个JS关联的CSS文件的chunkhash也会跟着改变，这样就会导致未改变的CSS文件的缓存失效了。针对这种情况，我们可以使用mini-css-extract-plugin插件将CSS从JS文件中抽离出来并使用contenthash，来解决上述问题。
+​		[contenthash]：使用chunkhash还存在一个问题，当一个JS文件引入了CSS文件（import 'xxx.css'），打包构建后它们的chunkhash值是相同的，因此如果更改了JS文件的内容，即使CSS文件内容没有更改，那么与这个JS关联的CSS文件的chunkhash也会跟着改变，这样就会导致未改变的CSS文件的缓存失效了。针对这种情况，可以使用mini-css-extract-plugin插件将CSS从JS文件中抽离出来并使用contenthash，来解决上述问题。
 
 ### path
 
@@ -272,7 +272,7 @@ module.exports = {
 
 ### publicPath
 
-​		webpack提供一个非常有用的配置，该配置能帮你为项目中的所有资源指定一个基础路径，它被称为公共路径publicPath。这里所说的所有资源的基础路径是指项目中应用CSS，JS，图片等资源的时候的一个基础路径，这个基础路径要配合具体资源的指定路径使用，所以其实打包后的资源访问路径可以如下表示：
+​		webpack提供一个非常有用的配置，该配置能帮你为项目中的所有资源指定一个基础路径，它被称为公共路径publicPath。这里所说的所有资源的基础路径是指项目中应用CSS，JS，图片等资源的时候的一个基础路径，这个基础路径要配合具体资源的指定路径使用，所以其实打包后的资源访问路径可以如下所示：
 
 静态资源最终访问路径 = output.publicPath+资源loader或插件等配置路径。
 
@@ -348,7 +348,7 @@ webpack --module-bind 'css=style-loader!css-loader'
 
 ### babel-loader
 
-​		在日常的开发中，很多人会使用ES6，7，8或者更高版本的JS代码，然而浏览器对这些语法的支持并不是特别友好，因此为了让新语法能够在浏览器中顺利运行，需要使用babel对JS语法进行转换，变成ES5等浏览器支持的语法，如果单纯地手动引入babel，既麻烦，又会导致文件体积过大，所以使用webpack通过babel-loader调用babel，从而在打包的时候进行这种转换。
+​		在日常的开发中，经常会使用ES6，7，8或者更高版本的JS代码，然而浏览器对这些语法的支持并不是特别友好，因此为了让新语法能够在浏览器中顺利运行，需要使用babel对JS语法进行转换，变成ES5等浏览器支持的语法，如果单纯地手动引入babel，既麻烦，又会导致文件体积过大，所以使用webpack通过babel-loader调用babel，从而在打包的时候自动进行这种转换。
 
 #### 安装
 
@@ -396,7 +396,7 @@ options中的presets是用来配置babel的预设，即babel的编码规则。�
 
 + cacheIdentifier：默认是由 @babel/core 版本号，babel-loader 版本号，.babelrc文件内容（存在的情况下），环境变量 `BABEL_ENV` 的值（没有时降级到 `NODE_ENV`）组成的一个字符串。可以设置为一个自定义的值，在 identifier 改变后，来强制缓存失效。
 
-+ cacheCompression：默认值为 true。当设置此值时，会使用 Gzip 压缩每个 Babel transform 输出。
++ cacheCompression：默认值为 true。当设置此值时，会使用 Gzip 压缩每个 Babel transform的输出。
 
 #### 进阶
 
@@ -530,7 +530,7 @@ module: {
 
 ### css-loader
 
-​		css-loader是webpack用来处理项目中的CSS的loader，它会对`@import`和`url()`（CSS中的图片引入，同时还需要url-loader/file-loader处理图片）进行处理。一般用于处理在一个CSS文件中通过@import引入另一个CSS文件，或者在一个JS文件中通过import/require引入一个CSS文件，css-loader会将样式打包进bundle.js文件中，但是不会将CSS插入到HTML中。
+​		css-loader是webpack用来处理项目中的CSS的loader，它会对`@import`和`url()`（CSS中的图片引入，同时还需要url-loader和file-loader处理图片）进行处理。一般用于处理在一个CSS文件中通过@import引入另一个CSS文件，或者在一个JS文件中通过import/require引入一个CSS文件，css-loader会将样式打包进bundle.js文件中，但是不会将CSS插入到HTML中。
 
 ![image-20201109000028740](https://tva1.sinaimg.cn/large/0081Kckwly1gki7jp089yj30ok01zglr.jpg)
 
@@ -753,7 +753,7 @@ module: {
 
 #### 配置项
 
-+ limit：文件大小的限制，单位为字节byte，小于该值文件就会被打包成base64编码的DataURL，如果文件大小大于等于该值，则默认使用file-loader来处理，并且全部查询参数会传递给它。
++ limit：文件大小的限制，单位为字节byte，小于该值文件就会被打包成base64编码的DataURL，如果文件的大小大于等于该值，则默认使用file-loader来处理，并且全部查询参数会传递给它。
 + mimetype：用于设置文件的MIME类型。如果未指定，则使用文件扩展名来查找对应的MIME类型。
 + fallback：用于设置当url-loader加载的文件大于限制时，所对应的loader。
 
@@ -906,7 +906,7 @@ module.exports = {
 }
 ```
 
-#### 配置项
+#### plugin配置项
 
 + filename：用于设置每个输出的CSS的文件名，类似于`output.filename`可以使用各种hash。使用`[name]`占位符配置filename的时候，`[name]`的值是引用了该CSS的入口entry的值。
 + chunkFilename：用于设置非入口的chunk的文件名称，类似于`output.chunkFilename`。
@@ -1108,7 +1108,7 @@ externals: {
 }
 ```
 
-2、如果在浏览器中运行，就不用添加什么前缀，默认就是global。
+2、如果在浏览器中运行，就不用添加什么前缀，默认就是全局的。
 
 ```javascript
 externals: {
@@ -1170,8 +1170,6 @@ module.exports = {
     }
 }
 ```
-
-
 
 ### enforceExtension
 
@@ -1383,7 +1381,7 @@ module.exports = {
 
 ## 用法
 
-​		使用Dll时，构建过程分为两个：dll的构建和webpack主构建。因此需要使用两个配置文件：webpack.config.js和webpack.dll.config.js。先通过webpack.dll.config.js构建出dll bundle，然后再使用webpack主构建进行打包。
+​		使用Dll时，构建过程分为两个：dll的构建和webpack的构建。因此需要使用两个配置文件：webpack.config.js和webpack.dll.config.js。先通过webpack.dll.config.js构建出dll bundle，然后再使用webpack的构建进行打包。
 
 ### webpack.dll.config.js
 
