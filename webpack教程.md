@@ -16,6 +16,10 @@ module.exports = {
 
 这样的好处是webpack配置可以独立于工程目录。例如在分离开发环境和生产环境的配置文件的时候，一般把webpack.config.js放到build文件夹下，此时entry不用相对于build目录来配置，只需要根据context的设置来配置即可。
 
+![image-20210406224218847](https://tva1.sinaimg.cn/large/008eGmZEly1gpaem8tv7kj30pi07cwfr.jpg)
+
+![image-20210406224320175](https://tva1.sinaimg.cn/large/008eGmZEly1gpaenb4omij30ol05h758.jpg)
+
 # entry入口
 
 ​		entry即入口，指示webpack应该使用哪个模块来作为构建起其内部依赖图的开始。进入entry后，webpack会找出有哪些模块和库是entry直接或间接依赖的。可以通过在webpack配置文件中配置entry属性，来指定一个入口（或多个入口）。默认值为./src。
@@ -209,6 +213,12 @@ module.exports = {
 
 ​		webpack的异步模块（即通过import()导入的模块）默认是没有名字的，同时由于没有在异步模块加载的时候显示的指定chunkFilename，webpack就会把[name]替换为chunk文件的[id]，一个自增的id号。可以通过import(/\*webpackChunkName: "test123"\*/ 'index.js')来设置webpack的chunkFilename中的[name]占位符。
 
+![image-20210406223314116](https://tva1.sinaimg.cn/large/008eGmZEly1gpaeeh5u6nj30cw033mx7.jpg)
+
+![image-20210406223333101](https://tva1.sinaimg.cn/large/008eGmZEly1gpaeea549tj30br02x3yj.jpg)
+
+![image-20210406223353050](https://tva1.sinaimg.cn/large/008eGmZEly1gpaedhyse3j308p04a748.jpg)
+
 ### filename
 
 ​		filename用于设置输出的bundle的名称。bundle将被写入到output.path选项指定的目录下。
@@ -277,6 +287,10 @@ module.exports = {
 静态资源最终访问路径 = output.publicPath+资源loader或插件等配置路径。
 
 publicPath一般用来处理将静态资源部署到CDN的情况下的资源访问路径。
+
+![image-20210406225357039](https://tva1.sinaimg.cn/large/008eGmZEly1gpaeycomyij30bs03o0sv.jpg)
+
+![image-20210406225433984](https://tva1.sinaimg.cn/large/008eGmZEly1gpaeyzhv89j30ez03ndfx.jpg)
 
 # mode
 
@@ -356,7 +370,7 @@ webpack --module-bind 'css=style-loader!css-loader'
 npm i @babel-core babel-loader @babel/preset-env --save-dev
 ```
 
-@babel-core是babel编译库的核心包，负责代码的解析。@babel/preset-env是babel的编译规则，通过@babel/preset-env这个包告诉babel以什么样的转码规范去编译JS代码。
+@babel-core是babel编译库的核心包，负责代码的解析。@babel/preset-env是babel的编译规则，通过@babel/preset-env这个包告诉babel以什么样的转码规范去编译JS代码。比如说，如果需要按照ES6标准编译，就安装@babel/preset-es2015，如果按照ES7标准来编译，就安装@babel/preset-es2016。一般来说，如果想用最新的标准规范进行编译，就安装@babel/preset-env，它包含了@babel/preset-es2015，@babel/preset-es2016等内容，可以编译所有最新规范中的代码。
 
 #### 用法
 
@@ -370,7 +384,11 @@ module: {
                 loader: 'babel-loader',
                 options: {
                     cacheDirectory: true,
-                    presets: ['@babel/preset-env']
+                    presets: ['@babel/preset-env', {
+                        targets: {
+                            browser: ['> 1%']
+                        }
+                    }]
                 }
             }
         }
@@ -378,7 +396,7 @@ module: {
 }
 ```
 
-options中的presets是用来配置babel的预设，即babel的编码规则。通过以上配置就可以实现babel对ES6代码的转译。
+options中的presets是用来配置babel的预设，即babel的编码规则。通过以上配置就可以实现babel对ES6代码的编译。同时设置targets属性，使babel编译出来的语法支持市场占有率超过1%的浏览器。
 
 + 未使用babel-loader的情况：
 
@@ -450,8 +468,8 @@ module: {
 
 useBuiltIns的参数支持三个值：
 
-+ entry: 只支持引入一次@babel/polyfill，如果多次引用会抛出错误。
-+ usage：只会在用到ES6的API的文件里引用。
++ entry: 根据配置的浏览器兼容选项，引入浏览器不兼容的polyfill，处理浏览器不兼容的代码。需要在入口文件手动添加import '@babel/polyfill'。
++ usage：只会在用到ES6的API的文件里引入，类似于按需引入。
 + false：默认值，会将@babel/polyfill整体引入。
 
 2、@babel/polyfill会污染全局环境，因为新的API都是由@babel/polyfill引入到全局环境中的，一般在写工具类库的时候会比较在意这个问题。
@@ -497,8 +515,8 @@ module: {
 在@babel/plugin-transform-runtime配置中需要配置corejs选项，它有三个参数：
 
 + false：需要安装@babel/runtime。
-+ 2：需要安装@babel/runtime-corejs2
-+ 3：需要安装@babel/runtime-corejs3
++ 2：需要安装@babel/runtime-corejs2。主要针对底层API做编译，如Promise，Fetch等。
++ 3：需要安装@babel/runtime-corejs3。主要针对底层API和相关实例方法，如Array.prototype.filter，Array.prototype.findIndex等。
 
 配置好@babel/plugin-transform-runtime相应的内容之后，就可以将@babel/polyfill相关的内容全部删掉，因为
 
@@ -562,53 +580,6 @@ module: {
 + import：默认值为true。启用/禁用@import的解析，@import中的绝对路径的url会被移到运行时去处理。
 
 + modules：默认值为false。启用/禁用CSS模块规范，设置为false会提升性能，因为避免了CSS modules特性的解析。
-+ importLoaders：用于设置在【css-loader处理@import的资源文件之前】使用多少个loader。比如：
-
-```javascript
-module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.less$/,
-        use: [
-          {
-            loader: 'style-loader'
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              importLoaders: 1
-            }
-          },
-          'postcss-loader',
-          'less-loader'
-        ]
-      }
-    ]
-  }
-}
-```
-
-```css
-// a.less
-body {
-    font-size: 14px;
-}
-
-// b.less
-body {
-    background-color: #f00;
-}
-// index.less
-@import "./a.less";
-@import "./b.less";
-
-body {
-    color: #0f0;
-}
-```
-
-当css-loader处理index.less文件时，执行到@import语句时，importLoaders设置了1，所以a.less和b.less会先交给postcss-loader处理，不会交给less-loader处理，如果设置为2，则a.less和b.less文件会交给postcss-loader和less-loader处理。如果不设置importLoaders或者将其设置为0，则a.less和b.less不会被postcss-loader和less-loader处理。所以importLoaders设置的目的就是让@import进来的文件也能够经过相关loader去处理。
 
 ### style-loader
 
