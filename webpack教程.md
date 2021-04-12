@@ -16,7 +16,11 @@ module.exports = {
 
 这样的好处是webpack配置可以独立于工程目录。例如在分离开发环境和生产环境的配置文件的时候，一般把webpack.config.js放到build文件夹下，此时entry不用相对于build目录来配置，只需要根据context的设置来配置即可。
 
+使用前：
+
 ![image-20210406224218847](https://tva1.sinaimg.cn/large/008eGmZEly1gpaem8tv7kj30pi07cwfr.jpg)
+
+使用后：
 
 ![image-20210406224320175](https://tva1.sinaimg.cn/large/008eGmZEly1gpaenb4omij30ol05h758.jpg)
 
@@ -981,7 +985,7 @@ module.exports = {
     filename: 'index_bundle.js'
   },
   devServer: {
-	contentBase: path.join(__dirname, 'dist'),
+		contentBase: path.join(__dirname, 'dist'),
     port: 8080
   }
 }
@@ -1066,7 +1070,37 @@ import $ from 'jquery'
 
 同时可以去掉项目中安装的jquery的npm包，或者不用再npm install jquery -S了。
 
-<font style="color: red">注意</font>：externals配置对象中，属性名为模块名，属性值为变量名。这里jquery代表的是真实的jquery模块名，jQuery代表的是全局变量名，可随意定义，比如定义成$。
+<font style="color: red">注意</font>：
+
+1、value值为script标签引入的模块暴露出来的变量名，不可更改。
+
+![企业微信截图_5d6542df-477c-4179-887c-4f8727494323](https://tva1.sinaimg.cn/large/008eGmZEly1gph7shkmsuj30fo042aac.jpg)
+
+
+
+![image-20210412200659947](https://tva1.sinaimg.cn/large/008eGmZEly1gph7ugsrsrj30lq05iab2.jpg)
+
+![企业微信截图_de3688c6-140c-4be1-bd54-65787aa84ee5](https://tva1.sinaimg.cn/large/008eGmZEly1gph7uxmfv8j30730350so.jpg)
+
+![image-20210412200840005](https://tva1.sinaimg.cn/large/008eGmZEly1gph7w7irqyj30l606awfi.jpg)
+
+![image-20210412200912078](https://tva1.sinaimg.cn/large/008eGmZEly1gph7wr4ttej309u01y748.jpg)
+
+2、key值是打包后暴露出来的变量名。可更改。
+
+![image-20210412201109776](https://tva1.sinaimg.cn/large/008eGmZEly1gph7ysorrmj30bm03wglp.jpg)
+
+![image-20210412201254923](https://tva1.sinaimg.cn/large/008eGmZEly1gph80m8aemj30g6036mxl.jpg)
+
+![image-20210412201310311](https://tva1.sinaimg.cn/large/008eGmZEly1gph80vjyonj309r01iwef.jpg)
+
+3、但是key值不会挂载到window上。
+
+![image-20210412201426432](https://tva1.sinaimg.cn/large/008eGmZEly1gph827buohj30aw03uglr.jpg)
+
+![image-20210412201510128](https://tva1.sinaimg.cn/large/008eGmZEly1gph82yia15j30ka02k74q.jpg)
+
+![image-20210412201525912](https://tva1.sinaimg.cn/large/008eGmZEly1gph838rww4j304v014web.jpg)
 
 ## externals支持的模块上下文
 
@@ -1560,4 +1594,3 @@ config.toString();
 
 
 ![image-20201213221549306](https://tva1.sinaimg.cn/large/0081Kckwly1glmlnwekolj30so0iiq61.jpg)
-
