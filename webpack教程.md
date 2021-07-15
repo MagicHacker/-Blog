@@ -87,7 +87,7 @@ module.exports = {
 
 ![image-20201026231511179](https://tva1.sinaimg.cn/large/0081Kckwly1gk356ix1obj308701ujr8.jpg)
 
-**注意：**构建多页面应用时会使用对象语法，最终是要构建出多个bundle文件的，所以在output中不能指定输出某一个文件，否则无法构建成功，因而报错。
+**注意：**构建多页面应用时会使用对象语法，最终是要构建出多个bundle文件的，所以在output中不能指定输出某一个文件，必须使用[name]占位符的形式，否则无法构建成功，因而报错。
 
 ### key为路径字符串
 
@@ -362,7 +362,7 @@ webpack --module-bind 'css=style-loader!css-loader'
 
 ## loader的特性
 
-+ loader支持链式传递。loader会将前一个loader的处理结果传递给下一个loader进行处理。一组loader将按照定义的相反的顺序去执行，从空间上看就是从下到上执行，或者从右向左执行。
++ loader支持链式传递。webpack会将前一个loader的处理结果传递给下一个loader进行处理。一组loader将按照定义的相反的顺序去执行，从空间上看就是从下到上执行，或者从右向左执行。
 + loader可以是同步的，也可以是异步的。
 + loader运行在Node.js中，并且能够执行任何可能的操作。
 + loader接收查询参数，用于对loader传递配置。
@@ -372,7 +372,7 @@ webpack --module-bind 'css=style-loader!css-loader'
 
 ### babel-loader
 
-​		在日常的开发中，经常会使用ES6，7，8或者更高版本的JS代码，然而浏览器对这些语法的支持并不是特别友好，因此为了让新语法能够在浏览器中顺利运行，需要使用babel对JS语法进行转换，变成ES5等浏览器支持的语法，如果单纯地手动引入babel，既麻烦，又会导致文件体积过大，所以使用webpack通过babel-loader调用babel，从而在打包的时候自动进行这种转换。
+​		在日常的开发中，经常会使用ES6，7，8或者更高版本的JS代码，然而浏览器对这些语法的支持并不是特别友好，因此为了让新语法能够在浏览器中顺利运行，需要使用babel对JS语法进行转换，变成ES5等浏览器支持的语法，如果单纯地手动引入babel，既麻烦，又会导致文件体积过大，所以webpack通过babel-loader调用babel，从而在打包的时候自动进行这种转换。
 
 #### 安装
 
@@ -436,7 +436,7 @@ options中的presets是用来配置babel的预设，即babel的编码规则。�
 npm install --save @babel/polyfill
 ```
 
-第一种使用方式是在页面中直接：
+第一种使用方式是在页面中直接import：
 
 ```js
 import '@babel/polyfill'
@@ -985,7 +985,7 @@ module.exports = {
     filename: 'index_bundle.js'
   },
   devServer: {
-		contentBase: path.join(__dirname, 'dist'),
+	contentBase: path.join(__dirname, 'dist'),
     port: 8080
   }
 }
@@ -1373,7 +1373,7 @@ module.exports = {
 + inline：不会产生独立的.map文件，而是把sourcemap的内容以DataURI的方式追加到bundle文件末尾。
 + hidden：不在bundle文件结尾处指出source map的信息，但是仍然会生成sourcemap，这样浏览器不会自动加载source map，避免生产环境发布sourcemap信息。
 + cheap：生成的sourcemap中不包含列信息，也不包含loader的sourcemap信息。即生成的sourcemap映射的是loader处理后的源代码。
-+ module：生成的sourcemap中会包含loader的sourcemap信息，即生成的sourcemap映射的是loader处理前的源代码。
++ module：生成的sourcemap中包含列信息，也包含loader的sourcemap信息，即生成的sourcemap映射的是loader处理前的源代码。
 
 ## 开发环境
 
@@ -1579,7 +1579,7 @@ config.toString();
 
 # webpack原理简述
 
-​		webpack大致的处理流程：初始化参数——>开始编译——>确定入口——>编译模块——>完成模块的编译——>输出资源——>输出完成
+​		webpack大致的处理流程：初始化参数——>开始编译——>确定入口——>编译模块——>完成编译——>输出资源——>输出完成
 
 + 初始化参数：从配置文件（默认为webpack.config.js）和shell语句中读取与合并参数，得出最终的参数。这个过程中还会执行配置文件中的插件实例化语句new Plugin()。
 + 开始编译：用上一步得到的参数初始化compiler对象，加载所有配置的插件plugin，通过对象的run方法开始执行编译。compiler负责文件监听和启动编译。
@@ -1591,6 +1591,4 @@ config.toString();
 
 
 
-
-
-![image-20201213221549306](https://tva1.sinaimg.cn/large/0081Kckwly1glmlnwekolj30so0iiq61.jpg)
+![image-20201213221549306](https://tva1.sinaimg.cn/large/008eGmZEly1gphckfijmlj30so0iiq61.jpg)
