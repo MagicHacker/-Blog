@@ -854,7 +854,7 @@ module.exports = {
   tabWidth: 2,
   trailingComma: 'none',
   bracketSpacing: true,
-  arrowParens: "avoid"
+  arrowParens: "avoid",
   overrides: [
     {
       files: [
