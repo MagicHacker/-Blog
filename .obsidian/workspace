@@ -4,30 +4,32 @@
     "type": "split",
     "children": [
       {
-        "id": "43a5ede74f45d6ce",
+        "id": "0ce4c929643570dd",
         "type": "leaf",
+        "dimension": 58.60889395667047,
         "state": {
           "type": "markdown",
           "state": {
-            "file": "栈.md",
+            "file": "队列.md",
             "mode": "source",
-            "source": true
+            "source": false
           }
         },
-        "group": "a56f98469bb0970d"
+        "group": "6071c11bb7179f10"
       },
       {
-        "id": "4e6fd0a34c591d62",
+        "id": "cc7c38c1905786e8",
         "type": "leaf",
+        "dimension": 41.391106043329536,
         "state": {
           "type": "markdown",
           "state": {
-            "file": "栈.md",
+            "file": "队列.md",
             "mode": "preview",
-            "source": true
+            "source": false
           }
         },
-        "group": "a56f98469bb0970d"
+        "group": "6071c11bb7179f10"
       }
     ],
     "direction": "vertical"
@@ -83,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "栈.md",
+                "file": "队列.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -101,10 +103,11 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "43a5ede74f45d6ce",
+  "active": "0ce4c929643570dd",
   "lastOpenFiles": [
+    "队列.md",
     "栈.md",
-    "Pasted image 20220404200616.png",
+    "image/Pasted image 20220404200616.png",
     "image/browser.png",
     "顺序表.md"
   ]
