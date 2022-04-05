@@ -4,32 +4,30 @@
     "type": "split",
     "children": [
       {
-        "id": "0ce4c929643570dd",
+        "id": "7568212c8d70d28b",
         "type": "leaf",
-        "dimension": 58.60889395667047,
         "state": {
           "type": "markdown",
           "state": {
-            "file": "队列.md",
+            "file": "链表.md",
             "mode": "source",
             "source": false
           }
         },
-        "group": "6071c11bb7179f10"
+        "group": "757dd34525d45581"
       },
       {
-        "id": "cc7c38c1905786e8",
+        "id": "211ea63522c8bb61",
         "type": "leaf",
-        "dimension": 41.391106043329536,
         "state": {
           "type": "markdown",
           "state": {
-            "file": "队列.md",
+            "file": "链表.md",
             "mode": "preview",
             "source": false
           }
         },
-        "group": "6071c11bb7179f10"
+        "group": "757dd34525d45581"
       }
     ],
     "direction": "vertical"
@@ -85,7 +83,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "队列.md",
+                "file": "链表.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,8 +101,9 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "0ce4c929643570dd",
+  "active": "7568212c8d70d28b",
   "lastOpenFiles": [
+    "链表.md",
     "队列.md",
     "栈.md",
     "image/Pasted image 20220404200616.png",
