@@ -4,30 +4,16 @@
     "type": "split",
     "children": [
       {
-        "id": "7568212c8d70d28b",
+        "id": "1f9c35e3205b9420",
         "type": "leaf",
         "state": {
           "type": "markdown",
           "state": {
-            "file": "链表.md",
-            "mode": "source",
-            "source": false
-          }
-        },
-        "group": "757dd34525d45581"
-      },
-      {
-        "id": "211ea63522c8bb61",
-        "type": "leaf",
-        "state": {
-          "type": "markdown",
-          "state": {
-            "file": "链表.md",
+            "file": "webpack教程.md",
             "mode": "preview",
             "source": false
           }
-        },
-        "group": "757dd34525d45581"
+        }
       }
     ],
     "direction": "vertical"
@@ -83,7 +69,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "链表.md",
+                "file": "webpack教程.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -101,11 +87,12 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "7568212c8d70d28b",
+  "active": "1f9c35e3205b9420",
   "lastOpenFiles": [
+    "webpack教程.md",
+    "栈.md",
     "链表.md",
     "队列.md",
-    "栈.md",
     "image/Pasted image 20220404200616.png",
     "image/browser.png",
     "顺序表.md"

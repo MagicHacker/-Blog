@@ -298,7 +298,7 @@ publicPath一般用来处理将静态资源部署到CDN的情况下的资源访�
 
 ![image-20210407222452039](https://tva1.sinaimg.cn/large/008eGmZEly1gpbjqfs936j30t102p3yx.jpg)
 
-### outputPath和publicPath的区别
+### output的Path和publicPath的区别
 
 ​		outputPath只是告诉webpack将生成的结果输出到哪里，而publicPath则是被用于内嵌到CSS，HTML文件中的url的值，即资源的引用路径。
 
