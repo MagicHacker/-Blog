@@ -10,7 +10,7 @@
           "type": "markdown",
           "state": {
             "file": "webpack教程.md",
-            "mode": "preview",
+            "mode": "source",
             "source": false
           }
         }

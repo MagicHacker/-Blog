@@ -1041,7 +1041,8 @@ module.exports = {
   ```
 
 + after：用于在webpack-dev-server中定义额外的中间件，在webpack-dev-server内部所有中间件执行之后调用。用到较少，一般用于打印日志或者做一些额外的处理。
-
+## HMR热更新原理
+webpack的热更新又称热替换，缩写为HMR。这个机制可以做到不用刷新浏览器就可以用新的模块替换旧的模块。HMR的核心就是客户端从服务端去拉取更新后的文件，拉取的实际上是chunk diff。webpack-dev-server与浏览器之间维护了一个websocket，当本地资源变化的时候，webpack-dev-server会向浏览器推送更新，并带上构建的hash，让客户端与上一次资源进行对比。当客户端对比出差异之后会向webpack-dev-server发起Ajax请求来获取更改的内容（文件列表，hash），这样客户端可以借助这些信息继续向webpack-dev-server发起JSONP请求获取该chunk的增量更新。
 # externals
 
 ​		externals意为webpack的外部扩展。externals选项提供了从webpack的输出的bundle文件中排除某些依赖的方法，防止将某些import的包打包到bundle中，而是在运行时再去从外部获取这些扩展依赖，减少打包的体积。使用externals配置后，webpack可以不处理这些依赖库，但是依旧可以在代码中通过CMD，AMD，window/global全局的方式访问。
