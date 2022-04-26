@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "深拷贝和浅拷贝.md",
+            "file": "防抖和节流.md",
             "mode": "source",
             "source": false
           }
@@ -69,7 +69,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "深拷贝和浅拷贝.md",
+                "file": "防抖和节流.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -89,15 +89,15 @@
   },
   "active": "1f9c35e3205b9420",
   "lastOpenFiles": [
-    "深拷贝和浅拷贝.md",
-    "浏览器缓存机制.md",
-    "浏览器输入URL回车后发生了什么.md",
-    "HTTP状态码.md",
-    "webpack教程.md",
-    "栈.md",
-    "链表.md",
-    "队列.md",
+    "防抖和节流.md",
+    "image/Pasted image 20220405211318.png",
+    "image/Pasted image 20220426171555.png",
+    "image/Pasted image 20220426171832.png",
+    "image/Pasted image 20220404200753.png",
     "image/Pasted image 20220404200616.png",
-    "image/browser.png"
+    "image/browser.png",
+    "顺序表.md",
+    "瞎说系列之Object.assign入门.md",
+    "深拷贝和浅拷贝.md"
   ]
 }
