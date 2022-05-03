@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "闭包.md",
+            "file": "原型和原型链.md",
             "mode": "source",
             "source": false
           }
@@ -69,7 +69,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "闭包.md",
+                "file": "原型和原型链.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -89,15 +89,15 @@
   },
   "active": "1f9c35e3205b9420",
   "lastOpenFiles": [
+    "原型和原型链.md",
     "闭包.md",
+    "浏览器输入URL回车后发生了什么.md",
     "Event Loop.md",
     "防抖和节流.md",
     "image/Pasted image 20220405211318.png",
     "image/Pasted image 20220426171555.png",
     "image/Pasted image 20220426171832.png",
     "image/Pasted image 20220404200753.png",
-    "image/Pasted image 20220404200616.png",
-    "image/browser.png",
-    "顺序表.md"
+    "image/Pasted image 20220404200616.png"
   ]
 }
