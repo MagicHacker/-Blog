@@ -11,4 +11,4 @@ Vue不能检测以下数组的变动：
 + 直接修改数组的长度时。vm.items.length = newLength
 第一种情况可以使用Vue.set方法去解决。第二种情况使用splice方法。vm.items.splice(newLength)
 ## Vue响应式源码
-Vue的源码中有个observer方法，forEach遍历data选项中的属性，然后在这个forEach中循环调用defineReactive方法，在这个方法里面调用Object.defineProperty方法，将data选项的属性转换成getter/setter的形式。在getter方法中进行依赖收集，收集的是正在观察这个属性的所有watcher，收集到一个数组里。然后当属性变化的时候，触发setter，循环调用watcher里面的notify方法派发更新。
+Vue的源码中有个observer方法，forEach遍历data选项中的属性，然后在这个forEach中循环调用defineReactive方法，在这个方法里面调用Object.defineProperty方法，将data选项的属性转换成getter/setter的形式。在getter方法中进行依赖收集，收集的是正在观察这个属性的所有watcher，收集到一个数组里。然后当属性变化的时候，触发setter，调用一个notify方法通知所有watcher，派发更新。
