@@ -43,3 +43,62 @@ export default {
 	computed: mapState(['count', 'sum'])
 }
 ```
+### Getter
+有时候需要从store的state中派生出一些状态，例如对列表进行过滤并计数：
+```javascript
+computed: {
+ todosCount() {
+	 return this.$store.state.todos.filter(() => {})
+ }
+}
+```
+如果有多个组件都需要用到此属性，要么复制这个函数，或者抽取到公共函数中，然后多次导入。
+Vuex允许在store中定义getter。
+Getter接受state作为其第一个参数：
+```javascript
+const store = createStore({
+	state: {
+		todos: []
+	},
+	getters: {
+		doneTodos: (state) => {
+			return state.todos.filter(() => {})
+		}
+	}
+})
+```
+### 通过属性访问
+Getter会暴露为store.getters对象，可以通过属性的形式访问这些值。
+```javascript
+this.$store.getters.doneTodos
+```
+Getter也接受其他getter作为第二个参数：
+```javascript
+getters: {
+	doneTodosCount(state, getters) {
+		return getters.doneTodos.length
+	}
+}
+```
+### 通过方法访问
+你也可以通过让getter返回一个函数，来实现给getter传参。在你对store里的数组进行查询时非常有用。
+```javascript
+getters: {
+	getTodoById: () => {
+		return (id) => {
+			return state.todos.find(id => id ===1)
+		}
+	}
+}
+```
+### mapGetters辅助函数
+mapGetters辅助函数仅仅是将store中的getter映射到局部计算属性：
+```javascript
+import {mapGetters} from 'vuex'
+export default {
+	computed: {
+		//使用对象展开运算符将getter混入computed对象中
+		...mapGetters(['', ''])
+	}
+}
+```
