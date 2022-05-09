@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "Vue响应式原理.md",
+            "file": "Vuex的处理.md",
             "mode": "source",
             "source": false
           }
@@ -69,7 +69,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Vue响应式原理.md",
+                "file": "Vuex的处理.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -89,6 +89,7 @@
   },
   "active": "6d57754d0a5edc74",
   "lastOpenFiles": [
+    "Vuex的处理.md",
     "Vue响应式原理.md",
     "Vue生命周期.md",
     "Vue.nextTick的原理.md",
@@ -97,7 +98,6 @@
     "原型和原型链.md",
     "闭包.md",
     "浏览器输入URL回车后发生了什么.md",
-    "Event Loop.md",
-    "防抖和节流.md"
+    "Event Loop.md"
   ]
 }
