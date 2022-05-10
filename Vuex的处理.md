@@ -131,3 +131,50 @@ mutations: {
 ```
 #### mutation必须是同步函数
 比如你正在debug一个应用并观察devTool的mutation日志。每一条mutation被记录，devTools都需要捕捉到前一状态和后一状态的快照。然而在mutation中调用异步函数，会让mutation被触发的时候，异步的回调函数还没有被调用，没有返回结果，状态不可追踪。
+## Action
+Action类似于mutation，不同在于：
++ Action提交的是mutation，而不是直接变更状态。
++ Action可以包含任意异步操作。
+```javascript
+const store = createStore({
+	state: {
+		count: 0
+	},
+	mutations: {
+		increment(state) {
+			state.count++
+		}
+	},
+	actions: {
+		add(context) {
+			context.commit('increment')
+		}
+	}
+})
+```
+Action函数接受一个与store实例具有相同方法和属性的context对象，因此你可以调用context.commit提交一个mutation，或者通过context.state和context.getters来获取state和getters。
+### 分发Action
+Action通过store.dispatch方法触发：
+```javascript
+store.dispatch('add')
+```
+在action内部执行异步操作：
+```javascript
+actions: {
+	addAsync({ commit }) {
+		setTimeout(() => {
+			commit('add')
+		}, 1000)
+	}
+}
+```
+Actions同样支持载荷的方式和对象的方式分发mutation：
+```javascript
+store.dispatch('add', {
+ amount: 10
+})
+store.dispatch({
+	type: 'add',
+	amount: 10
+})
+```
