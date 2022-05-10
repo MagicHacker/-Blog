@@ -102,3 +102,32 @@ export default {
 	}
 }
 ```
+## mutation
+更改Vuex的store中的状态的唯一方法就是提交mutation。Vuex中的mutation类似于事件：每个mutation都有一个字符串的事件类型type和一个回调函数handler。这个回调函数就是修改状态的地方，并且它接受state作为第一个参数：
+```javascript
+const store = createStore({
+	state: {
+		count: 1
+	},
+	mutations: {
+		increment(state) {
+			state.count++
+		}
+	}
+})
+```
+要调用一个mutation函数，必须通过store.commit，并不能直接调用mutation函数。
+```JavaScript
+store.commit('increment')
+```
+#### 提交载荷
+可以向store.commit传入额外的参数，即mutation的载荷。
+```JavaScript
+mutations: {
+  increment (state, n) {
+    state.count += n
+  }
+}
+```
+#### mutation必须是同步函数
+比如你正在debug一个应用并观察devTool的mutation日志。每一条mutation被记录，devTools都需要捕捉到前一状态和后一状态的快照。然而在mutation中调用异步函数，会让mutation被触发的时候，异步的回调函数还没有被调用，没有返回结果，状态不可追踪。
