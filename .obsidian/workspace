@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "Vue面试题.md",
+            "file": "React生命周期.md",
             "mode": "source",
             "source": false
           }
@@ -69,7 +69,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Vue面试题.md",
+                "file": "React生命周期.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -89,6 +89,7 @@
   },
   "active": "6d57754d0a5edc74",
   "lastOpenFiles": [
+    "React生命周期.md",
     "Vue面试题.md",
     "Vuex.md",
     "Vue生命周期.md",
@@ -97,7 +98,6 @@
     "async和await.md",
     "Promise.md",
     "原型和原型链.md",
-    "闭包.md",
-    "浏览器输入URL回车后发生了什么.md"
+    "闭包.md"
   ]
 }
