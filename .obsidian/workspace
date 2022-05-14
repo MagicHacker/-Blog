@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "React生命周期.md",
+            "file": "Vue生命周期.md",
             "mode": "source",
             "source": false
           }
@@ -69,7 +69,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "React生命周期.md",
+                "file": "Vue生命周期.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -89,10 +89,10 @@
   },
   "active": "6d57754d0a5edc74",
   "lastOpenFiles": [
+    "Vue生命周期.md",
     "React生命周期.md",
     "Vue面试题.md",
     "Vuex.md",
-    "Vue生命周期.md",
     "Vue.nextTick的原理.md",
     "Vue响应式原理.md",
     "async和await.md",
