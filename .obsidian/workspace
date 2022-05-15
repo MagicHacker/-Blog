@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "闭包.md",
+            "file": "跨域.md",
             "mode": "source",
             "source": false
           }
@@ -69,7 +69,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "闭包.md",
+                "file": "跨域.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -89,8 +89,8 @@
   },
   "active": "6d57754d0a5edc74",
   "lastOpenFiles": [
-    "闭包.md",
     "跨域.md",
+    "闭包.md",
     "Vue生命周期.md",
     "React生命周期.md",
     "Vue面试题.md",
