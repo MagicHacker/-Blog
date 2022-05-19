@@ -15,6 +15,8 @@ React中的合成事件是对浏览器原生事件的一种封装。
 PureComponent的原理是继承了component类，自动加载shouldComponentUpdate函数。当组件数据更新时，shouldComponentUpdate会对props和state进行浅比较。返回true触发render重新渲染，返回false不会触发render重新渲染。
 ## React.memo
 React.memo作用于函数组件，作用类似于PureComponent。React.memo接收两个参数：第一个参数是函数组件，第二个参数用于对比props是否一致，功能与shouldComponentUpdate类似，但是判断效果与shouldComponentUpdate相反，返回true不会触发重新渲染，返回false会触发重新渲染。
+## React的state更新之后发生了什么？
+state更新之后，会依次执行shouldComponentUpdate，componentWillUpdate，render和componentDidUpdate等生命周期钩子函数。shouldComponentUpdate会接收需要更新的nextProps和nextState，可以在shouldComponentUpdate函数中添加判断条件，如果为false，就不再执行下面的生命周期钩子函数，也就不会更新视图。
 ## React调用setState之后发生了什么?
 在调用setState之后，React会将传入的参数对象与组件的当前状态进行合并。然后React会根据新的状态构建React元素树，在React得到元素树之后，React会进行diff算法比较新旧树的差异，然后按需更新内容。
 ## setState是同步的还是异步的？
@@ -28,8 +30,19 @@ setState方法的第二个参数是一个回调函数，这个回调函数将在
 + 状态变更时，记录新树和旧树的差异。
 + 最后把差异更新到真实的DOM中，其实是按需更新。
 ## React Hooks是什么？
-React Hooks可以让你在函数组件中使用state和生命周期钩子函数。
+React Hooks可以让你在不编写Class组件的情况下使用state或者其他React特性。
 ## 为什么要有React Hooks？
 + 组件之间难以复用状态逻辑。
 + 复杂组件变得难以理解。
 + class组件不友好。
+## useState
+useState中的state的保存是保存在链表的节点中。保存在链表的顺序就是state声明的顺序。
+## React Hooks的规则
+### 只在最顶层使用Hook
+因为Hook使用到了链表，这样能保证每次渲染的时候调用hook的顺序是一致的。代码中有多个useState的时候，React能够知道哪个state对应哪个useState。
+### 只在React函数组件中调用Hooks
+## React类组件和函数组件的不同？
++ 类组件有state状态和生命周期钩子函数。
++ 类组件可以获取实例化的this，函数组件不行，打包后的严格模式下函数组件的this是undefined。
++ 函数组件捕获了渲染时所使用的值。
+函数组件捕获了渲染时所使用的值，主要还是this造成的。在类组件中，每次渲染this都是指向了该组件的新的实例，所以this.props的值都是最新的值，而函数组件并不是这样的。
