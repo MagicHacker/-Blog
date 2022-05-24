@@ -90,6 +90,7 @@
   "active": "6d57754d0a5edc74",
   "lastOpenFiles": [
     "Vue面试题.md",
+    "Vue.nextTick的原理.md",
     "async和await.md",
     "闭包.md",
     "原型和原型链.md",
@@ -97,7 +98,6 @@
     "跨域.md",
     "Vue生命周期.md",
     "React面试题.md",
-    "React生命周期.md",
-    "webpack教程.md"
+    "React生命周期.md"
   ]
 }
