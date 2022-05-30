@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "EventLoop.md",
+            "file": "webpack教程.md",
             "mode": "source",
             "source": false
           }
@@ -69,7 +69,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "EventLoop.md",
+                "file": "webpack教程.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -89,15 +89,15 @@
   },
   "active": "6d57754d0a5edc74",
   "lastOpenFiles": [
-    "EventLoop.md",
+    "webpack教程.md",
     "防抖和节流.md",
     "深拷贝和浅拷贝.md",
+    "浏览器输入URL回车后发生了什么.md",
+    "EventLoop.md",
     "浏览器缓存机制.md",
     "HTTP状态码.md",
-    "浏览器输入URL回车后发生了什么.md",
     "Vue面试题.md",
     "Vue.nextTick的原理.md",
-    "async和await.md",
-    "闭包.md"
+    "async和await.md"
   ]
 }
