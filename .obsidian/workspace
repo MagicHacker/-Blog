@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "闭包.md",
+            "file": "Vue和React的区别.md",
             "mode": "source",
             "source": false
           }
@@ -69,7 +69,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "闭包.md",
+                "file": "Vue和React的区别.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -89,15 +89,15 @@
   },
   "active": "6d57754d0a5edc74",
   "lastOpenFiles": [
-    "闭包.md",
-    "image/browser.png",
-    "跨域.md",
-    "浏览器缓存机制.md",
+    "instanceof原理.md",
+    "HTTP状态码.md",
     "Vue面试题.md",
+    "React生命周期.md",
+    "闭包.md",
     "webpack教程.md",
-    "防抖和节流.md",
-    "深拷贝和浅拷贝.md",
-    "浏览器输入URL回车后发生了什么.md",
-    "EventLoop.md"
+    "Vetur+Eslint+Prettier统一代码规范.md",
+    "EventLoop.md",
+    "Vue.nextTick的原理.md",
+    "Vuex.md"
   ]
 }
