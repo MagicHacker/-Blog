@@ -89,15 +89,15 @@
   },
   "active": "6d57754d0a5edc74",
   "lastOpenFiles": [
+    "React面试题.md",
+    "let和const.md",
+    "Vue面试题.md",
     "for in 和for of的区别.md",
     "浏览器缓存机制.md",
     "Vue生命周期.md",
     "浏览器输入URL回车后发生了什么.md",
     "Vue和React的区别.md",
     "instanceof原理.md",
-    "HTTP状态码.md",
-    "Vue面试题.md",
-    "React生命周期.md",
-    "闭包.md"
+    "HTTP状态码.md"
   ]
 }
