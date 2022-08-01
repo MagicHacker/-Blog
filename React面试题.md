@@ -18,7 +18,7 @@ React.memo作用于函数组件，作用类似于PureComponent。React.memo接�
 ## React的state更新之后发生了什么？
 state更新之后，会依次执行shouldComponentUpdate，componentWillUpdate，render和componentDidUpdate等生命周期钩子函数。shouldComponentUpdate会接收需要更新的nextProps和nextState，可以在shouldComponentUpdate函数中添加判断条件，如果为false，就不再执行下面的生命周期钩子函数，也就不会更新视图。
 ## React调用setState之后发生了什么?
-在调用setState之后，React会将传入的参数对象与组件的当前的state状态进行合并。然后React会根据新的状态构建React元素树，在React得到元素树之后，React会进行diff算法比较新旧树的差异，然后按需更新组件内容。
+在代码中调用setState之后，React会将传入的参数对象与组件当前的状态合并，然后触发调和过程。经过调和过程，React会以相对高效的方式根据新的状态构建React元素树并重新渲染整个UI界面。在React得到元素树之后，React会自动计算出新树和老树的差异，然后根据差异对界面进行最小化渲染。
 ## setState是同步的还是异步的？
 setState并不是单纯的同步或者异步的。它会根据使用场景的不同而不同。在源码中，通过isBatchingUpdates来判断state是先存进队列还是直接更新，如果值为true则将state存进队列，执行异步操作，为false则是同步操作，直接更新。
 + 异步：在React生命周期钩子函数中或者合成事件中都是异步操作。
