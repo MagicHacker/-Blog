@@ -1,1 +1,0 @@
-instanceof用于检测构造函数的prototype原型对象是否在某个实例对象的原型链上。
