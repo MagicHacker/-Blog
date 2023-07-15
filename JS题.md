@@ -33,6 +33,43 @@ function foo() {
 
 ## 箭头函数和普通函数的区别
 
-+ 箭头函数自身没有this，它的this来源于父层函数的this，箭头函数的this在函数定义的时候就已经确定了。
-+ 箭头函数无法作为构造函数使用，没有自身的prototype，也没有arguments。
++ 箭头函数没有自己的this对象。箭头函数内部的this就是定义时上层作用域中的this对象。
++ 不可以用作构造函数，即不可以对箭头函数使用new命令。
++ 不可以使用arguments对象，该对象在箭头函数内不存在。可以使用rest参数代替。
++ 不能使用yield命令，因此箭头函数不能用作generator函数。
+
+## Promise
+
+所谓Promise，简单来说就是一个容器，里面保存着某个未来才会结束的事件的结果，这个事件通常是一个异步操作。
+
+Promise特点：
+
++ 对象的状态不受外界影响。Promise对象代表一个异步操作，有三种状态：pending进行中，fulfilled已成功，rejected已失败。只有异步操作的结果可以决定当前是哪一种状态，任何操作都无法改变这个状态。
++ 一旦状态改变，就不会再次变化，任何时候都可以得到这个结果。
++ 缺点：首先无法取消Promise，一旦新建它就会立即执行，无法中途取消。其次，如果不设置回调函数，Promise内部抛出的错误，不会反应到外部。
+
+resolve函数的作用是，将Promise对象的状态从未完成变为已成功，在异步操作成功时调用，并将异步操作的结果，作为参数传递出去，由then函数接收。reject函数的作用是，将Promise对象的状态从“未完成”变为“失败”（即从 pending 变为 rejected），在异步操作失败时调用，并将异步操作报出的错误，作为参数传递出去。
+
+catch方法的作用是用于指定发生错误时的回调函数。如果异步操作抛出错误，状态就会变为rejected，就会调用catch方法指定的回调函数，如果then方法指定的回调函数抛出错误，也会被catch方法捕获。
+
+如果Promise的状态已经变成resolved，再抛出错误就是无效的，因为Promise的状态一定确定，就不能再改变了。
+
+```javascript
+const promise = new Promise((resolve) => {
+  resolve('ok');
+  throw new Error('error')
+})
+promise.then(() => {})
+.catch(() => {})
+```
+
+Promise对象的错误具有冒泡性质，会一直向后传递，直到被捕获为止。
+
+如果没有使用catch方法捕获错误，那么Promise抛出的错误不会传递到外层代码。
+
+catch方法返回的还是一个Promise对象，因此后面还可以接着调用then方法。
+
+
+
+
 
