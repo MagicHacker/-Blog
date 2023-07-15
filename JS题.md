@@ -17,7 +17,7 @@ JSON.parse(JSON.stringfy())利用JSON.stringfy()方法将对象序列化成json�
 
 Object.assign()，ES6的展开运算符。
 
-## forEach如何调出循环
+## forEach如何跳出循环
 
 forEach是不能通过break或者return跳出循环的。可以使用try-catch来跳出循环。
 
