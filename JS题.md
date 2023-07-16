@@ -69,7 +69,21 @@ Promise对象的错误具有冒泡性质，会一直向后传递，直到被捕�
 
 catch方法返回的还是一个Promise对象，因此后面还可以接着调用then方法。
 
+## async/await
+
+async函数的返回值是Promise对象，可以使用then方法添加回调函数。当函数执行的时候，一旦遇到await就会先等待异步操作完成，再执行函数体内后面的语句。
+
+aysnc函数内部return语句返回的值，会成为then方法回调函数的参数。
+
+async函数内部抛出的错误，会导致返回的Promise对象状态为rejected。
+
+async函数返回的Promise对象，必须等到内部所有await命令后面的Promise对象执行完，状态才会发生改变。
 
 
 
+await命令后面是一个Promise对象，返回该对象的结果。如果不是Promise对象，就直接返回对应的值。
+
+await命令后面的Promise对象如果变为rejected状态，则rejected参数会被catch捕获。
+
+任何一个await命令后面的Promise对象变为rejected状态，那么整个async函数都会中断执行。
 
