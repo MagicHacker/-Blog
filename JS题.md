@@ -79,8 +79,6 @@ async函数内部抛出的错误，会导致返回的Promise对象状态为rejec
 
 async函数返回的Promise对象，必须等到内部所有await命令后面的Promise对象执行完，状态才会发生改变。
 
-
-
 await命令后面是一个Promise对象，返回该对象的结果。如果不是Promise对象，就直接返回对应的值。
 
 await命令后面的Promise对象如果变为rejected状态，则rejected参数会被catch捕获。
