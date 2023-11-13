@@ -52,7 +52,7 @@ resolve函数的作用是，将Promise对象的状态从未完成变为已成功
 
 catch方法的作用是用于指定发生错误时的回调函数。如果异步操作抛出错误，状态就会变为rejected，就会调用catch方法指定的回调函数，如果then方法指定的回调函数抛出错误，也会被catch方法捕获。
 
-如果Promise的状态已经变成resolved，再抛出错误就是无效的，因为Promise的状态一定确定，就不能再改变了。
+如果Promise的状态已经变成resolved，再抛出错误就是无效的，因为Promise的状态已经确定，就不能再改变了。
 
 ```javascript
 const promise = new Promise((resolve) => {
