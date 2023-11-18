@@ -73,7 +73,7 @@ catch方法返回的还是一个Promise对象，因此后面还可以接着调�
 
 async函数的返回值是Promise对象，可以使用then方法添加回调函数。当函数执行的时候，一旦遇到await就会先等待异步操作完成，再执行函数体内后面的语句。
 
-aysnc函数内部return语句返回的值，会成为then方法回调函数的参数。
+async函数内部return语句返回的值，会成为then方法回调函数的参数。
 
 async函数内部抛出的错误，会导致返回的Promise对象状态为rejected。
 
