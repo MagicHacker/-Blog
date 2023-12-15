@@ -8,9 +8,10 @@ React.PureComponent和React.Component完全相同，它只是为你处理了shou
 
 ## 调用setState之后发生了什么？
 
-+ React会将传入的参数对象与组件当前的状态对象合并产生新的state。
-+ 生成新的虚拟DOM树。
-+ 计算新旧树的差异，然后差异化更新。
++ React会将传入的参数对象与组件当前的状态对象合并产生新的state状态对象。
++ React会生成新的虚拟DOM树。
++ React进行diff计算新旧树的差异，然后差异化更新。
++ React重新渲染组件。
 
 setState的调用会引起4个生命周期钩子的执行：
 
